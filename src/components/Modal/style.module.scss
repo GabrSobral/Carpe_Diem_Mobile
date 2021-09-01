@@ -1,0 +1,97 @@
+.modalBackground{
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.487);
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+
+  .modalContainer{
+    filter: blur(0px);
+    z-index: 20;
+    width: 90%;
+    height: fit-content;
+    padding: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+        
+    border-radius: 15px;
+    background-color: var(--white);
+
+    img{
+      height: 8rem;
+      width: 8rem;
+    }
+  
+    div{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 1.5rem;
+      
+      h2{
+        font-size: 2rem;
+        font-weight: 800;
+        white-space: normal;
+      }
+
+      p{
+        color: var(--text);
+        font-size: 1.15rem;
+        text-align: center;
+        white-space: normal;
+        margin: 0.5rem 0;
+      }
+    }
+
+    .removeModalButton{
+      display: flex;
+      align-items: center;
+      flex-direction: row;
+      width: 100%;
+      justify-content: space-between;
+
+      .yesAndNoButton{
+        width: 48%;
+        border-radius: 7px;
+        background-color: var(--blue-400);
+        font-size: 1.5rem;
+        color: var(--white);
+        border: 0;
+        outline: 0;
+        padding: 1rem;
+
+        &:first-child{
+          background: var(--red-900);
+        }
+        &:last-child{
+          background: var(--green-300);
+        }
+      }
+    }
+
+    .finishButton{
+      width: 100%;
+      border-radius: 7px;
+      background-color: var(--blue-400);
+      font-size: 1.5rem;
+      color: var(--white);
+      border: 0;
+      outline: 0;
+      padding: 1rem;
+    }
+  }
+}

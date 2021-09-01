@@ -1,0 +1,60 @@
+.container{
+  width: 100%;
+  position: fixed;
+  top: 0;
+  height: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background-color: var(--white);
+  box-shadow: 1px 1px 1px 5px rgb(232, 232, 232);
+  z-index: 1000;
+
+  .name{
+    position: relative;
+    width: fit-content;
+    display: flex;
+    white-space: nowrap;
+    align-items: center;
+
+    button{
+      display : none;
+      position: absolute;
+      border-radius: 50%;
+      border: 0;
+      outline: 0;
+      padding: 0.5rem;
+      background: var(--white);
+      margin-right: 1rem;
+      z-index: 13;
+    }
+
+    h2{
+      z-index: 15;
+      transition: 0.2s ease;
+      display: flex;
+      font-weight: 400;
+      
+      span{
+        margin-left: 0.3rem;
+        font-weight: 800;
+      }
+    }
+  }
+
+  .userImage{
+    button{
+      width: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height:4rem;
+      border: 0;
+      border-radius: 50%;
+      background-color: var(--red-900);
+      box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.234);
+    }
+    
+  }
+}

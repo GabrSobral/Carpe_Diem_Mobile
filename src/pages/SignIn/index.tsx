@@ -13,16 +13,11 @@ export const SignIn: React.FC = () => {
   const [ email, setEmail ] = useState<string>('')
   const [ password, setPassword ] = useState<string>('')
   const { setLoadingTrue, isLoading, closeLoading } = useLoading()
-  const [ isFilled, setIsFilled ] = useState(true)
   const [ message, setMessage ] = useState<string>('')
 
   // useEffect(()=> {
   //   return closeLoading()
   // },[closeLoading])
-
-  useEffect(()=>{
-    email && password ? setIsFilled(false) : setIsFilled(true)
-  },[email, password])
 
 
   async function signIn(event : FormEvent){
@@ -56,7 +51,7 @@ export const SignIn: React.FC = () => {
           
           <span>{message}</span>
           
-          <button type='submit' disabled={isFilled} onClick={signIn}>
+          <button type='submit' disabled={email && password ? false : true} onClick={signIn}>
             Entrar
             <FaSignInAlt size={24} />
           </button>

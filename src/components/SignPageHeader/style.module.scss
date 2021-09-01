@@ -1,8 +1,8 @@
 .container{
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   width: 100%;
 
   button{
@@ -22,14 +22,19 @@
   }
 
   h1{
-    margin: auto;
+    position: absolute;
+    transform: translateX(50%);
+    top: -50%;
+    right: 50%;
   }
 
-  a{
+  button:last-child{
     font-size: 1.25rem;
     color: var(--blue-300);
     font-weight: 600;
     transition: transform 0.2s ease;
+    border-radius: 0;
+    background: transparent;
 
     &:active{
       transform: scale(0.9);

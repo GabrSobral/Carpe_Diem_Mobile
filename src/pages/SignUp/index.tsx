@@ -8,6 +8,7 @@ import { LoadingStatus } from '../../components/LoadingStatus'
 import { useLoading } from "../../contexts/LoadingContext"
 
 import styles from '../SignIn/styles.module.scss'
+import { api } from "../../services/api"
 
 export const SignUp: React.FC = () => {
   const [ name, setName ] = useState<string>('')
@@ -15,13 +16,7 @@ export const SignUp: React.FC = () => {
   const [ password, setPassword ] = useState<string>('')
   const [ message, setMessage ] = useState<string>('')
   const [ confirmPassword, setConfirmPassword ] = useState<string>('')
-  const [ isFilled, setIsFilled ] = useState(true)
   const { setLoadingTrue, isLoading, closeLoading } = useLoading()
-
-  useEffect(()=>{
-    name && email && password && confirmPassword ? setIsFilled(false) : setIsFilled(true)
-  },[email, password, name, confirmPassword])
-
 
   async function SignUp(){
     name.trim()
@@ -31,6 +26,7 @@ export const SignUp: React.FC = () => {
       return setMessage("Sua confirmação de senha está inválida!")
     }
     // setLoadingTrue()
+    const { data } = await api.post('/users', { name, email, password })
   }
 
   return (
@@ -72,7 +68,7 @@ export const SignUp: React.FC = () => {
           <button 
             type='button' 
             onClick={SignUp} 
-            disabled={email && password && confirmPassword ? false : true}
+            disabled={name && email && password && confirmPassword ? false : true}
           >
             Cadastrar
             <FaSignInAlt size={24}/>

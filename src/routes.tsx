@@ -9,6 +9,7 @@ export const Routes: React.FC = () => {
   return(
     <IonReactRouter>
       <IonRouterOutlet>
+        
         <Route exact path="/">
           <Redirect to="/SignIn" />
         </Route>

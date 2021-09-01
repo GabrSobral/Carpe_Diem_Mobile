@@ -7,7 +7,7 @@ import styles from './style.module.scss'
 
 interface headerProps{
   title : string,
-  button?: string,
+  button: "Entrar" | "Cadastrar",
 }
 
 export function SignPageHeader({ title, button } : headerProps){

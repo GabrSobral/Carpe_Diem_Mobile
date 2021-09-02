@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { FaEnvelope, FaLock, FaSignInAlt } from 'react-icons/fa'
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { motion } from 'framer-motion'
 
 import { SignPageHeader } from '../../components/SignPageHeader'
@@ -8,20 +8,30 @@ import { LoadingStatus } from '../../components/LoadingStatus'
 import { useLoading } from '../../contexts/LoadingContext';
 
 import styles from './styles.module.scss'
+import { useUsers } from '../../contexts/UserContext';
 
 export const SignIn: React.FC = () => {
+  const { Sign } = useUsers()
+  const history = useHistory()
   const [ email, setEmail ] = useState<string>('')
   const [ password, setPassword ] = useState<string>('')
   const { setLoadingTrue, isLoading, closeLoading } = useLoading()
   const [ message, setMessage ] = useState<string>('')
 
-  // useEffect(()=> {
-  //   return closeLoading()
-  // },[closeLoading])
-
+  useEffect(()=> { closeLoading() },[closeLoading])
+  useEffect(()=> { console.log(message) },[message])
 
   async function signIn(event : FormEvent){
     event.preventDefault()
+    
+    const result = await Sign({email, password, query: "/login"})
+    console.log(result)
+    if(result.message === "ok") {
+      history.push('/')
+    } else {
+      setMessage(result.message)
+      closeLoading()
+    }
   }
 
   return(
@@ -49,7 +59,7 @@ export const SignIn: React.FC = () => {
             <button onClick={()=> setLoadingTrue()} className={styles.forgotPassword}>Esqueci minha senha</button>
           </Link>
           
-          <span>{message}</span>
+          <span className={styles.warningText}>{message}</span>
           
           <button type='submit' disabled={email && password ? false : true} onClick={signIn}>
             Entrar

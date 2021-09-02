@@ -2,8 +2,6 @@ import { FiArrowLeft } from 'react-icons/fi'
 import { AnimatePresence, motion, useMotionValue } from 'framer-motion'
 import { useHistory } from 'react-router-dom'
 
-import Urgent from '../../images/urgent.svg'
-
 import styles from './style.module.scss'
 
 interface HeaderProps{
@@ -61,12 +59,6 @@ export function Header({ GoBackIsActive} : HeaderProps){
           </motion.h2>
         </AnimatePresence>
       </motion.div>
-
-      <div className={styles.userImage}>
-        <button type="button" onClick={()=> alert("Função em desenvolvimento, tente novamente mais tarde.")}>
-          <img src={Urgent} alt="Urgencia de ansiedade" />
-        </button>
-      </div>
     </header>
   )
 }

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion"
-import { useEffect, useState } from "react"
+import { FormEvent, useEffect, useState } from "react"
 import { FaUser, FaEnvelope, FaSignInAlt, FaLock, FaUnlock } from "react-icons/fa"
 import { useHistory } from "react-router"
 
@@ -8,25 +8,39 @@ import { LoadingStatus } from '../../components/LoadingStatus'
 import { useLoading } from "../../contexts/LoadingContext"
 
 import styles from '../SignIn/styles.module.scss'
-import { api } from "../../services/api"
+import { useUsers } from "../../contexts/UserContext"
 
 export const SignUp: React.FC = () => {
+  const history = useHistory()
   const [ name, setName ] = useState<string>('')
   const [ email, setEmail ] = useState<string>('')
   const [ password, setPassword ] = useState<string>('')
   const [ message, setMessage ] = useState<string>('')
   const [ confirmPassword, setConfirmPassword ] = useState<string>('')
+
+  const { Sign } = useUsers()
   const { setLoadingTrue, isLoading, closeLoading } = useLoading()
 
-  async function SignUp(){
+  useEffect(()=> { closeLoading() },[closeLoading])
+
+  async function SignUp(event: FormEvent){
+    event.preventDefault()
+
     name.trim()
     email.trim()
     
     if(password !== confirmPassword){
       return setMessage("Sua confirmação de senha está inválida!")
     }
-    // setLoadingTrue()
-    const { data } = await api.post('/users', { name, email, password })
+    setLoadingTrue()
+    
+    const result = await Sign({name, email, password, query: "/users"})
+    if(result.message === "ok") {
+      history.push('/')
+    } else {
+      setMessage(result.message)
+      closeLoading()
+    }
   }
 
   return (

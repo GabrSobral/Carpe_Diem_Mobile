@@ -16,14 +16,20 @@ import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 
-/* Theme variables */
-import './theme/variables.css';
-
 import { Routes } from './routes';
+import { UserProvider } from './contexts/UserContext';
+import { ActivityProvider } from './contexts/ActivityContext';
+import { LoadingProvider } from './contexts/LoadingContext';
 
 const App: React.FC = () => (
   <IonApp>
-    <Routes/>
+    <UserProvider>
+      <ActivityProvider>
+        <LoadingProvider>
+          <Routes/>
+        </LoadingProvider>
+      </ActivityProvider>
+    </UserProvider>
   </IonApp>
 );
 

@@ -39,8 +39,8 @@ export const SignUp: React.FC = () => {
       history.push('/')
     } else {
       setMessage(result.message)
-      closeLoading()
     }
+    closeLoading()
   }
 
   return (

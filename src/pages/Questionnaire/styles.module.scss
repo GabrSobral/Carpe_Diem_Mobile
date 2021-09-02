@@ -41,7 +41,7 @@
         justify-content: space-between;
         margin-top: 0.5rem;
         background-color: var(--green-300);
-        padding: 0.5rem 1rem;
+        padding: 0.5rem 2rem;
         border-radius: 7px;
         box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.261);
 
@@ -52,7 +52,10 @@
           color: var(--gray-50);
 
           input{
-            transform: scale(1.5);
+            position: relative;
+            // transform: scale(2);
+            min-width: 1.7rem;
+            min-height: 1.7rem;
             border: 0;
             outline: 0;
             display: flex;
@@ -60,10 +63,13 @@
             justify-content: center;
 
             &::before{
+              position: absolute;
               content: "";
               width: 40%;
               height: 40%;
               border-radius: 50%;
+              right: 50%;
+              transform: translate(50%);
               background-color: var(--gray-200);
             }
             &:checked::before{
@@ -76,6 +82,7 @@
           }
           label{
             margin-top: 0.5rem;
+            font-size: 1.2rem;
           }
         }
       }

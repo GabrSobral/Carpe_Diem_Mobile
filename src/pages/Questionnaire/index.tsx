@@ -25,46 +25,39 @@ export const Questionnaire: React.FC = () => {
   const [ questions, setQuestions ] = useState<QuestionProps[]>([])
 
   const [ isFilled, setIsFilled ] = useState(false)
-  const [ allAnswers, setAllAnswers ] = useState<any[]>([])
+  const [ allAnswers, setAllAnswers ] = useState([]) as any[]
   const [ count, setCount ] = useState(0)
 
-  useEffect(()=>{ console.log(allAnswers) }, [allAnswers])
   useEffect(() => {
     (async () => {
       const { data } = await api.get('/question/list')
       setQuestions(data)
       setIsVisible(true)
       const nullArray = data.map(()=> null)
-      console.log('nullArray: ', nullArray)
       setAllAnswers(nullArray)
     })()
   }, [])
 
   useEffect(() => {
-    if(allAnswers.indexOf(null) === -1) {
+    if(allAnswers.indexOf(null) === -1 && allAnswers.length !== 0) {
       setIsFilled(true)
-      console.log("Cheiooooo: ", allAnswers)
     }
   },[count]) 
 
   async function handleConfirm(){
     setLoadingTrue()
-    console.log('allAnswers: ', allAnswers)
-    await api.post('/questionnaire', { answers : allAnswers }).then(()=> {
+    await api.post('/answer/new', { answers : allAnswers }).then(()=> {
       // history.push("/Home")
       return 
     }).catch((err)=>{
-      console.log(err.response.data.message)
-      // history.push("/Home")
+      alert(err.response.data.message)
       return 
     })
   }
   function handleAnswersAndIndex(value: any, index: number){
-    console.log(value.target.value)
-    setAllAnswers(prevState => {
-      prevState.splice(index, 1, value.target.value)
-      return prevState
-    })
+    allAnswers.splice(index, 1, value.target.value)
+    setAllAnswers(allAnswers)
+    setCount(prev => prev + 1)
   }
 
   return(
@@ -91,28 +84,28 @@ export const Questionnaire: React.FC = () => {
                      { handleAnswersAndIndex(event, index) }}
                 >
                   <div>
-                    <input type="radio" id="answer-0" name={question.id} value="0"/>
-                    <label htmlFor="answer-0">0</label>
+                    <input type="radio" id={`${question.id}-0`} name={question.id} value="0"/>
+                    <label htmlFor={`${question.id}-0`}>0</label>
                   </div>
                   <div>
-                    <input type="radio" id="answer-1" name={question.id} value="1"/>
-                    <label htmlFor="answer-1">1</label>
+                    <input type="radio" id={`${question.id}-1`} name={question.id} value="1"/>
+                    <label htmlFor={`${question.id}-1`}>1</label>
                   </div>
                   <div>
-                    <input type="radio" id="answer-2" name={question.id} value="2"/>
-                    <label htmlFor="answer-2">2</label>
+                    <input type="radio" id={`${question.id}-2`} name={question.id} value="2"/>
+                    <label htmlFor={`${question.id}-2`}>2</label>
                   </div>
                   <div>
-                    <input type="radio" id="answer-3" name={question.id} value="3"/>
-                    <label htmlFor="answer-3">3</label>
+                    <input type="radio" id={`${question.id}-3`} name={question.id} value="3"/>
+                    <label htmlFor={`${question.id}-3`}>3</label>
                   </div>
                   <div>
-                    <input type="radio" id="answer-4" name={question.id} value="4"/>
-                    <label htmlFor="answer-4">4</label>
+                    <input type="radio" id={`${question.id}-4`} name={question.id} value="4"/>
+                    <label htmlFor={`${question.id}-4`}>4</label>
                   </div>
                   <div>
-                    <input type="radio" id="answer-5" name={question.id} value="5"/>
-                    <label htmlFor="answer-5">5</label>
+                    <input type="radio" id={`${question.id}-5`} name={question.id} value="5"/>
+                    <label htmlFor={`${question.id}-5`}>5</label>
                   </div>
                 </div>
               </div>

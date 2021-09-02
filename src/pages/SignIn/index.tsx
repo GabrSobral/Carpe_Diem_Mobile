@@ -27,7 +27,7 @@ export const SignIn: React.FC = () => {
     const result = await Sign({email, password, query: "/login"})
     console.log(result)
     if(result.message === "ok") {
-      history.push('/')
+      history.push('/Questionnaire')
     } else {
       setMessage(result.message)
     }
@@ -56,7 +56,13 @@ export const SignIn: React.FC = () => {
           </div>
           
           <Link to="/Login/ForgotPassword">
-            <button onClick={()=> setLoadingTrue()} className={styles.forgotPassword}>Esqueci minha senha</button>
+            <button 
+              type="button" 
+              onClick={()=> setLoadingTrue()} 
+              className={styles.forgotPassword}
+            >
+                Esqueci minha senha
+            </button>
           </Link>
           
           <span className={styles.warningText}>{message}</span>

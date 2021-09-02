@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useState, FormEvent } from "react"
 import { useHistory } from "react-router"
-import { FormEvent } from "react-router/node_modules/@types/react"
+
 import { Header } from "../../components/header"
 import { LoadingStatus } from "../../components/LoadingStatus"
 import { useLoading } from "../../contexts/LoadingContext"
@@ -23,7 +23,7 @@ export const Questionnaire: React.FC = () => {
   const [ isVisible, setIsVisible ] = useState(false)
   const { isLoading, setLoadingTrue, closeLoading } = useLoading()
   const [ questions, setQuestions ] = useState<QuestionProps[]>([])
-
+  const [ message, setMessage ] = useState('Mensagem de teste')
   const [ isFilled, setIsFilled ] = useState(false)
   const [ allAnswers, setAllAnswers ] = useState([]) as any[]
   const [ count, setCount ] = useState(0)
@@ -42,18 +42,21 @@ export const Questionnaire: React.FC = () => {
     if(allAnswers.indexOf(null) === -1 && allAnswers.length !== 0) {
       setIsFilled(true)
     }
-  },[count]) 
+  },[count, allAnswers]) 
 
   async function handleConfirm(){
     setLoadingTrue()
-    await api.post('/answer/new', { answers : allAnswers }).then(()=> {
-      // history.push("/Home")
+
+    await api.post('/answer/new', { answer : allAnswers }).then(()=> {
+      history.push("/Home")
       return 
     }).catch((err)=>{
-      alert(err.response.data.message)
+      setMessage(`Algo deu errado: ${err.response.data.message}`)
+      closeLoading()
       return 
     })
   }
+
   function handleAnswersAndIndex(value: any, index: number){
     allAnswers.splice(index, 1, value.target.value)
     setAllAnswers(allAnswers)
@@ -110,6 +113,8 @@ export const Questionnaire: React.FC = () => {
                 </div>
               </div>
             ))}
+
+            <span className={styles.warningText}>{message}</span>
 
               <button 
                 type="button" 

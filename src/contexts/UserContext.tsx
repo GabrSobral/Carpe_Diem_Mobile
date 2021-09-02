@@ -25,7 +25,7 @@ interface SignResult {
   message?: String;
 }
 interface UserContextProps {
-  Sign: ({}: SignProps) => any;
+  Sign: ({name, password, email, query}: SignProps) => any;
   username: String;
   isAuthenticated: Boolean;
 }

@@ -1,6 +1,7 @@
+import { useEffect } from "react";
 import { createContext, ReactNode, useContext, useState } from "react";
 import { api } from "../services/api";
-import { setToken } from "../utils/handleToken";
+import { getToken, setToken } from "../utils/handleToken";
 
 interface UserProviderProps {
   children: ReactNode;
@@ -35,6 +36,12 @@ const UserContext = createContext({} as UserContextProps)
 export function UserProvider({ children }: UserProviderProps){
   const [ isAuthenticated, setIsAuthenticated ] = useState(false)
   const [ username, setUsername ] = useState('')
+
+  useEffect(() => {
+    if(getToken()) {
+      setIsAuthenticated(true)
+    }
+  },[])
 
   async function Sign({name, email, password, query = '/login'}: SignProps) {
     const result = {} as SignResult

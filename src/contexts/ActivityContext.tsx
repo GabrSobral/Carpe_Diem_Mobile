@@ -1,16 +1,20 @@
+import { useEffect } from "react";
 import { createContext, ReactNode, useContext, useState } from "react";
+import { api } from "../services/api";
+import { useUsers } from "./UserContext";
 
-interface DesignedTo{
-  _id : string;
-  name : string;
+interface ICategory{
+  id: string;
+  name: string;
 }
-interface ActivitiesProps{
-  _id : string;
-  designedTo : DesignedTo[];
+
+export interface ActivitiesProps{
+  id : string;
   title : string;
-  description: string;
   body: string;
-  experience : number;
+  description: string;
+  files: any[]
+  category : ICategory
 }
 
 interface ActivityContextData{
@@ -18,19 +22,44 @@ interface ActivityContextData{
   setActivitiesState: (values:  ActivitiesProps[]) => void;
   activitiesToday: number;
   setActivitiesTodayState: (num: number)=> void;
+  selectedActivity?: ActivitiesProps;
+  setSelectedActivityState: (activity: ActivitiesProps) => void;
 }
 
-interface ActivityProvider{
+interface ActivityProviderProps{
   children: ReactNode;
 }
 
+
 export const ActivityContext = createContext({} as ActivityContextData)
 
-export function ActivityProvider({children} : ActivityProvider){
+export function ActivityProvider({children} : ActivityProviderProps){
   const [ activities, setActivities ] = useState<ActivitiesProps[]>([])
   const [ activitiesToday, setActivitiesToday ] = useState(0)
+  const [ selectedActivity, setSelectedActivity ] = useState<ActivitiesProps>()
+  const { isAuthenticated } = useUsers()
+
+  useEffect(() => {
+    if(!isAuthenticated){ return }
+    (async () => {
+      try{
+        const { data } = await api.get('/activity/get-activities')
+        console.log(data)
+        setActivities(data)
+      } catch(error: any) {
+        if( error.response.data.error === 
+            "You already request the activities, try again tomorrow") {
+              const { data } = await api.get('/activity/my-list')
+              setActivities(data)
+              return
+            }
+        alert(error.response.data.error)
+      }
+    })()
+  },[isAuthenticated])
 
   function setActivitiesTodayState(num: number){ setActivitiesToday(num) }
+  function setSelectedActivityState(activity: ActivitiesProps){ setSelectedActivity(activity) }
 
   function setActivitiesState(values : ActivitiesProps[]){
     setActivities(values)
@@ -42,7 +71,9 @@ export function ActivityProvider({children} : ActivityProvider){
         activities,
         setActivitiesState,
         activitiesToday,
-        setActivitiesTodayState
+        setActivitiesTodayState,
+        selectedActivity,
+        setSelectedActivityState
       }}
     >
       {children}

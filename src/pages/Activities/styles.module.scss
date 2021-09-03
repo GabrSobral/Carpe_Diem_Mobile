@@ -1,0 +1,100 @@
+.container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  background: var(--white);
+
+  main{
+    margin-top: 5rem;
+    width: 100%;
+    padding: 1rem 1rem 1rem 1rem;
+    height: fit-content;
+  }
+
+  .activityTitle{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+    min-width: 100%;
+
+    transition: 0.3s ease;
+  
+    background-color: var(--green-300);
+    border-radius: 7px;
+    padding: 1rem;
+    overflow: hidden;
+    transition: transform 0.2s ease;
+  
+    .icon{
+      min-height: 3.5rem;
+      min-width: 3.5rem;
+      border-radius: 50%;
+      padding: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--green-350);
+  
+      margin-right: 0.5rem;
+    }
+  
+    .content{
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      justify-content: center;
+      max-width: calc(100% - 6rem);
+  
+      h2{
+        color: var(--white);
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        font-size: 1.8rem;
+        margin: 0;
+      }
+      p{
+        margin-top: 0.5rem;
+        color: var(--gray-100);
+        line-height: 1.25rem;
+        text-align: center;
+      }
+    }
+  
+    button{
+      border-radius: 50%;
+      padding: 1rem 0;
+      border: 0;
+      font-size: 0;
+      background: transparent;
+    }
+  }
+
+  .allActivities{
+    margin-top: 1rem;
+    width: 100%;
+    overflow-y: scroll;
+    padding-bottom: 4rem;
+    max-height: 65vh;
+    border-radius: 7px;
+  }
+  .dontHaveActivitiesContainer{
+    width: 100%;
+    height: 10rem;
+    margin-top: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    span{
+      margin-top: 1rem;
+      font-size: 1.25rem;
+      font-weight: 500;
+      text-align: center;
+    }
+  }
+}

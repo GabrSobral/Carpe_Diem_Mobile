@@ -1,0 +1,223 @@
+.container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  background: var(--white);
+  padding-bottom: 2rem;
+
+  main{
+    width: 100%;
+    padding: 1rem 1rem 6rem 1rem;
+    margin-top: 5rem;
+    max-height: calc(100% - 4.5rem);
+
+    overflow-y: scroll;
+
+    strong{
+      font-size: 1.25rem;
+      padding: 1rem 0;
+    }
+
+    .video{
+      transition: 0.3s ease;
+      margin-top: 1rem;
+      width: 100%;
+      height: auto;
+      border-radius: 7px;
+      background-color: var(--gray-50);
+    }
+    .image{
+      width: 32rem;
+      height: 18rem;
+      border-radius: 7px;
+      background-color: var(--gray-50);
+    }
+
+
+    .activityItem{
+      display: flex;
+      max-width: 100%;
+      min-width: 100%;
+      align-items: center;
+    
+      background: linear-gradient(329deg, var(--blue-800) 0%, var(--blue-300) 100%);
+      border-radius: 7px;
+      padding: 1rem;
+      overflow: hidden;
+      transition: transform 0.2s ease;
+      
+      .icon{
+        min-height: 3.5rem;
+        min-width: 3.5rem;
+        border-radius: 50%;
+        padding: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--blue-600);
+    
+        margin-right: 0.5rem;
+      }
+    
+      .content{
+        display: flex;
+        flex-direction: column;
+        max-width: calc(100% - 6rem);
+    
+        h2{
+          color: var(--white);
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
+        p{
+          margin-top: 0.5rem;
+          color: var(--gray-100);
+          line-height: 1.25rem;
+        }
+      }
+    }
+
+    .ActivityDescription{
+      margin-top: 1rem;
+      width: 100%;
+      border-radius: 7px;
+      background-color: var(--gray-50);
+
+      padding: 1rem;
+
+      p{
+        line-height: 1.5rem;
+      }
+    }
+
+    .buttons{
+      width: 90%;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      margin-top: 2rem;
+
+      button{
+        width: 50%;
+        height: 4.5rem;
+        border: 0;
+        display: flex;
+        border-radius: 0 7px 7px 0;
+        font-weight: 600;
+        align-items: center;
+        outline: 0;
+        justify-content: center;
+        font-size: 1.25rem;
+        color: var(--gray-100);
+
+        background-color: var(--green-350);
+
+        &:first-child{
+          border-radius: 7px 0 0 7px;
+          background-color: var(--red-900);
+        }
+
+        svg{
+          margin-right: 0.5rem;
+        }
+      }
+    }
+  }
+
+}
+
+.modalBackground{
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.487);
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+
+  .modalContainer{
+    filter: blur(0px);
+    z-index: 20;
+    width: 90%;
+    height: fit-content;
+    padding: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+        
+    border-radius: 15px;
+    background-color: var(--white);
+  
+    div{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 1.5rem;
+      
+      h2{
+        font-size: 2rem;
+        font-weight: 800;
+        white-space: normal;
+      }
+
+      p{
+        color: var(--text);
+        font-size: 1.15rem;
+        text-align: center;
+        white-space: normal;
+        margin: 0.5rem 0;
+      }
+    }
+
+    .removeModalButton{
+      display: flex;
+      align-items: center;
+      flex-direction: row;
+      width: 100%;
+      justify-content: space-between;
+
+      button{
+        width: 48%;
+        border-radius: 7px;
+        font-size: 1.5rem;
+        color: var(--white);
+        border: 0;
+        outline: 0;
+        padding: 1rem;
+
+        &:first-child{
+          background-color: var(--red-900);
+        }
+        &:last-child{
+          background-color: var(--green-300);
+        }
+      }
+    }
+
+    button{
+      width: 100%;
+      border-radius: 7px;
+      background-color: var(--blue-400);
+      font-size: 1.5rem;
+      color: var(--white);
+      border: 0;
+      outline: 0;
+      padding: 1rem;
+    }
+  }
+}

@@ -24,7 +24,7 @@ export function Header({ GoBackIsActive} : HeaderProps){
     <header className={styles.container}>
       <motion.div className={styles.name}>
 
-        <AnimatePresence>
+        <AnimatePresence exitBeforeEnter>
           {GoBackIsActive && (
             <motion.button 
               onClick={() => history.goBack()}

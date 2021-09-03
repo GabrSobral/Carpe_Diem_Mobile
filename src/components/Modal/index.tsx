@@ -16,7 +16,7 @@ interface ModalProps{
   setIsVisible: any;
   destinyPage?: string;
   confirmFunction?: () => any;
-  image: 'Success' | "Exclude"
+  image?: 'Success' | "Exclude"
 }
 
 const images = {
@@ -41,71 +41,65 @@ export function Modal({
   useEffect(()=> { setIsModalVisible(isVisible) },[ isVisible ])
 
   return(
-    <>
+    <motion.div className={styles.modalBackground}
+      layout
+      key={`modal${keyModal}Background`}
+      initial={{ opacity: 0}}
+      animate={{ opacity: 1}}
+      exit={{ opacity: 0}}
+    >
+      <AnimatePresence key={`AP${keyModal}`}>
+        <motion.div className={styles.modalContainer}
+          layout
+          key={`modal${keyModal}`}
+          animate={{
+            scale : [0, 1],
+            opacity:[0, 1]}}
+          exit={{ scale : 0}}
+          transition={{ 
+            delay: 0.25,
+            bounce: 0.5, 
+            type: "spring", 
+            duration: 0.3 }}
+        >
+          {image && images[image]}
+          <div>
+            <h2>{title}</h2>
+            <p>{description}</p>
+          </div>
 
-    {isModalVisible && (
-      <motion.div className={styles.modalBackground}
-        layout
-        key={`modal${keyModal}Background`}
-        initial={{ opacity: 0}}
-        animate={{ opacity: 1}}
-        exit={{ opacity: 0}}
-      >
-        <AnimatePresence key={`AP${keyModal}`}>
-          <motion.div className={styles.modalContainer}
-            layout
-            key={`modal${keyModal}`}
-            animate={{
-              scale : [0, 1],
-              opacity:[0, 1]}}
-            exit={{ scale : 0}}
-            transition={{ 
-              delay: 0.25,
-              bounce: 0.5, 
-              type: "spring", 
-              duration: 0.3 }}
-          >
-            {images[image]}
-            <div>
-              <h2>{title}</h2>
-              <p>{description}</p>
-            </div>
-
-            { yesAndNoButtons ? (
-              <div className={styles.removeModalButton}>
-                <button 
-                  type="button" 
-                  onClick={() => setIsVisible(false)}
-                  className={styles.yesAndNoButton}
-                >
-                  Não
-                </button>
-
-                <button 
-                  type="button" 
-                  onClick={confirmFunction}
-                  className={styles.yesAndNoButton}
-                >   
-                  Sim
-                </button>
-              </div>
-            ) : (
+          { yesAndNoButtons ? (
+            <div className={styles.removeModalButton}>
               <button 
-                type="button"
-                className={styles.finishButton}
-                onClick={() => {
-                  setIsModalVisible(false)
-                  setTimeout(() => history.push(`/${destinyPage}`), 270)
-                }}
-                >
-                Fechar
+                type="button" 
+                onClick={() => setIsVisible(false)}
+                className={styles.yesAndNoButton}
+              >
+                Não
               </button>
-            ) }
-          </motion.div>
-        </AnimatePresence>
-      </motion.div>
-    )}
 
-    </>
+              <button 
+                type="button" 
+                onClick={confirmFunction}
+                className={styles.yesAndNoButton}
+              >   
+                Sim
+              </button>
+            </div>
+          ) : (
+            <button 
+              type="button"
+              className={styles.finishButton}
+              onClick={() => {
+                setIsModalVisible(false)
+                setTimeout(() => history.push(`/${destinyPage}`), 270)
+              }}
+              >
+              Fechar
+            </button>
+          ) }
+        </motion.div>
+      </AnimatePresence>
+    </motion.div>
   )
 }

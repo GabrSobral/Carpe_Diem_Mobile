@@ -1,6 +1,6 @@
 import styles from './style.module.scss'
 import { Link } from 'react-router-dom'
-import { FiHeadphones, FiMoreVertical, FiRadio } from 'react-icons/fi'
+import { FiHeadphones } from 'react-icons/fi'
 
 import Medic from '../../images/medic.svg'
 import Clock from '../../images/clock.svg'
@@ -17,8 +17,8 @@ interface ActivityItemProps extends ButtonHTMLAttributes<HTMLButtonElement>{
 const icon = {
   music: <FiHeadphones size={30} color="#fff"/>,
   gym: <img src={Gym} alt="" style={{ width: 30, height: 30 }}/>,
-  medic : <img src={Medic} alt="" style={{ width: 30, height: 30 }}/>,
-  clock : <img src={Clock} alt="" style={{ width: 30, height: 30 }}/>
+  medic : <img src={Medic} alt="" style={{ width: 40, height: 40 }}/>,
+  clock : <img src={Clock} alt="" style={{ width: 40, height: 40 }}/>
 }
 
 export function Item({ title, description, icons, page }: ActivityItemProps){

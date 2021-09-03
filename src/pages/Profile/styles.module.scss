@@ -1,0 +1,238 @@
+.container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  background: var(--white);
+
+  main{
+    margin-top: 5rem;
+    width: 100%;
+    height: fit-content;
+    overflow-y: auto;
+    overflow-x: hidden;
+    perspective: 2px;
+
+    .headerUserContainer{
+      position: relative;
+      width: 100%;
+      height: 15rem;
+      background: linear-gradient(329deg, var(--blue-800) 0%, var(--blue-300) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2.5rem;
+
+      .registeredAt{
+        position: absolute;
+        font-size: 0.75rem;
+        bottom: 2rem;
+        right: 1rem;
+        color: var(--gray-100);
+      }
+
+      .ImageAndNameContainer{
+        transform: translateY(-10%);
+        width: 100%;
+        display: flex;
+        align-items: center;
+        // justify-content: space-between;
+
+        img{
+          border-radius: 50%;
+          height: 9rem;
+          width: 9rem;
+          margin-right: 1rem;
+          box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.275);
+        }
+
+        span{
+          font-size: 1.25rem;
+          color: var(--white);
+          word-break: keep-all;
+          word-wrap: break-word;
+        }
+      }
+    }
+    .BottomInfoContainer{
+      position: relative;
+      width: 100%;
+      border-radius: 17px 17px 0px 0px;
+      height: calc(89vh - 15rem);
+      background-color: var(--white);
+      box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.207);
+      transform: translateY(-5%);
+      padding: 1rem;
+
+      .allActivitiesComplete{
+        width: 100%;
+        height: fit-content;
+        background-color: var(--gray-50);
+        border-radius: 7px;
+        padding: 1.25rem 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        span:first-child{
+          font-size: 1.25rem;
+          font-weight: 500;
+        }
+        span:last-child{
+          font-size: 1.75rem;
+          font-weight: 600;
+          color: var(--blue-300);
+        }
+      }
+
+      .configurationsContainer{
+        width: 100%;
+        background-color: var(--gray-100);
+        margin: 1rem 0;
+        border-radius: 7px;
+        overflow: hidden;
+
+        .configurationButton{
+          width: 100%;
+          display: flex;
+          padding: 1.25rem 1rem;
+          align-items: center;
+          border-radius: 7px;
+          box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.234);
+          background-color: var(--gray-50);
+          justify-content: space-between;
+          border: 0;
+          font-size: 1.25rem;
+          font-weight: 500;
+        }
+
+        .hiddenButtons{
+          box-shadow: 1px 1px 10px inset rgba(0, 0, 0, 0.234);
+
+          button{
+            width: 100%;
+            border: 0;
+            background: transparent;
+            padding: 1.25rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          }
+        }
+      }
+
+      .logoutButton{
+        position: relative;
+        width: 100%;
+        height: fit-content;
+        padding: 1rem;
+        border: 2px solid var(--red-900);
+        color: var(--red-900);
+        background-color: transparent;
+        border-radius: 7px;
+        font-size: 1.25rem;
+      
+        svg{
+          position: absolute;
+          transform: translateX(50%) translateY(-50%);
+          top: 50%;
+          right: 2rem;
+        }
+      }
+    }
+  }
+}
+
+.modalBackground{
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.487);
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+
+  .modalContainer{
+    filter: blur(0px);
+    z-index: 20;
+    width: 90%;
+    height: fit-content;
+    padding: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+        
+    border-radius: 15px;
+    background-color: var(--white);
+  
+    div{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 1.5rem;
+      
+      h2{
+        font-size: 2rem;
+        font-weight: 800;
+        white-space: normal;
+      }
+
+      p{
+        color: var(--text);
+        font-size: 1.15rem;
+        text-align: center;
+        white-space: normal;
+        margin: 0.5rem 0;
+      }
+    }
+
+    .removeModalButton{
+      display: flex;
+      align-items: center;
+      flex-direction: row;
+      width: 100%;
+      justify-content: space-between;
+
+      button{
+        width: 48%;
+        border-radius: 7px;
+        background-color: var(--blue-400);
+        font-size: 1.5rem;
+        color: var(--white);
+        border: 0;
+        outline: 0;
+        padding: 1rem;
+
+        &:first-child{
+          background-color: var(--red-900);
+        }
+        &:last-child{
+          background-color: var(--green-300);
+        }
+      }
+    }
+
+    button{
+      width: 100%;
+      border-radius: 7px;
+      background-color: var(--blue-400);
+      font-size: 1.5rem;
+      color: var(--white);
+      border: 0;
+      outline: 0;
+      padding: 1rem;
+    }
+  }
+}

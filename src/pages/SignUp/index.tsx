@@ -12,6 +12,7 @@ import { useUsers } from "../../contexts/UserContext"
 
 export const SignUp: React.FC = () => {
   const history = useHistory()
+  const { isAuthenticated } = useUsers()
   const [ name, setName ] = useState<string>('')
   const [ email, setEmail ] = useState<string>('')
   const [ password, setPassword ] = useState<string>('')
@@ -20,6 +21,10 @@ export const SignUp: React.FC = () => {
 
   const { Sign } = useUsers()
   const { setLoadingTrue, isLoading, closeLoading } = useLoading()
+
+  useEffect(() => {
+    isAuthenticated && history.push('/Home')
+  },[isAuthenticated, history])
 
   useEffect(()=> { closeLoading() },[closeLoading])
 

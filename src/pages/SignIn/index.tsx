@@ -11,14 +11,20 @@ import styles from './styles.module.scss'
 import { useUsers } from '../../contexts/UserContext';
 
 export const SignIn: React.FC = () => {
-  const { Sign } = useUsers()
+  const { Sign, isAuthenticated } = useUsers()
   const history = useHistory()
   const [ email, setEmail ] = useState<string>('')
   const [ password, setPassword ] = useState<string>('')
   const { setLoadingTrue, isLoading, closeLoading } = useLoading()
   const [ message, setMessage ] = useState<string>('')
 
-  useEffect(()=> { closeLoading() },[closeLoading])
+  useEffect(() => {
+    isAuthenticated && history.push('/Home')
+  },[isAuthenticated, history])
+
+  useEffect(()=> { 
+    closeLoading() 
+  },[closeLoading])
   useEffect(()=> { console.log(message) },[message])
 
   async function signIn(event : FormEvent){

@@ -1,5 +1,4 @@
-import { ButtonHTMLAttributes, HTMLProps } from 'react'
-import { Link } from 'react-router-dom'
+import { ButtonHTMLAttributes } from 'react'
 import { FiBook, FiHeadphones, FiMoreVertical, } from 'react-icons/fi'
 
 import Medic from '../../images/medic.svg'
@@ -12,12 +11,11 @@ import Meditation from '../../images/meditation.svg'
 import { useLoading } from '../../contexts/LoadingContext'
 
 import styles from './style.module.scss'
+import { ActivitiesProps, useActivity } from '../../contexts/ActivityContext'
+import { useHistory } from 'react-router'
 
 interface ActivityItemProps extends ButtonHTMLAttributes<HTMLButtonElement>{
-  title : string,
-  description : string,
-  icons : string,
-  content : string
+  activity: ActivitiesProps;
 }
 
 // const icon = {
@@ -32,25 +30,32 @@ interface ActivityItemProps extends ButtonHTMLAttributes<HTMLButtonElement>{
 //   clock : <img src={Clock} alt="" style={{ width: 30, height: 30 }}/>
 // }
 
-export function ActivityItem({ title, description, icons, content, id }: ActivityItemProps){
+export function ActivityItem({ activity }: ActivityItemProps){
   const { setLoadingTrue } = useLoading()
-  
+  const { setSelectedActivityState } = useActivity()
+  const history = useHistory()
+
   return(
-    <Link to={`/Activity/ActivityDetails?title=${title}&description=${description}&icons=${icons}&content=${content}&id=${id}`}>
-      <div className={styles.container} onClick={setLoadingTrue}>
-        <div className={styles.icon}>
-          {/* {icon[icons]} */}
-        </div>
-
-        <div className={styles.content}>
-          <h2>{title}</h2>
-          <p>{description}</p>
-        </div>
-
-        <button type="button">
-          <FiMoreVertical size={30} color="#fff"/>
-        </button>
+    <button 
+    className={styles.container} 
+    onClick={() => {
+      setSelectedActivityState(activity)
+      history.push('/ActivityDetails')
+      setLoadingTrue()
+    }}>
+      <div className={styles.icon}>
+        {/* {icon[icons]} */}
+        <div/>
       </div>
-    </Link>
+
+      <div className={styles.content}>
+        <h2>{activity.title}</h2>
+        <p>{activity.description}</p>
+      </div>
+
+      <div>
+        <FiMoreVertical size={30} color="#fff"/>
+      </div>
+    </button>
   )
 }

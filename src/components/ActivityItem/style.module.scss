@@ -3,12 +3,13 @@
   max-width: 100%;
   min-width: 100%;
   align-items: center;
-  justify-content: space-between;
+  justify-content: left;
 
   background: linear-gradient(329deg, var(--blue-800) 0%, var(--blue-300) 100%);
 
+  border: 0;
   border-radius: 7px;
-  padding: 1rem;
+  padding: 1.25rem;
   overflow: hidden;
   transition: transform 0.2s ease;
 
@@ -34,6 +35,9 @@
   .content{
     display: flex;
     flex-direction: column;
+    // align-items: center;
+    justify-content: left;
+    width: 100%;
     max-width: calc(100% - 6rem);
 
     h2{
@@ -41,11 +45,13 @@
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
+      text-align:start;
     }
     p{
       margin-top: 0.5rem;
       color: var(--gray-100);
       line-height: 1.5rem;
+      text-align:start;
     }
   }
 

@@ -1,5 +1,6 @@
 import styles from './styles.module.scss'
-import { FiList, FiHome, FiUser} from 'react-icons/fi'
+import { FiList, FiUser} from 'react-icons/fi'
+import UrgentSVG from '../../images/urgent.svg'
 import { useLoading } from '../../contexts/LoadingContext'
 import { useHistory } from 'react-router-dom'
 
@@ -15,19 +16,19 @@ export function BottomMenu({ pageActive }: TabsProps){
     switch(page){
       case "activities" : {
         if(pageActive !== "activities"){
-          history.push("/Activity/Activities")
+          history.push("/Activities")
           setLoadingTrue();
         } break;
       }
       case "home" : {
         if(pageActive !== "home"){
-          history.push("/Home/Home")
+          history.push("/Home")
           setLoadingTrue();
         } break;
       }
       case "me" : {
         if(pageActive !== "me"){
-          history.push("/Me/Me")
+          history.push("/Profile")
           setLoadingTrue();
         } break;
       }
@@ -37,18 +38,18 @@ export function BottomMenu({ pageActive }: TabsProps){
   return(
     <footer className={styles.container}>
         <button type='button' className={pageActive === "activities" ? styles.active : ''} onClick={()=> navigate("activities")}>
-          <FiList size={30} color={'#fff'}/>
-          Atividades
+          <FiList size={34} color={'#fff'}/>
+          {/* Atividades */}
         </button>
 
-        <button type='button' className={pageActive === "home" ? styles.active : ''} onClick={()=> navigate("home")}>
-          <FiHome size={30} color={'#fff'}/>
-          home
+        <button type='button' className={styles.urgentButton} onClick={()=> navigate("home")}>
+          <img src={UrgentSVG} alt="Clique em caso de crise" />
+          {/* home */}
         </button>
 
         <button type='button' className={pageActive === "me" ? styles.active : ''} onClick={()=> navigate("me")}>
-          <FiUser size={30} color={'#fff'}/>
-          Eu
+          <FiUser size={34} color={'#fff'}/>
+          {/* Eu */}
         </button>
     </footer>
   )

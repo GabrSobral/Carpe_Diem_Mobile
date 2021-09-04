@@ -1,7 +1,8 @@
-import { useEffect } from "react";
-import { createContext, ReactNode, useContext, useState } from "react";
+import { useCallback } from "react";
+import { createContext, ReactNode, useContext, useState, useEffect } from "react";
 import { api } from "../services/api";
-import { getToken, setToken } from "../utils/handleToken";
+import { getToken, removeToken, setToken } from "../utils/handleToken";
+import { storage } from "../utils/ionicStorage";
 
 interface UserProviderProps {
   children: ReactNode;
@@ -29,6 +30,22 @@ interface UserContextProps {
   Sign: ({name, password, email, query}: SignProps) => any;
   username: String;
   isAuthenticated: Boolean;
+  Logout: () => Promise<unknown>;
+  user?: UserProps;
+  handleFinishActivityInUser: () => void;
+  setHasAnswered: () => void;
+  updateUserState: () => void;
+}
+interface UserProps {
+  id: string;
+  name: string;
+  email: string;
+  activities_finished_today: number;
+  all_activities_finished: number;
+  quantity_of_activities: number;
+  created_at: Date;
+  updated_at: Date;
+  hasAnswered?: boolean;
 }
 
 const UserContext = createContext({} as UserContextProps)
@@ -36,11 +53,20 @@ const UserContext = createContext({} as UserContextProps)
 export function UserProvider({ children }: UserProviderProps){
   const [ isAuthenticated, setIsAuthenticated ] = useState(false)
   const [ username, setUsername ] = useState('')
+  const [ user, setUser ] = useState<UserProps>()
 
   useEffect(() => {
-    if(getToken()) {
-      setIsAuthenticated(true)
-    }
+    (async () => {
+      if(getToken()) {
+        setIsAuthenticated(true) 
+      }
+    })()
+  },[])
+
+  const updateUserState = useCallback(async () => {
+    const userStore = await storage.get('user')
+    if(userStore)
+      setUser(userStore)
   },[])
 
   async function Sign({name, email, password, query = '/login'}: SignProps) {
@@ -48,7 +74,15 @@ export function UserProvider({ children }: UserProviderProps){
 
     try {
       const { data } = await api.post(query, { name, email, password })
+
+      api.interceptors.request.use((config) => {
+        config.headers.authorization = `Bearer ${data.token}`
+        return config
+      })
+      
       setToken(data.token)
+      await storage.set('user', data.user)
+      setUser(data.user)
       setUsername(data.user.name)
       setIsAuthenticated(true)
 
@@ -61,12 +95,59 @@ export function UserProvider({ children }: UserProviderProps){
     }
   }
 
+  function Logout(){
+    return new Promise((resolve, reject) => {
+      storage.remove('user')
+      storage.remove('activities')
+      removeToken()
+      setIsAuthenticated(false)
+      setUsername('')
+      setUser(undefined)
+
+      return resolve('ok')
+    })
+  }
+
+  async function handleFinishActivityInUser(){
+    setUser(prev => {
+      if(prev){
+        prev.all_activities_finished++
+        prev.activities_finished_today++
+
+        (async () => {
+          await storage.set('user', prev)
+        })()
+
+        return prev
+      }
+      return undefined
+    })
+  }
+
+  function setHasAnswered(){
+    setUser(prev => {
+      if(prev) {
+        (async () => {
+          prev.hasAnswered = true
+          await storage.set('user', prev)
+        })()
+        return prev
+      }
+      return undefined
+    })
+  }
+
   return(
     <UserContext.Provider 
       value={{
         Sign,
         isAuthenticated,
-        username
+        username,
+        Logout,
+        user,
+        handleFinishActivityInUser,
+        setHasAnswered,
+        updateUserState
       }}>
       {children}
     </UserContext.Provider>

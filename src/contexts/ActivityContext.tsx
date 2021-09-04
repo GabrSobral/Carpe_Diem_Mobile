@@ -1,6 +1,6 @@
-import { useEffect } from "react";
-import { createContext, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useContext, useState, useEffect } from "react";
 import { api } from "../services/api";
+import { storage } from "../utils/ionicStorage";
 import { useUsers } from "./UserContext";
 
 interface ICategory{
@@ -24,12 +24,13 @@ interface ActivityContextData{
   setActivitiesTodayState: (num: number)=> void;
   selectedActivity?: ActivitiesProps;
   setSelectedActivityState: (activity: ActivitiesProps) => void;
+  handleUpdateActivitiesState: (activity_id: string) => void;
+  handleFinishActivity: (activity_id: string) => void;
 }
 
 interface ActivityProviderProps{
   children: ReactNode;
 }
-
 
 export const ActivityContext = createContext({} as ActivityContextData)
 
@@ -37,14 +38,18 @@ export function ActivityProvider({children} : ActivityProviderProps){
   const [ activities, setActivities ] = useState<ActivitiesProps[]>([])
   const [ activitiesToday, setActivitiesToday ] = useState(0)
   const [ selectedActivity, setSelectedActivity ] = useState<ActivitiesProps>()
-  const { isAuthenticated } = useUsers()
+  const { handleFinishActivityInUser, user } = useUsers()
 
   useEffect(() => {
-    if(!isAuthenticated){ return }
+    if(!user?.hasAnswered){ return }
     (async () => {
       try{
         const { data } = await api.get('/activity/get-activities')
-        console.log(data)
+        await storage.set('activities', data)
+        const user = await storage.get('user')
+        user.activities_finished_today = 0
+        await storage.set('user', user)
+
         setActivities(data)
       } catch(error: any) {
         if( error.response.data.error === 
@@ -56,13 +61,23 @@ export function ActivityProvider({children} : ActivityProviderProps){
         alert(error.response.data.error)
       }
     })()
-  },[isAuthenticated])
+  },[user?.hasAnswered])
 
   function setActivitiesTodayState(num: number){ setActivitiesToday(num) }
   function setSelectedActivityState(activity: ActivitiesProps){ setSelectedActivity(activity) }
+  function setActivitiesState(values : ActivitiesProps[]){ setActivities(values) }
 
-  function setActivitiesState(values : ActivitiesProps[]){
-    setActivities(values)
+  async function handleUpdateActivitiesState(activity_id: string) {
+    const newArray: ActivitiesProps[] = []
+    activities.forEach(item => item.id !== activity_id && newArray.push(item))
+    setActivities(newArray)
+    await storage.set('activities', newArray)
+  }
+
+  async function handleFinishActivity(activity_id: string){
+    await api.delete(`/activity/finish/${activity_id}`)
+    handleUpdateActivitiesState(activity_id)
+    handleFinishActivityInUser()
   }
 
   return (
@@ -73,7 +88,9 @@ export function ActivityProvider({children} : ActivityProviderProps){
         activitiesToday,
         setActivitiesTodayState,
         selectedActivity,
-        setSelectedActivityState
+        setSelectedActivityState,
+        handleUpdateActivitiesState,
+        handleFinishActivity
       }}
     >
       {children}

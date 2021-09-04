@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
-import { AnimatePresence, motion, useMotionValue } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { buildStyles, CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import { useHistory } from 'react-router';
 
 import { BottomMenu } from '../../components/BottomMenu'
 import { Header } from '../../components/header'
@@ -10,22 +9,30 @@ import { LoadingStatus } from '../../components/LoadingStatus';
 import { Item } from '../../components/ItemButton';
 
 import { useLoading } from '../../contexts/LoadingContext';
-import { useActivity } from '../../contexts/ActivityContext';
 
 import styles from './styles.module.scss'
+import { useUsers } from '../../contexts/UserContext';
+import { useLocation } from 'react-router';
 
 export const Home: React.FC = () => {
-  const history = useHistory()
+  const { user } = useUsers()
+  const query = useLocation().pathname
   const [ isVisible, setIsVisible ] = useState(false)
   const { isLoading, closeLoading } = useLoading()
   const [ percentage , setPercentage ] = useState(0)
-  const { activitiesToday, setActivitiesTodayState } = useActivity()
-  const y = useMotionValue(0)
+
+  console.log(query)
 
   useEffect(() => { 
     closeLoading()
     setIsVisible(true) 
   },[closeLoading])
+
+  useEffect(() => {
+    const percentegeCalculated = Math.round(
+      ((user?.activities_finished_today || 0) * 100) / (user?.quantity_of_activities || 0))
+    setPercentage(percentegeCalculated)
+  },[user?.activities_finished_today, user?.quantity_of_activities])
 
   const memoizedHeader = useMemo(()=>(
     <Header GoBackIsActive={false}/>
@@ -38,7 +45,8 @@ export const Home: React.FC = () => {
       <div className={styles.progressBarContainer}>
         <CircularProgressbar 
           value={percentage} 
-          text={activitiesToday >= 0 ? `${activitiesToday}/5` : "..."}
+          text={(user?.activities_finished_today || 0) >= 0 ? 
+              `${user?.activities_finished_today}/${(user?.quantity_of_activities || 0)}` : "..."}
           className={styles.circularProgressBar}
           strokeWidth={3}
           styles={buildStyles({
@@ -48,7 +56,7 @@ export const Home: React.FC = () => {
         />
       </div>
     </section>
-  ),[percentage, activitiesToday])
+  ),[percentage, user?.activities_finished_today, user?.quantity_of_activities])
 
   const memoizedPagesControl = useMemo(()=>(
     <section>

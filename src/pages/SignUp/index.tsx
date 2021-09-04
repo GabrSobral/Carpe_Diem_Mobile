@@ -41,7 +41,7 @@ export const SignUp: React.FC = () => {
     
     const result = await Sign({name, email, password, query: "/users"})
     if(result.message === "ok") {
-      history.push('/')
+      history.push('/Questionnaire')
     } else {
       setMessage(result.message)
     }

@@ -11,16 +11,12 @@ import styles from './styles.module.scss'
 import { useUsers } from '../../contexts/UserContext';
 
 export const SignIn: React.FC = () => {
-  const { Sign, isAuthenticated } = useUsers()
   const history = useHistory()
+  const { Sign } = useUsers()
   const [ email, setEmail ] = useState<string>('')
   const [ password, setPassword ] = useState<string>('')
   const { setLoadingTrue, isLoading, closeLoading } = useLoading()
   const [ message, setMessage ] = useState<string>('')
-
-  useEffect(() => {
-    isAuthenticated && history.push('/Home')
-  },[isAuthenticated, history])
 
   useEffect(()=> { 
     closeLoading() 
@@ -33,7 +29,12 @@ export const SignIn: React.FC = () => {
     const result = await Sign({email, password, query: "/login"})
     console.log(result)
     if(result.message === "ok") {
-      history.push('/Questionnaire')
+      console.log(result.data.user.hasAnswered)
+      if(result.data.user.hasAnswered === true) {
+        return history.push('/Home')
+      } else{
+        return history.push('/Questionnaire')  
+      }
     } else {
       setMessage(result.message)
     }

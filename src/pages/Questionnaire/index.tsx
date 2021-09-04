@@ -5,6 +5,7 @@ import { useHistory } from "react-router"
 import { Header } from "../../components/header"
 import { LoadingStatus } from "../../components/LoadingStatus"
 import { useLoading } from "../../contexts/LoadingContext"
+import { useUsers } from "../../contexts/UserContext"
 import { api } from "../../services/api"
 
 import styles from './styles.module.scss'
@@ -27,6 +28,7 @@ export const Questionnaire: React.FC = () => {
   const [ isFilled, setIsFilled ] = useState(false)
   const [ allAnswers, setAllAnswers ] = useState([]) as any[]
   const [ count, setCount ] = useState(0)
+  const { setHasAnswered } = useUsers()
 
   useEffect(() => {
     (async () => {
@@ -48,6 +50,7 @@ export const Questionnaire: React.FC = () => {
     setLoadingTrue()
 
     await api.post('/answer/new', { answer : allAnswers }).then(()=> {
+      setHasAnswered()
       history.push("/Home")
       return 
     }).catch((err)=>{

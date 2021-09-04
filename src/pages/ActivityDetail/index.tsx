@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, useCallback } from 'react'
 import { AnimatePresence, AnimateSharedLayout, motion } from 'framer-motion'
 import { useHistory } from 'react-router-dom'
-import { FiHeadphones, FiTrash, FiCheck, FiBook } from 'react-icons/fi'
+// import { FiHeadphones, FiTrash, FiCheck, FiBook } from 'react-icons/fi'
 
 import { BottomMenu } from '../../components/BottomMenu'
 import { Header } from '../../components/header'
@@ -17,11 +17,11 @@ import { useLoading } from '../../contexts/LoadingContext'
 // import Respiration from '../../images/respiration.svg'
 // import Meditation from '../../images/meditation.svg'
 
-import { api } from '../../services/api'
 import { useActivity } from '../../contexts/ActivityContext'
 import { Modal } from '../../components/Modal'
 
 import styles from './styles.module.scss'
+import { api } from '../../services/api'
 
 // const icon = {
 //   Musica: <FiHeadphones size={30} color="#fff"/>,
@@ -40,7 +40,7 @@ export const ActivityDetails: React.FC = () => {
   const [ isModalSuccessVisible, setIsModalSuccessVisible ] = useState(false)
   const [ isModalRemoveVisible, setIsModalRemoveVisible ] = useState(false)
   const { isLoading, setLoadingTrue, closeLoading } = useLoading()
-  const { selectedActivity } = useActivity()
+  const { selectedActivity, handleUpdateActivitiesState, handleFinishActivity } = useActivity()
   
   const history = useHistory()
 
@@ -52,47 +52,52 @@ export const ActivityDetails: React.FC = () => {
     }
   },[selectedActivity, history])
 
-  const Finish = useCallback(() => {
+  const Finish = useCallback(async () => {
     setLoadingTrue()
+    handleFinishActivity(selectedActivity?.id || '')
     setIsModalSuccessVisible(true)
-  },[setLoadingTrue, setIsModalSuccessVisible])
+  },[setLoadingTrue, setIsModalSuccessVisible, selectedActivity?.id, handleFinishActivity])
 
   const ExcludeActivity = useCallback(async () => {
     setLoadingTrue()
+
+    await api.delete(`/activity/my-delete/${selectedActivity?.id}`)
+    handleUpdateActivitiesState(String(selectedActivity?.id))
     setIsModalRemoveVisible(false)
     setTimeout(() => history.push('/activities'), 300)
-  },[setLoadingTrue, setIsModalRemoveVisible, history])
+  },[setLoadingTrue, setIsModalRemoveVisible, history, selectedActivity?.id, handleUpdateActivitiesState])
   
   const MemoizedModalExclude = useMemo(()=>(
     <AnimatePresence exitBeforeEnter>
       { isModalRemoveVisible && (
         <Modal
           title="Oh não..."
-          description="Você tem certeza de que deseja excluir essa tarefa?"
+          description="Você tem certeza de que deseja descartar essa tarefa?"
           keyModal="Exclude"
-          isVisible={isModalRemoveVisible}
           setIsVisible={setIsModalRemoveVisible}
           yesAndNoButtons={true}
           confirmFunction={ExcludeActivity}
           image="Exclude"
-          destinyPage="Activity/Activities"
+          destinyPage="Activities"
         />
       ) }
-      
     </AnimatePresence>
   ),[isModalRemoveVisible, ExcludeActivity])
 
   const MemoizedModalSuccess = useMemo(()=>(
-    <Modal
-      title="Parabéns!"
-      description="Você conseguiu realizar uma tarefa, isso é ótimo!"
-      keyModal="Success"
-      isVisible={isModalSuccessVisible}
-      setIsVisible={setIsModalSuccessVisible}
-      yesAndNoButtons={false}
-      image="Success"
-      destinyPage="Activities"
-    />
+    <AnimatePresence exitBeforeEnter>
+      { isModalSuccessVisible && (
+        <Modal
+          title="Parabéns!"
+          description="Você conseguiu realizar uma tarefa, isso é ótimo!"
+          keyModal="Success"
+          setIsVisible={setIsModalSuccessVisible}
+          yesAndNoButtons={false}
+          image="Success"
+          destinyPage="Activities"
+        />
+      ) }
+    </AnimatePresence>
   ),[isModalSuccessVisible])
 
   const memoizedDetails = useMemo(()=>(
@@ -142,9 +147,9 @@ export const ActivityDetails: React.FC = () => {
     <div className={styles.container}>
         {memoizedHeader}
 
-        {isModalSuccessVisible && (MemoizedModalSuccess)}
+        {MemoizedModalSuccess}
 
-        {isModalRemoveVisible && (MemoizedModalExclude)}
+        {MemoizedModalExclude}
 
         <AnimateSharedLayout type="crossfade">
          
@@ -181,14 +186,14 @@ export const ActivityDetails: React.FC = () => {
         
                   if(item.format === "mp3"){
                     return(
-                      <>
+                      <div key={item.id}>
                         <strong>Nós recomendamos essa música</strong>
                         <Player 
                           name={item.name || ''}
                           url={item.url || ''}
                           duration={item.duration || 0}
                         />
-                      </>
+                      </div>
                     )
                   }
         
@@ -206,7 +211,7 @@ export const ActivityDetails: React.FC = () => {
                       
                     )
                   }
-                  return <p key={item.id}>banana</p>
+                  return <p key={item.id}/>
                 })}
                 {memoizedButtonsControl}
               </motion.main>

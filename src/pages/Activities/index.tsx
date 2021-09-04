@@ -34,21 +34,20 @@ export const Activities: React.FC = () => {
 
   const memoizedAllActivities = useMemo(()=>(
     <section className={styles.allActivities}>
-      {activities.length !== 0 ? (
+      {activities?.length !== 0 ? (
         activities.map(activity => (
           <ActivityItem 
             key={activity.id}
             activity={activity}
           />
         ))
-      )
-      : (
+        )
+        : (
         <div className={styles.dontHaveActivitiesContainer}>
           <FiFrown color="#bbb" size={86}/>
           <span>Não há atividades para realizar.</span>
         </div>
-      )
-      }
+      )}
     </section>
   ),[activities])
 
@@ -58,20 +57,18 @@ export const Activities: React.FC = () => {
 
   return(
     <div className={styles.container}>
-      
       {memoizedHeader}
       <AnimatePresence exitBeforeEnter>
         {isVisible && (
           <motion.main
-            key="Activities"
-            initial={{ opacity: 0, height: 0, y: 50 }}
-            animate={{ opacity: 1, height: "fit-content", y: 0}}
-            exit={{ opacity: 0}}
+          key="Activities"
+          initial={{ opacity: 0, height: 0, y: 50 }}
+          animate={{ opacity: 1, height: "fit-content", y: 0}}
+          exit={{ opacity: 0}}
           >
-            {isLoading && (
-              <LoadingStatus/>
-            )}
+            {isLoading && <LoadingStatus/> }
             {memoizedMainTitle}
+            
             {memoizedAllActivities}
           </motion.main>
         )}

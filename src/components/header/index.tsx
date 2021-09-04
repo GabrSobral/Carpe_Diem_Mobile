@@ -1,5 +1,5 @@
 import { FiArrowLeft } from 'react-icons/fi'
-import { AnimatePresence, motion, useMotionValue } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { useHistory } from 'react-router-dom'
 
 import styles from './style.module.scss'
@@ -10,7 +10,6 @@ interface HeaderProps{
 
 export function Header({ GoBackIsActive} : HeaderProps){
   const history = useHistory()
-  const x = useMotionValue(0)
   const variants = {
     active: {
       x : [0, 50]
@@ -40,7 +39,7 @@ export function Header({ GoBackIsActive} : HeaderProps){
                 type: 'spring' 
               }}
             >
-              <FiArrowLeft size={30} color="#434343"/>
+            <FiArrowLeft size={30} color="#434343"/>
           </motion.button>
           )}    
         
@@ -55,7 +54,7 @@ export function Header({ GoBackIsActive} : HeaderProps){
             variants={variants}
           >
             Olá, 
-          <motion.span>Nome teste</motion.span>
+            <motion.span>Nome teste</motion.span>
           </motion.h2>
         </AnimatePresence>
       </motion.div>

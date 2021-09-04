@@ -5,13 +5,11 @@ import Success from '../../images/trophy.svg'
 import Exclude from '../../images/delete.svg'
 
 import styles from './style.module.scss'
-import { useEffect, useState } from 'react'
 
 interface ModalProps{
   keyModal: string;
   title: string;
   description: string;
-  isVisible: boolean;
   yesAndNoButtons: boolean;
   setIsVisible: any;
   destinyPage?: string;
@@ -28,7 +26,6 @@ export function Modal({
   keyModal,
   title,
   description,
-  isVisible,
   image,
   setIsVisible,
   yesAndNoButtons,
@@ -36,9 +33,6 @@ export function Modal({
   confirmFunction
  }: ModalProps) {
   const history = useHistory()
-  const [ isModalVisible, setIsModalVisible ] = useState<boolean>(false)
-
-  useEffect(()=> { setIsModalVisible(isVisible) },[ isVisible ])
 
   return(
     <motion.div className={styles.modalBackground}
@@ -91,7 +85,7 @@ export function Modal({
               type="button"
               className={styles.finishButton}
               onClick={() => {
-                setIsModalVisible(false)
+                setIsVisible(false)
                 setTimeout(() => history.push(`/${destinyPage}`), 270)
               }}
               >

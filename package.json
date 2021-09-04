@@ -13,6 +13,7 @@
   "dependencies": {
     "@ionic/react": "^5.5.0",
     "@ionic/react-router": "^5.5.0",
+    "@ionic/storage": "^3.0.6",
     "axios": "^0.21.1",
     "framer-motion": "^4.1.17",
     "ionicons": "^5.4.0",

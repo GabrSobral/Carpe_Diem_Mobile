@@ -55,19 +55,24 @@ export function UserProvider({ children }: UserProviderProps){
   const [ username, setUsername ] = useState('')
   const [ user, setUser ] = useState<UserProps>()
 
+  const updateUserState = useCallback(async () => {
+    const userStore = await storage.get('user')
+    if(userStore){
+      setUser(userStore)
+      const firstName = userStore.name.split(' ')[0]
+      setUsername(firstName)
+    }
+  },[])
+
   useEffect(() => {
     (async () => {
       if(getToken()) {
         setIsAuthenticated(true) 
+        updateUserState()
       }
     })()
-  },[])
+  },[ updateUserState ])
 
-  const updateUserState = useCallback(async () => {
-    const userStore = await storage.get('user')
-    if(userStore)
-      setUser(userStore)
-  },[])
 
   async function Sign({name, email, password, query = '/login'}: SignProps) {
     const result = {} as SignResult
@@ -75,10 +80,10 @@ export function UserProvider({ children }: UserProviderProps){
     try {
       const { data } = await api.post(query, { name, email, password })
 
-      api.interceptors.request.use((config) => {
-        config.headers.authorization = `Bearer ${data.token}`
-        return config
-      })
+      // api.interceptors.request.use((config) => {
+      //   config.headers.authorization = `Bearer ${data.token}`
+      //   return config
+      // })
       
       setToken(data.token)
       await storage.set('user', data.user)

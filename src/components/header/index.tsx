@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useHistory } from 'react-router-dom'
 
 import styles from './style.module.scss'
+import { useUsers } from '../../contexts/UserContext'
 
 interface HeaderProps{
   GoBackIsActive : boolean
@@ -10,6 +11,7 @@ interface HeaderProps{
 
 export function Header({ GoBackIsActive} : HeaderProps){
   const history = useHistory()
+  const { username } = useUsers()
   const variants = {
     active: {
       x : [0, 50]
@@ -21,12 +23,12 @@ export function Header({ GoBackIsActive} : HeaderProps){
 
   return(
     <header className={styles.container}>
-      <motion.div className={styles.name}>
+      <div className={styles.name}>
 
-        <AnimatePresence exitBeforeEnter>
+        <AnimatePresence>
           {GoBackIsActive && (
             <motion.button 
-              onClick={() => history.goBack()}
+              onClick={() => history.push('/Home')}
               key="GoBackKey"
               type='button'
               animate={{ 
@@ -54,10 +56,10 @@ export function Header({ GoBackIsActive} : HeaderProps){
             variants={variants}
           >
             Olá, 
-            <motion.span>Nome teste</motion.span>
+            <span>{username}</span>
           </motion.h2>
         </AnimatePresence>
-      </motion.div>
+      </div>
     </header>
   )
 }

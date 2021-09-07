@@ -1,8 +1,6 @@
 import { FaTimes } from 'react-icons/fa'
 import { Link, useHistory } from 'react-router-dom'
 
-import { useLoading } from '../../contexts/LoadingContext'
-
 import styles from './style.module.scss'
 
 interface headerProps{
@@ -11,7 +9,6 @@ interface headerProps{
 }
 
 export function SignPageHeader({ title, button } : headerProps){
-  const { setLoadingTrue } = useLoading()
   const history = useHistory()
 
   return(
@@ -24,7 +21,7 @@ export function SignPageHeader({ title, button } : headerProps){
       <h1>{title}</h1>
 
       <Link to={button === 'Entrar' ? '/SignIn' : '/SignUp'}>
-        <button type="button" onClick={setLoadingTrue}>{button}</button>
+        <button type="button">{button}</button>
       </Link>
     </header>
   )

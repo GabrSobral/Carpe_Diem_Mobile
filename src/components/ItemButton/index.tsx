@@ -6,7 +6,6 @@ import Medic from '../../images/medic.svg'
 import Clock from '../../images/clock.svg'
 import Gym from '../../images/Gym.svg'
 import { ButtonHTMLAttributes } from 'react'
-import { useLoading } from '../../contexts/LoadingContext'
 
 interface ActivityItemProps extends ButtonHTMLAttributes<HTMLButtonElement>{
   title : string,
@@ -22,10 +21,9 @@ const icon = {
 }
 
 export function Item({ title, description, icons, page }: ActivityItemProps){
-  const { setLoadingTrue } = useLoading()
   return(
     <Link to={`/${page}`}>
-      <div className={styles.container} onClick={setLoadingTrue}>
+      <div className={styles.container}>
         <div className={styles.icon}>
           {icon[icons]}
         </div>

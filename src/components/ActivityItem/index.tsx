@@ -1,14 +1,14 @@
 import { ButtonHTMLAttributes } from 'react'
 import { FiBook, FiHeadphones, FiMoreVertical, } from 'react-icons/fi'
 
-import Medic from '../../images/medic.svg'
-import Clock from '../../images/clock.svg'
-import Gym from '../../images/Gym.svg'
-import Games from '../../images/games.svg'
-import Food from '../../images/food.svg'
-import Respiration from '../../images/respiration.svg'
-import Meditation from '../../images/meditation.svg'
-import { useLoading } from '../../contexts/LoadingContext'
+// import Medic from '../../images/medic.svg'
+// import Clock from '../../images/clock.svg'
+// import Gym from '../../images/Gym.svg'
+// import Games from '../../images/games.svg'
+// import Food from '../../images/food.svg'
+// import Respiration from '../../images/respiration.svg'
+// import Meditation from '../../images/meditation.svg'
+// import { useLoading } from '../../contexts/LoadingContext'
 
 import styles from './style.module.scss'
 import { ActivitiesProps, useActivity } from '../../contexts/ActivityContext'
@@ -31,7 +31,6 @@ interface ActivityItemProps extends ButtonHTMLAttributes<HTMLButtonElement>{
 // }
 
 export function ActivityItem({ activity }: ActivityItemProps){
-  const { setLoadingTrue } = useLoading()
   const { setSelectedActivityState } = useActivity()
   const history = useHistory()
 
@@ -41,7 +40,6 @@ export function ActivityItem({ activity }: ActivityItemProps){
     onClick={() => {
       setSelectedActivityState(activity)
       history.push('/ActivityDetails')
-      setLoadingTrue()
     }}>
       <div className={styles.icon}>
         {/* {icon[icons]} */}

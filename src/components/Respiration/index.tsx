@@ -1,4 +1,4 @@
-import { motion, useMotionValue } from "framer-motion";
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { FiPlay, FiX } from "react-icons/fi";
 import { Timer } from "../Timer";
@@ -11,68 +11,76 @@ export function Respiration(){
   const [ isFinished, setIsFinished ] = useState(false)
   const [ isFirst, setIsFirst ] = useState(10)
   const [ message, setMessage ] = useState('Começar')
-  const y = useMotionValue(0)
-
+  
   let timeOutFunction : NodeJS.Timeout
-
+  
   function handleStartClock(){
     setIsClockStarted(!isClockStarted)
     isClockStarted ? setIsFirst(0) : setIsFirst(1)
+    // setIsFinished(false)
     clearTimeout(timeOutFunction)
   }
-
+  
   useEffect(()=> {
+    let insideTimeout = timeOutFunction
     if(isFirst === 1){
       setIsFirst(isFirst + 1)
-      setIsFinished(!isFinished)
-      clearTimeout(timeOutFunction)
+      setIsFinished(true)
+      clearTimeout(insideTimeout)
       setRespirationSize(100)
       setMessage("Respire...")
     }
     if(isFirst === 0){
       setIsFirst(isFirst + 2)
-      setIsFinished(!isFinished)
-      setRespirationSize(0)
-      clearTimeout(timeOutFunction)
+      setIsFinished(true)
+      setRespirationSize(0.0001)
+      clearTimeout(insideTimeout)
       setMessage("Pausado...")
     }
     if(isFinished && isClockStarted){
-      timeOutFunction = setTimeout(() => {
-        setIsFinished(!isFinished)
+      insideTimeout = setTimeout(() => {
+        setIsFinished(false)
         setRespirationSize(0)
         setMessage("Expire...")
       }, 7000)
     } else if(!isFinished && isClockStarted){
-      timeOutFunction = setTimeout(() => {
-        setIsFinished(!isFinished)
+      insideTimeout = setTimeout(() => {
+        setIsFinished(true)
         setRespirationSize(100)
         setMessage("Respire...")
       }, 7000)
     }
-    return () => clearTimeout(timeOutFunction)
+    return () => clearTimeout(insideTimeout)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[respirationSize, isClockStarted])
 
   return(
         <motion.main
-            key="Activities"
-            initial={{ opacity: 0, height: 0, y: 50 }}
-            animate={{ opacity: 1, height: "fit-content", y: 0}}
-            exit={{ opacity: 0}}
-            className={styles.MainContainer}
-          >
+          key="RespirationMainKey"
+          initial={{ opacity: 0, height: 0, y: 50 }}
+          animate={{ opacity: 1, height: "fit-content", y: 0}}
+          exit={{ opacity: 0}}
+          className={styles.MainContainer}
+        >
           <div className={styles.respirationContainer}>
-              <motion.h2 
-                className={styles.instruction}
-                initial={{ opacity: 0}}
-                animate={{ opacity: 1}}
-                exit={{ opacity: 0}}
-              >
-                {message}
-              </motion.h2>
+            <motion.h2 
+              key="RespirationMainTitle"
+              className={styles.instruction}
+              initial={{ opacity: 0}}
+              animate={{ opacity: 1}}
+              exit={{ opacity: 0}}
+            >
+              {message}
+            </motion.h2>
 
             <div className={styles.RespirationAndTimerContainer}>
               <div className={styles.circleRespirationContainer}>
-                <div style={{ width: `${respirationSize}%`, height: `${respirationSize}%` }}/>
+                <div 
+                style={{ 
+                  width: `${respirationSize}%`, 
+                  height: `${respirationSize}%`,
+                  transition: isClockStarted ? "7s" : '0.3s'
+                 }}/>
               </div>
               
               <Timer isClockActive={isClockStarted}/>

@@ -67,6 +67,6 @@
     background-color: var(--blue-300);
     box-shadow: inset 0 0 20px #ffffffa8;
 
-    transition: 7s;
+    transition-timing-function: cubic-bezier(0,0, 1,1);
   }
 }

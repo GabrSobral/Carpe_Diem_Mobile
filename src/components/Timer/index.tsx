@@ -9,13 +9,16 @@ export function Timer({ isClockActive } : TimerProps){
   const [ seconds, setSeconds ] = useState(0)
 
   useEffect(()=>{
+    let timeout: NodeJS.Timeout
     if(isClockActive){
-      setTimeout(()=> {
+      timeout = setTimeout(()=> {
         setSeconds(prevState => prevState + 1)
       },1000)
       const timestamp = convertDurationToTimeString(seconds)
       setTimer(timestamp)
+      return () => clearTimeout(timeout)
     }
+    return () => clearTimeout(timeout)
   },[seconds, isClockActive])
 
   function convertDurationToTimeString(duration : number){

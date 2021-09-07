@@ -57,6 +57,24 @@
       }
     }
 
+    .sliderTimerContainer{
+      width: 100%;
+      height: fit-content;
+      padding: 0;
+      border-radius: 7px;
+      background-color: var(--gray-100);
+      overflow: hidden;
+      display: flex;
+      align-items: flex-start;
+
+      > div{
+        margin: 0;
+        height: 1.25rem;
+        background-color: var(--blue-400);
+        transition-timing-function: cubic-bezier(0, 0, 1, 1);
+      }
+    }
+
     .removeModalButton{
       display: flex;
       align-items: center;

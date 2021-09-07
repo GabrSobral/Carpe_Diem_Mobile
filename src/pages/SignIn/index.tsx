@@ -1,10 +1,9 @@
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { FaEnvelope, FaLock, FaSignInAlt } from 'react-icons/fa'
 import { Link, useHistory } from 'react-router-dom';
 import { motion } from 'framer-motion'
 
 import { SignPageHeader } from '../../components/SignPageHeader'
-import { LoadingStatus } from '../../components/LoadingStatus'
 import { useLoading } from '../../contexts/LoadingContext';
 
 import styles from './styles.module.scss'
@@ -18,27 +17,24 @@ export const SignIn: React.FC = () => {
   const { setLoadingTrue, isLoading, closeLoading } = useLoading()
   const [ message, setMessage ] = useState<string>('')
 
-  useEffect(()=> { 
-    closeLoading() 
-  },[closeLoading])
-  useEffect(()=> { console.log(message) },[message])
-
   async function signIn(event : FormEvent){
     event.preventDefault()
+    setLoadingTrue()
     
     const result = await Sign({email, password, query: "/login"})
-    console.log(result)
     if(result.message === "ok") {
       console.log(result.data.user.hasAnswered)
       if(result.data.user.hasAnswered === true) {
+        closeLoading()
         return history.push('/Home')
       } else{
+        closeLoading()
         return history.push('/Questionnaire')  
       }
     } else {
       setMessage(result.message)
+      closeLoading()
     }
-    closeLoading()
   }
 
   return(
@@ -49,7 +45,6 @@ export const SignIn: React.FC = () => {
         animate={{opacity : 1, y : 0}}
       >
         <form className={styles.formContainer}>
-          {isLoading && (<LoadingStatus/>) }
           <div className={!email ? styles.inputContainer : styles.inputContainerActive}>
             <span>Email</span>
             <input type='email' onChange={(event)=> setEmail(event.target.value)}/>
@@ -74,7 +69,7 @@ export const SignIn: React.FC = () => {
           
           <span className={styles.warningText}>{message}</span>
           
-          <button type='submit' disabled={email && password ? false : true} onClick={signIn}>
+          <button type='submit' disabled={email && password && !isLoading ? false : true} onClick={signIn}>
             Entrar
             <FaSignInAlt size={24} />
           </button>

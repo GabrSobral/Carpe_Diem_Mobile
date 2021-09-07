@@ -5,28 +5,17 @@ import 'react-circular-progressbar/dist/styles.css';
 
 import { BottomMenu } from '../../components/BottomMenu'
 import { Header } from '../../components/header'
-import { LoadingStatus } from '../../components/LoadingStatus';
 import { Item } from '../../components/ItemButton';
-
-import { useLoading } from '../../contexts/LoadingContext';
 
 import styles from './styles.module.scss'
 import { useUsers } from '../../contexts/UserContext';
-import { useLocation } from 'react-router';
 
 export const Home: React.FC = () => {
   const { user } = useUsers()
-  const query = useLocation().pathname
   const [ isVisible, setIsVisible ] = useState(false)
-  const { isLoading, closeLoading } = useLoading()
   const [ percentage , setPercentage ] = useState(0)
 
-  console.log(query)
-
-  useEffect(() => { 
-    closeLoading()
-    setIsVisible(true) 
-  },[closeLoading])
+  useEffect(() => { setIsVisible(true) },[])
 
   useEffect(() => {
     const percentegeCalculated = Math.round(
@@ -76,7 +65,6 @@ export const Home: React.FC = () => {
 
   return(
     <div className={styles.container}>
-      { isLoading && (<LoadingStatus/>) }
       {memoizedHeader}
       <AnimatePresence exitBeforeEnter>
         {isVisible && (

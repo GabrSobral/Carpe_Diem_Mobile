@@ -6,7 +6,6 @@ import { FiBook, FiLock, FiLogOut, FiSettings } from 'react-icons/fi';
 
 import { BottomMenu } from '../../components/BottomMenu'
 import { Header } from '../../components/header'
-import { LoadingStatus } from '../../components/LoadingStatus';
 import { Modal } from '../../components/Modal'
 
 import { useLoading } from '../../contexts/LoadingContext';
@@ -17,7 +16,7 @@ import { useUsers } from '../../contexts/UserContext';
 export const Profile: React.FC = () => {
   const history = useHistory()
   const [ isVisible, setIsVisible ] = useState(false)
-  const { isLoading, closeLoading, setLoadingTrue } = useLoading()
+  const { setLoadingTrue } = useLoading()
   const [ settingsIsVisible, setSettingsIsVisible ] = useState(false)
   const [ isLogoutModalVisible, setIsLogoutModalVisible ] = useState(false)
   const { Logout, user } = useUsers()
@@ -27,7 +26,6 @@ export const Profile: React.FC = () => {
   },[history, Logout])
  
   useEffect(()=>{ setIsVisible(true) },[])
-  useEffect(() => { closeLoading() },[ closeLoading ])
 
   const memoizedModalLogout = useMemo(()=>(
     <AnimatePresence exitBeforeEnter>
@@ -119,7 +117,6 @@ export const Profile: React.FC = () => {
 
   return(
     <div className={styles.container}>
-      { isLoading && (<LoadingStatus/>) }
       { memoizedModalLogout }
 
       {memoizedHeader}

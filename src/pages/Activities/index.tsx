@@ -5,20 +5,16 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { ActivityItem } from '../../components/ActivityItem'
 import { BottomMenu } from '../../components/BottomMenu'
 import { Header } from '../../components/header'
-import { LoadingStatus } from '../../components/LoadingStatus'
 
-import { useLoading } from '../../contexts/LoadingContext'
 import { useActivity } from '../../contexts/ActivityContext'
 
 import styles from './styles.module.scss'
 
 export const Activities: React.FC = () => {
   const [ isVisible, setIsVisible ] = useState(false)
-  const { isLoading, closeLoading } = useLoading()
   const { activities } = useActivity()
 
   useEffect(()=> { setIsVisible(true) },[])
-  useEffect(()=> { closeLoading() },[closeLoading])
 
   const memoizedHeader = useMemo(()=>(
     <Header GoBackIsActive={true}/>
@@ -31,7 +27,6 @@ export const Activities: React.FC = () => {
       </div>
     </div>
   ),[])
-
   const memoizedAllActivities = useMemo(()=>(
     <section className={styles.allActivities}>
       {activities?.length !== 0 ? (
@@ -50,7 +45,6 @@ export const Activities: React.FC = () => {
       )}
     </section>
   ),[activities])
-
   const memoizedBottomMenu = useMemo(()=>(
     <BottomMenu pageActive='activities'/>
   ),[])
@@ -66,7 +60,6 @@ export const Activities: React.FC = () => {
           animate={{ opacity: 1, height: "fit-content", y: 0}}
           exit={{ opacity: 0}}
           >
-            {isLoading && <LoadingStatus/> }
             {memoizedMainTitle}
             
             {memoizedAllActivities}

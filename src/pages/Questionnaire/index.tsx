@@ -3,7 +3,6 @@ import { useEffect, useState, FormEvent } from "react"
 import { useHistory } from "react-router"
 
 import { Header } from "../../components/header"
-import { LoadingStatus } from "../../components/LoadingStatus"
 import { useLoading } from "../../contexts/LoadingContext"
 import { useUsers } from "../../contexts/UserContext"
 import { api } from "../../services/api"
@@ -22,7 +21,7 @@ interface QuestionProps {
 export const Questionnaire: React.FC = () => {
   const history = useHistory()
   const [ isVisible, setIsVisible ] = useState(false)
-  const { isLoading, setLoadingTrue, closeLoading } = useLoading()
+  const { setLoadingTrue, closeLoading } = useLoading()
   const [ questions, setQuestions ] = useState<QuestionProps[]>([])
   const [ message, setMessage ] = useState('Mensagem de teste')
   const [ isFilled, setIsFilled ] = useState(false)
@@ -51,6 +50,7 @@ export const Questionnaire: React.FC = () => {
 
     await api.post('/answer/new', { answer : allAnswers }).then(()=> {
       setHasAnswered()
+      closeLoading()
       history.push("/Home")
       return 
     }).catch((err)=>{
@@ -77,7 +77,6 @@ export const Questionnaire: React.FC = () => {
             animate={{ opacity: 1, height: "fit-content", y: 0}}
             exit={{ opacity: 0}}
           >
-            {isLoading && <LoadingStatus/> }
             <h2>Permita-nos conhecê-lo(a) <br/> melhor</h2>
 
             {questions.map((question, index) => (

@@ -5,7 +5,6 @@ import { useHistory } from 'react-router-dom'
 
 import { BottomMenu } from '../../components/BottomMenu'
 import { Header } from '../../components/header'
-import { LoadingStatus } from '../../components/LoadingStatus'
 import { Player } from '../../components/Player'
 import { useLoading } from '../../contexts/LoadingContext'
 
@@ -39,13 +38,12 @@ export const ActivityDetails: React.FC = () => {
   const [ isVisible, setIsVisible ] = useState(false)
   const [ isModalSuccessVisible, setIsModalSuccessVisible ] = useState(false)
   const [ isModalRemoveVisible, setIsModalRemoveVisible ] = useState(false)
-  const { isLoading, setLoadingTrue, closeLoading } = useLoading()
+  const { setLoadingTrue, closeLoading } = useLoading()
   const { selectedActivity, handleUpdateActivitiesState, handleFinishActivity } = useActivity()
   
   const history = useHistory()
 
   useEffect(()=> { setIsVisible(true) },[])
-  useEffect(()=> { closeLoading() },[ closeLoading ])
   useEffect(() => {
     if(!selectedActivity) {
       history.push('/Activities')
@@ -56,7 +54,8 @@ export const ActivityDetails: React.FC = () => {
     setLoadingTrue()
     handleFinishActivity(selectedActivity?.id || '')
     setIsModalSuccessVisible(true)
-  },[setLoadingTrue, setIsModalSuccessVisible, selectedActivity?.id, handleFinishActivity])
+    closeLoading()
+  },[setLoadingTrue, setIsModalSuccessVisible, selectedActivity?.id, handleFinishActivity, closeLoading])
 
   const ExcludeActivity = useCallback(async () => {
     setLoadingTrue()
@@ -145,80 +144,78 @@ export const ActivityDetails: React.FC = () => {
 
   return(
     <div className={styles.container}>
-        {memoizedHeader}
+      {memoizedHeader}
 
-        {MemoizedModalSuccess}
+      {MemoizedModalSuccess}
 
-        {MemoizedModalExclude}
+      {MemoizedModalExclude}
 
-        <AnimateSharedLayout type="crossfade">
-         
-          <AnimatePresence exitBeforeEnter>
-            {isVisible && (
+      <AnimateSharedLayout type="crossfade">
+        
+        <AnimatePresence exitBeforeEnter>
+          {isVisible && (
+            
+            <motion.main
+            layout
+            key="ActivityDetails"
+            initial={{ opacity: 0, height: 0, y: 50 }}
+            animate={{ opacity: 1, height: "fit-content", y: 0}}
+            exit={{ opacity: 0, height: 0}}
+            >    
+              {memoizedDetails}
+
+              {selectedActivity?.files.map(item => {
               
-              <motion.main
-              layout
-              key="ActivityDetails"
-              initial={{ opacity: 0, height: 0, y: 50 }}
-              animate={{ opacity: 1, height: "fit-content", y: 0}}
-              exit={{ opacity: 0, height: 0}}
-              >
-                {isLoading && (<LoadingStatus/>) }
-                
-                {memoizedDetails}
-
-                {selectedActivity?.files.map(item => {
-                
-                  if(item.format === "mp4"){
-                    return(
-                      <motion.video 
-                        controls 
-                        className={styles.video} 
-                        key={item.id}
-                        initial={{ opacity: 0}}
-                        animate={{ opacity: 1}}
-                      >
-                        <source src={item.url} type="video/mp4"/>
-                        Your browser does not support the video tag.
-                      </motion.video>
-                    )
-                  }
-        
-                  if(item.format === "mp3"){
-                    return(
-                      <div key={item.id}>
-                        <strong>Nós recomendamos essa música</strong>
-                        <Player 
-                          name={item.name || ''}
-                          url={item.url || ''}
-                          duration={item.duration || 0}
-                        />
-                      </div>
-                    )
-                  }
-        
-                  if(item.format === "png"){
-                    return(
-                      <div className={styles.image} key={item.id}>
-                        <img 
-                          key={item.id}
-                          src={item.url} 
-                          alt="Imagem do arquivo" 
-                          width={512}
-                          height={288}
+                if(item.format === "mp4"){
+                  return(
+                    <motion.video 
+                      controls 
+                      className={styles.video} 
+                      key={item.id}
+                      initial={{ opacity: 0}}
+                      animate={{ opacity: 1}}
+                    >
+                      <source src={item.url} type="video/mp4"/>
+                      Your browser does not support the video tag.
+                    </motion.video>
+                  )
+                }
+      
+                if(item.format === "mp3"){
+                  return(
+                    <div key={item.id}>
+                      <strong>Nós recomendamos essa música</strong>
+                      <Player 
+                        name={item.name || ''}
+                        url={item.url || ''}
+                        duration={item.duration || 0}
                       />
-                      </div>
-                      
-                    )
-                  }
-                  return <p key={item.id}/>
-                })}
-                {memoizedButtonsControl}
-              </motion.main>
-            )}
-          </AnimatePresence>
-          {memoizedBottomMenu}
-        </AnimateSharedLayout>
+                    </div>
+                  )
+                }
+      
+                if(item.format === "png"){
+                  return(
+                    <div className={styles.image} key={item.id}>
+                      <img 
+                        key={item.id}
+                        src={item.url} 
+                        alt="Imagem do arquivo" 
+                        width={"100%"}
+                        height={"fit-content"}
+                    />
+                    </div>
+                    
+                  )
+                }
+                return <p key={item.id}/>
+              })}
+              {memoizedButtonsControl}
+            </motion.main>
+          )}
+        </AnimatePresence>
+        {memoizedBottomMenu}
+      </AnimateSharedLayout>
     </div>
   )
 }

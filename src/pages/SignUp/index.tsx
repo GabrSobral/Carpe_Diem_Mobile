@@ -1,10 +1,9 @@
 import { motion } from "framer-motion"
-import { FormEvent, useEffect, useState } from "react"
+import { FormEvent, useState } from "react"
 import { FaUser, FaEnvelope, FaSignInAlt, FaLock, FaUnlock } from "react-icons/fa"
 import { useHistory } from "react-router"
 
 import { SignPageHeader } from '../../components/SignPageHeader'
-import { LoadingStatus } from '../../components/LoadingStatus'
 import { useLoading } from "../../contexts/LoadingContext"
 
 import styles from '../SignIn/styles.module.scss'
@@ -12,7 +11,6 @@ import { useUsers } from "../../contexts/UserContext"
 
 export const SignUp: React.FC = () => {
   const history = useHistory()
-  const { isAuthenticated } = useUsers()
   const [ name, setName ] = useState<string>('')
   const [ email, setEmail ] = useState<string>('')
   const [ password, setPassword ] = useState<string>('')
@@ -20,13 +18,7 @@ export const SignUp: React.FC = () => {
   const [ confirmPassword, setConfirmPassword ] = useState<string>('')
 
   const { Sign } = useUsers()
-  const { setLoadingTrue, isLoading, closeLoading } = useLoading()
-
-  useEffect(() => {
-    isAuthenticated && history.push('/Home')
-  },[isAuthenticated, history])
-
-  useEffect(()=> { closeLoading() },[closeLoading])
+  const { setLoadingTrue, closeLoading, isLoading } = useLoading()
 
   async function SignUp(event: FormEvent){
     event.preventDefault()
@@ -56,7 +48,6 @@ export const SignUp: React.FC = () => {
         animate={{opacity : 1, y : 0}}
       >
         <form className={styles.formContainer}>
-          {isLoading && ( <LoadingStatus/>)}
           
           <div className={!name ? styles.inputContainer : styles.inputContainerActive}>
             <span>Nome</span>
@@ -87,7 +78,7 @@ export const SignUp: React.FC = () => {
           <button 
             type='button' 
             onClick={SignUp} 
-            disabled={name && email && password && confirmPassword ? false : true}
+            disabled={name && email && password && confirmPassword && !isLoading ? false : true}
           >
             Cadastrar
             <FaSignInAlt size={24}/>

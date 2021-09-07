@@ -38,7 +38,7 @@ export function ActivityProvider({children} : ActivityProviderProps){
   const [ activities, setActivities ] = useState<ActivitiesProps[]>([])
   const [ activitiesToday, setActivitiesToday ] = useState(0)
   const [ selectedActivity, setSelectedActivity ] = useState<ActivitiesProps>()
-  const { handleFinishActivityInUser, user } = useUsers()
+  const { handleFinishActivityInUser, user, updateUserState } = useUsers()
 
   useEffect(() => {
     if(!user?.hasAnswered){ return }
@@ -49,6 +49,7 @@ export function ActivityProvider({children} : ActivityProviderProps){
         const user = await storage.get('user')
         user.activities_finished_today = 0
         await storage.set('user', user)
+        updateUserState()
 
         setActivities(data)
       } catch(error: any) {
@@ -57,11 +58,11 @@ export function ActivityProvider({children} : ActivityProviderProps){
               const { data } = await api.get('/activity/my-list')
               setActivities(data)
               return
-            }
+        }
         alert(error.response.data.error)
       }
     })()
-  },[user?.hasAnswered])
+  },[user?.hasAnswered, updateUserState])
 
   function setActivitiesTodayState(num: number){ setActivitiesToday(num) }
   function setSelectedActivityState(activity: ActivitiesProps){ setSelectedActivity(activity) }

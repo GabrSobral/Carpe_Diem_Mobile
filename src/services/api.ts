@@ -5,9 +5,10 @@ const api = axios.create({
   baseURL: 'https://carpe-diem-api.herokuapp.com'
 })
 
-const token = getToken();
 
 api.interceptors.request.use(async config => {
+  const token = getToken();
+
   if (token) {
     if(!config.headers.Authorization){
       config.headers.Authorization = `Bearer ${token}`;

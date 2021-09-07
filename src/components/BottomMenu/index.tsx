@@ -1,15 +1,20 @@
-import styles from './styles.module.scss'
-import { FiList, FiUser} from 'react-icons/fi'
-import UrgentSVG from '../../images/urgent.svg'
-import { useLoading } from '../../contexts/LoadingContext'
+import { useState } from 'react'
+import ReactDOM from 'react-dom';
+import { AnimatePresence } from 'framer-motion'
 import { useHistory } from 'react-router-dom'
+import { FiList, FiUser} from 'react-icons/fi'
+
+import UrgentSVG from '../../images/urgent.svg'
+import styles from './styles.module.scss'
+import { UrgentModal } from '../UrgentModal'
 
 interface TabsProps{
   pageActive : string
 }
 
 export function BottomMenu({ pageActive }: TabsProps){
-  const { setLoadingTrue } = useLoading()
+  const [ isUrgentModalVisible, setIsUrgentModalVisible ] = useState(false)
+
   const history = useHistory()
 
   function navigate(page: string){
@@ -17,19 +22,16 @@ export function BottomMenu({ pageActive }: TabsProps){
       case "activities" : {
         if(pageActive !== "activities"){
           history.push("/Activities")
-          setLoadingTrue();
         } break;
       }
       case "home" : {
         if(pageActive !== "home"){
           history.push("/Home")
-          setLoadingTrue();
         } break;
       }
       case "me" : {
         if(pageActive !== "me"){
           history.push("/Profile")
-          setLoadingTrue();
         } break;
       }
     }
@@ -37,20 +39,40 @@ export function BottomMenu({ pageActive }: TabsProps){
 
   return(
     <footer className={styles.container}>
-        <button type='button' className={pageActive === "activities" ? styles.active : ''} onClick={()=> navigate("activities")}>
-          <FiList size={34} color={'#fff'}/>
-          {/* Atividades */}
-        </button>
+      {ReactDOM.createPortal(
+        <AnimatePresence exitBeforeEnter>
+          {isUrgentModalVisible && 
+          <UrgentModal 
+            confirmFunction={() => {}} 
+            setIsVisible={setIsUrgentModalVisible}/>}
+        </AnimatePresence>,
+        document.body
+      ) }
 
-        <button type='button' className={styles.urgentButton} onClick={()=> navigate("home")}>
-          <img src={UrgentSVG} alt="Clique em caso de crise" />
-          {/* home */}
-        </button>
+      
+      <button 
+        type='button' 
+        className={pageActive === "activities" ? styles.active : ''} 
+        onClick={()=> navigate("activities")}
+      >
+        <FiList size={34} color={'#fff'}/>
+      </button>
 
-        <button type='button' className={pageActive === "me" ? styles.active : ''} onClick={()=> navigate("me")}>
-          <FiUser size={34} color={'#fff'}/>
-          {/* Eu */}
-        </button>
+      <button  
+        type='button' 
+        className={styles.urgentButton} 
+        onClick={()=> setIsUrgentModalVisible(!isUrgentModalVisible)}
+      >
+        <img src={UrgentSVG} alt="Clique em caso de crise" />
+      </button>
+
+      <button 
+        type='button' 
+        className={pageActive === "me" ? styles.active : ''} 
+        onClick={()=> navigate("me")}
+      >
+        <FiUser size={34} color={'#fff'}/>
+      </button>
     </footer>
   )
 }

@@ -6,7 +6,6 @@ import { useHistory } from 'react-router-dom'
 import { BottomMenu } from '../../components/BottomMenu'
 import { Header } from '../../components/header'
 import { Player } from '../../components/Player'
-import { useLoading } from '../../contexts/LoadingContext'
 
 // import Medic from '../../images/medic.svg'
 // import Clock from '../../images/clock.svg'
@@ -38,7 +37,6 @@ export const ActivityDetails: React.FC = () => {
   const [ isVisible, setIsVisible ] = useState(false)
   const [ isModalSuccessVisible, setIsModalSuccessVisible ] = useState(false)
   const [ isModalRemoveVisible, setIsModalRemoveVisible ] = useState(false)
-  const { setLoadingTrue, closeLoading } = useLoading()
   const { selectedActivity, handleUpdateActivitiesState, handleFinishActivity } = useActivity()
   
   const history = useHistory()
@@ -51,20 +49,16 @@ export const ActivityDetails: React.FC = () => {
   },[selectedActivity, history])
 
   const Finish = useCallback(async () => {
-    setLoadingTrue()
     handleFinishActivity(selectedActivity?.id || '')
     setIsModalSuccessVisible(true)
-    closeLoading()
-  },[setLoadingTrue, setIsModalSuccessVisible, selectedActivity?.id, handleFinishActivity, closeLoading])
+  },[setIsModalSuccessVisible, selectedActivity?.id, handleFinishActivity])
 
   const ExcludeActivity = useCallback(async () => {
-    setLoadingTrue()
-
     await api.delete(`/activity/my-delete/${selectedActivity?.id}`)
     handleUpdateActivitiesState(String(selectedActivity?.id))
     setIsModalRemoveVisible(false)
     setTimeout(() => history.push('/activities'), 300)
-  },[setLoadingTrue, setIsModalRemoveVisible, history, selectedActivity?.id, handleUpdateActivitiesState])
+  },[setIsModalRemoveVisible, history, selectedActivity?.id, handleUpdateActivitiesState])
   
   const MemoizedModalExclude = useMemo(()=>(
     <AnimatePresence exitBeforeEnter>

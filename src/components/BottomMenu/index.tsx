@@ -42,9 +42,7 @@ export function BottomMenu({ pageActive }: TabsProps){
       {ReactDOM.createPortal(
         <AnimatePresence exitBeforeEnter>
           {isUrgentModalVisible && 
-          <UrgentModal 
-            confirmFunction={() => {}} 
-            setIsVisible={setIsUrgentModalVisible}/>}
+          <UrgentModal setIsVisible={setIsUrgentModalVisible}/>}
         </AnimatePresence>,
         document.body
       ) }

@@ -1,29 +1,35 @@
 import { AnimatePresence, motion } from 'framer-motion'
+import { useCallback } from 'react'
 import { useEffect, useState, Dispatch } from 'react'
 import emergencySVG from '../../images/emergency.svg'
+import { api } from '../../services/api'
 // import { useHistory } from 'react-router-dom'
 
 import styles from '../Modal/style.module.scss'
 
 interface iUrgentModalProps {
   setIsVisible: Dispatch<React.SetStateAction<boolean>>;
-  confirmFunction: () => void;
 }
 
 export function UrgentModal(
-  { setIsVisible, confirmFunction }: iUrgentModalProps) {
+  { setIsVisible }: iUrgentModalProps) {
     const [ percentage, setPercentage ] = useState(0)
     const transSeconds = 10
   // const history = useHistory()
 
+  const startProtocol = useCallback(async () => {
+    await api.post('/users/sms', { to: "5513991599324" })
+    setIsVisible(false)
+  },[setIsVisible])
+
   useEffect(() => {
     setPercentage(100)
     const timer = setTimeout(() => {
-      alert('Protocolo iniciado')
+      startProtocol()
     },transSeconds * 1000)
 
     return () => clearTimeout(timer)
-  },[])
+  },[startProtocol])
 
   return(
     <motion.div className={styles.modalBackground}
@@ -70,7 +76,7 @@ export function UrgentModal(
 
               <button 
                 type="button" 
-                onClick={confirmFunction}
+                onClick={startProtocol}
                 className={styles.yesAndNoButton}
               >   
                 Confirmar

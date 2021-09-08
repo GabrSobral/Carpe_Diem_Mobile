@@ -8,9 +8,9 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 ReactDOM.render(
   <React.StrictMode>
-    {/* <LoadingProvider> */}
+    <LoadingProvider>
       <App />
-    {/* </LoadingProvider> */}
+    </LoadingProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

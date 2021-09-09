@@ -18,7 +18,7 @@ export const Routes: React.FC = () => {
 
   const PrivateRoute = ({component, ...rest}: any) => {
     const routeComponent = (props: any) => (
-      (isAuthenticated && user)
+     (isAuthenticated && user)
         ? (user.hasAnswered ? 
           createElement(component, props) : 
           <Redirect to={{ pathname: "/Questionnaire", state: { from: props.location } }}/>)

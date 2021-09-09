@@ -28,7 +28,7 @@ export function Respiration(){
       setIsFinished(true)
       clearTimeout(insideTimeout)
       setRespirationSize(100)
-      setMessage("Respire...")
+      setMessage("Inspire...")
     }
     if(isFirst === 0){
       setIsFirst(isFirst + 2)
@@ -47,7 +47,7 @@ export function Respiration(){
       insideTimeout = setTimeout(() => {
         setIsFinished(true)
         setRespirationSize(100)
-        setMessage("Respire...")
+        setMessage("Inspire...")
       }, 7000)
     }
     return () => clearTimeout(insideTimeout)

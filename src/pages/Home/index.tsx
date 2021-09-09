@@ -49,7 +49,7 @@ export const Home: React.FC = () => {
 
   const memoizedPagesControl = useMemo(()=>(
     <section>
-      <h2 className={styles.sectionTitle}>Descubra</h2>
+      <h2 className={styles.sectionTitle}>Confira também</h2>
       <Item
         title="Respire e se acalme"
         description="Faça exercícios de respiração para se acalmar."

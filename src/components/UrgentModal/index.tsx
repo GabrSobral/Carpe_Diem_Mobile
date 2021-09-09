@@ -57,7 +57,7 @@ export function UrgentModal(
           <div>
             <h2>Alerta!</h2>
             <p>Você está prestes a iniciar o protocolo de emergência 
-              para crises. <br/>O protocólo iniciará automaticamente 
+              para crises. <br/>O protocolo iniciará automaticamente 
               após o tempo de confirmação</p>
           </div>
 

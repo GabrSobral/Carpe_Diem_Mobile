@@ -59,8 +59,12 @@ export function UserProvider({ children }: UserProviderProps){
     const userStore = await storage.get('user')
     if(userStore){
       setUser(userStore)
-      const firstName = userStore.name.split(' ')[0]
-      setUsername(firstName)
+      if(userStore){
+        const firstName = userStore.name.split(' ')[0]
+
+        console.log(firstName)
+        setUsername(firstName)
+      }
     }
   },[])
 
@@ -88,7 +92,8 @@ export function UserProvider({ children }: UserProviderProps){
       setToken(data.token)
       await storage.set('user', data.user)
       setUser(data.user)
-      setUsername(data.user.name)
+      const firstName = data.user.name.split(' ')[0]
+      setUsername(firstName)
       setIsAuthenticated(true)
 
       result.data = data

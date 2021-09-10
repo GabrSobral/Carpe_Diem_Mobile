@@ -23,21 +23,38 @@ export const Questionnaire: React.FC = () => {
   const [ isVisible, setIsVisible ] = useState(false)
   const { setLoadingTrue, closeLoading } = useLoading()
   const [ questions, setQuestions ] = useState<QuestionProps[]>([])
-  const [ message, setMessage ] = useState('Mensagem de teste')
+  const [ message, setMessage ] = useState('')
   const [ isFilled, setIsFilled ] = useState(false)
-  const [ allAnswers, setAllAnswers ] = useState([]) as any[]
+  const [ allAnswers, setAllAnswers ] = useState<any[]>([])
   const [ count, setCount ] = useState(0)
-  const { setHasAnswered } = useUsers()
+  const { setHasAnswered, user } = useUsers()
 
   useEffect(() => {
     (async () => {
-      const { data } = await api.get('/question/list')
-      setQuestions(data)
-      setIsVisible(true)
-      const nullArray = data.map(()=> null)
-      setAllAnswers(nullArray)
+      const questionsData = await api.get('/question/list')
+      setQuestions(questionsData.data)
+      let visible = false
+      setIsVisible(() => {
+        visible = true
+        return true
+      })
+
+        if(user?.hasAnswered && visible) {
+          const { data } = await api.get('/answer/my-list')
+          const allAnswers: string[] = []
+          data.forEach((item: any, index: number) => {
+            const inputElement: any = document.getElementById(`${item.question}-${item.answer}`)
+            inputElement && (inputElement.checked = true)
+            allAnswers.push(item.answer)
+          })
+          setAllAnswers(allAnswers)
+        } else {
+          const nullArray = questionsData.data.map(()=> null)
+          setAllAnswers(nullArray)
+        }
     })()
-  }, [])
+  }, [user?.hasAnswered])
+
 
   useEffect(() => {
     if(allAnswers.indexOf(null) === -1 && allAnswers.length !== 0) {
@@ -68,7 +85,7 @@ export const Questionnaire: React.FC = () => {
 
   return(
     <div className={styles.container}>
-      <Header GoBackIsActive={false}/>
+      <Header GoBackIsActive={!!user?.hasAnswered}/>
       <AnimatePresence exitBeforeEnter>
         {isVisible && (
           <motion.main
@@ -77,7 +94,11 @@ export const Questionnaire: React.FC = () => {
             animate={{ opacity: 1, height: "fit-content", y: 0}}
             exit={{ opacity: 0}}
           >
-            <h2>Permita-nos conhecê-lo(a) <br/> melhor</h2>
+            <h2>
+              { user?.hasAnswered ? 
+                "Revise e selecione suas respostas novamente" : 
+                "Permita-nos conhecê-lo(a) <br/> melhor"}
+            </h2>
 
             {questions.map((question, index) => (
               <div className={styles.questionItem} key={question.id}>

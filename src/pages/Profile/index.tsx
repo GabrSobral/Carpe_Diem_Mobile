@@ -84,8 +84,8 @@ export const Profile: React.FC = () => {
           animate={{ height: "fit-content"}}
           exit={{ height: 0 }}
         >
-          <Link to="/Profile">
-            <button type="button" onClick={()=> setLoadingTrue()}>
+          <Link to="/Questionnaire">
+            <button type="button">
               Alterar questionário
               <FiBook size={20} color="#6f6b6b"/>
             </button>

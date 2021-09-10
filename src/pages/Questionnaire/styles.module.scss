@@ -88,6 +88,14 @@
       }
     }
 
+    .warningText{
+      display: flex;
+      margin-top: 1rem;
+      justify-content: center;
+      color: var(--red-900);
+      font-size: 1rem;
+    }
+
     button{
       width: 100%;
       padding: 1.25rem;

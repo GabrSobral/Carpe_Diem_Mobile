@@ -8,15 +8,12 @@ import { BottomMenu } from '../../components/BottomMenu'
 import { Header } from '../../components/header'
 import { Modal } from '../../components/Modal'
 
-import { useLoading } from '../../contexts/LoadingContext';
-
 import styles from './styles.module.scss'
 import { useUsers } from '../../contexts/UserContext';
 
 export const Profile: React.FC = () => {
   const history = useHistory()
   const [ isVisible, setIsVisible ] = useState(false)
-  const { setLoadingTrue } = useLoading()
   const [ settingsIsVisible, setSettingsIsVisible ] = useState(false)
   const [ isLogoutModalVisible, setIsLogoutModalVisible ] = useState(false)
   const { Logout, user } = useUsers()
@@ -91,8 +88,8 @@ export const Profile: React.FC = () => {
             </button>
           </Link>
           
-          <Link to="/Profile">
-            <button type="button" onClick={()=> setLoadingTrue()}>
+          <Link to="/ChangePassword">
+            <button type="button">
               Alterar senha
               <FiLock size={20} color="#6f6b6b"/>
             </button>
@@ -102,7 +99,7 @@ export const Profile: React.FC = () => {
       )}
       </AnimatePresence>
     </div>
-  ),[settingsIsVisible, setLoadingTrue])
+  ),[settingsIsVisible])
 
   const memoizedLogoutButton = useMemo(()=>(
     <button type='button' className={styles.logoutButton} onClick={()=> setIsLogoutModalVisible(true)}>

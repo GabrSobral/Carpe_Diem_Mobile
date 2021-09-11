@@ -1,0 +1,183 @@
+.wrapper{
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+
+  align-items: center;
+  padding: 1rem 1.25rem;
+
+  section{
+    display: flex;
+    flex: 1;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+  }
+  .changePasswordTitle{
+    position: absolute;
+    top: 7rem;
+    font-size: 1.75rem;
+    font-weight: 500;
+    margin: 0;
+    transition: 0.3s;
+  }
+}
+
+.formContainer{
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  width: 90%;
+  margin-top: 1rem;
+
+  .title{
+    font-size: 1.5rem;
+    font-weight: 500;
+    transform: translateY(-150%);
+  }
+
+  .inputContainer{
+    position: relative;
+    width: 100%;
+
+    
+    &:not(:last-child){
+      margin-bottom: 1rem;
+    }
+
+    &:focus-within{
+      input{
+        border-bottom: 2px solid var(--blue-300);
+      }
+      & > span{
+        top: 0;
+        font-size: 0.80rem;
+        color: var(--blue-300);
+        background-color: var(--white);
+      }
+      .icon{
+        fill: var(--blue-300);
+      }
+    }
+
+    & > span{
+      position: absolute;
+      top: 50%;
+      left: 0.5rem;
+      transform: translateY(-50%);
+      background: var(--white);
+      pointer-events: none;
+      transition: top 0.2s ease;
+    }
+    input{
+      height: 3.5rem;
+      width: 100%;
+
+      border: 0;
+      border-bottom: 1px solid var(--gray-200);
+      outline: 0;
+      transition: border 0.2s ease;
+      padding-left: 0.5rem;
+
+      transition: 0.3s;
+    }
+    .icon{
+      position: absolute;
+      transform: translateY(-50%);
+      top: 50%;
+      right: 0.5rem;
+
+      fill: var(--gray-200);
+    }
+  }
+
+  .inputContainerActive{
+    position: relative;
+    width: 100%;
+
+    
+    &:not(:last-child){
+      margin-bottom: 1rem;
+    }
+
+    &:focus-within{
+      input{
+        border-bottom: 2px solid var(--blue-600);
+      }
+      span{
+        top: 0;
+        font-size: 0.80rem;
+        color: var(--blue-600);
+      }
+      .icon{
+        fill: var(--blue-600);
+      }
+    }
+
+    span{
+      position: absolute;
+      top: 0;
+      font-size: 0.80rem;
+      color: var(--blue-600);
+      left: 0.5rem;
+      transform: translateY(-50%);
+      background: var(--gray-50);
+      pointer-events: none;
+      transition: top 0.2s ease;
+    }
+    input{
+      height: 3.5rem;
+      width: 100%;
+
+      border: 0;
+      border-bottom: 1px solid var(--blue-300);
+      outline: 0;
+      transition: border 0.2s ease;
+      padding-left: 0.5rem;
+
+      padding-right: 2.25rem;
+    }
+    .icon{
+      position: absolute;
+      transform: translateY(-50%);
+      top: 50%;
+      right: 0.5rem;
+
+      fill: var(--blue-300);
+    }
+  }
+
+  button{
+    position: relative;
+    padding: 1.25rem;
+    border: 0;
+    border-radius: 7px;
+
+    background: linear-gradient(to right, var(--blue-300) 0%, var(--blue-600) 100%);
+
+    font-size: 1.25rem;
+    color: var(--white);
+    margin-top: 1rem;
+    text-rendering: optimizeSpeed;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:disabled{
+      opacity: 0.5;
+    }
+
+    svg{
+      position: absolute;
+      transform: translateY(-50%);
+      top: 50%;
+      right: 1.25rem;
+    }
+  }
+
+  .warningText{
+    text-align: center;
+    color: var(--red-900);
+  }
+}

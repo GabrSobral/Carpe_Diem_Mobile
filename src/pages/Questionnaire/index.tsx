@@ -94,11 +94,10 @@ export const Questionnaire: React.FC = () => {
             animate={{ opacity: 1, height: "fit-content", y: 0}}
             exit={{ opacity: 0}}
           >
-            <h2>
-              { user?.hasAnswered ? 
-                "Revise e selecione suas respostas novamente" : 
-                "Permita-nos conhecê-lo(a) <br/> melhor"}
-            </h2>
+            {user?.hasAnswered ?
+              <h2>Revise e selecione suas <br/> respostas novamente</h2> : 
+              <h2>Permita-nos conhecê-lo(a) <br/> melhor</h2> 
+            }
 
             {questions.map((question, index) => (
               <div className={styles.questionItem} key={question.id}>

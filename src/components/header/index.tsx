@@ -28,7 +28,7 @@ export function Header({ GoBackIsActive} : HeaderProps){
         <AnimatePresence>
           {GoBackIsActive && (
             <motion.button 
-              onClick={() => history.push('/Home')}
+              onClick={() => history.goBack()}
               key="GoBackKey"
               type='button'
               animate={{ 

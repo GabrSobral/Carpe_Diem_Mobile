@@ -13,11 +13,6 @@ export function SignPageHeader({ title, button } : headerProps){
 
   return(
     <header className={styles.container}>
-      {button && (
-        <button type='button' onClick={() => history.goBack()}>
-          <FaTimes size={17}/>
-        </button>
-      )}
       <h1>{title}</h1>
 
       <Link to={button === 'Entrar' ? '/SignIn' : '/SignUp'}>

@@ -13,6 +13,7 @@ import { Activities } from './pages/Activities';
 import { ActivityDetails } from './pages/ActivityDetail';
 import { useUsers } from './contexts/UserContext';
 import { ChangePassword } from './pages/ChangePassword';
+import { ForgotPassword } from './pages/ForgotPassword';
 
 export const Routes: React.FC = () => {
   const { isAuthenticated, user } = useUsers()
@@ -56,6 +57,7 @@ export const Routes: React.FC = () => {
         <PrivateRoute exact path="/Activities" component={Activities} />
         <PrivateRoute exact path="/ActivityDetails" component={ActivityDetails} />
         <PrivateRoute exact path="/ChangePassword" component={ChangePassword} />
+        <Route exact path="/ForgotPassword" component={ForgotPassword} />
 
       </IonRouterOutlet>
     </IonReactRouter>

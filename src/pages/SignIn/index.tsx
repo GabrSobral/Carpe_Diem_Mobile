@@ -57,10 +57,9 @@ export const SignIn: React.FC = () => {
             <FaLock size={20} className={styles.icon}/>
           </div>
           
-          <Link to="/Login/ForgotPassword">
+          <Link to="/ForgotPassword">
             <button 
               type="button" 
-              onClick={()=> setLoadingTrue()} 
               className={styles.forgotPassword}
             >
                 Esqueci minha senha

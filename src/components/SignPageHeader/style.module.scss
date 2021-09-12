@@ -4,22 +4,7 @@
   align-items: center;
   justify-content: flex-end;
   width: 100%;
-
-  button{
-    font-size: 0;
-    padding: 0.75rem;
-    outline: 0;
-    border: 0;
-    border-radius: 50%;
-    transition: transform 0.2s ease;
-
-    &:active{
-      transform: scale(0.95);
-       svg{
-         fill: var(--red-900);
-       }
-    }
-  }
+  min-height: 3rem;
 
   h1{
     position: absolute;

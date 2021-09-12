@@ -1,67 +1,67 @@
-import { useMemo, useState } from "react";
-import { useHistory } from 'react-router-dom'
-import { FaLock, FaUnlock, FaSave, FaKey } from 'react-icons/fa'
+import { useCallback, useMemo, useState } from "react";
+import { useLocation, useHistory } from 'react-router-dom'
+import { FaLock, FaUnlock, FaSave } from 'react-icons/fa'
 import { motion, AnimatePresence } from 'framer-motion';
 
+import { SignPageHeader } from "../../components/SignPageHeader";
 import { Modal } from '../../components/Modal'
 import { api } from '../../services/api'
 
-import styles from './styles.module.scss'
-import { Header } from "../../components/header";
-import { useCallback } from "react";
+import styles from '../ChangePassword/styles.module.scss'
 
-export function ChangePassword() {
-  const [ currentPassword, setCurrentPassword ] = useState<string>('')
+export function ResetPassword() {
+  const history = useHistory()
+  const location = useLocation()
   const [ newPassword, setNewPassword ] = useState<string>('')
   const [ confirmNewPassword, setConfirmNewPassword ] = useState<string>('')
 
   const [ message, setMessage ] = useState<string>('')
   const [ isModalVisible, setIsModalVisible ] = useState<boolean>(false)
 
-  const history = useHistory()
 
-  const changePassword = useCallback(async () => {
-    if(newPassword !== confirmNewPassword){
+  const reset = useCallback(async () => {
+    const query = new URLSearchParams(location.search)
+
+    if(newPassword !== confirmNewPassword) {
       setMessage("Senhas não estão iguais!")
       return
     }
-    try{
-      await api.post('/users/change-password', { 
-        oldPassword: currentPassword,
+    try {
+      await api.post('/users/reset-password', { 
+        email: query.get('email'),
+        token: query.get('token'),
         newPassword
       })
-      history.push('/Profile')
-    } catch(error: any){
+      history.push('/SignIn')
+    } catch(error: any) {
       setMessage(error.response.data.error)
     }
-  },[newPassword, confirmNewPassword, currentPassword, history])
 
+  },[newPassword, confirmNewPassword, history, location])
+  
   const memoizedModal = useMemo(()=>(
     <AnimatePresence exitBeforeEnter>
-      {isModalVisible && (
+      {isModalVisible && ( 
         <Modal
-          title="Tudo resolvido..."
-          description="Sua senha foi alterada com sucesso, faça login para entrar"
-          keyModal="ResetPassword"
-          setIsVisible={setIsModalVisible}
-          yesAndNoButtons={false}
-          destinyPage="Me/Me"
-        />
-      )}
+        title="Tudo resolvido..."
+        description="Sua senha foi alterada com sucesso, faça login para entrar"
+        keyModal="ResetPassword"
+        setIsVisible={setIsModalVisible}
+        yesAndNoButtons={false}
+        destinyPage="Login/SignIn"
+        />)
+      }
     </AnimatePresence>
+   
   ),[isModalVisible])
 
   const memoizedHeader = useMemo(()=> (
-    <Header GoBackIsActive={true}/>
+    <SignPageHeader title='Troca de senha'/>
   ),[])
 
-  const memoizedCurrentPassword = useMemo(()=> (
-    <div className={!currentPassword ? styles.inputContainer : styles.inputContainerActive}>
-      <span>Senha atual</span>
-      <input type='password' onChange={(event)=> setCurrentPassword(event.target.value)}/>
-      <FaKey size={20} className={styles.icon}/>
-    </div>
-  ),[currentPassword])
+  const memoizedTitle = useMemo(()=> (
+    <span className={styles.title}>Insira sua nova senha</span>
+  ),[])
 
   const memoizedNewPassword = useMemo(()=> (
     <div className={!newPassword ? styles.inputContainer : styles.inputContainerActive}>
@@ -84,15 +84,11 @@ export function ChangePassword() {
   ),[message])
   
   const memoizedButton = useMemo(()=> (
-    <button 
-      type='button' 
-      onClick={changePassword} 
-      disabled={newPassword && confirmNewPassword ? false : true}
-    >
+    <button type='button' onClick={reset} disabled={newPassword && confirmNewPassword ? false : true}>
       Confirmar
       <FaSave size={24}/>
     </button>
-  ),[ newPassword, confirmNewPassword, changePassword ])
+  ),[ newPassword, confirmNewPassword, reset ])
 
   return (
     <div className={styles.wrapper}>
@@ -101,12 +97,10 @@ export function ChangePassword() {
         initial={{opacity : 0, y : 50}}
         animate={{opacity : 1, y : 0}}
       >
-        <span className={styles.changePasswordTitle}>Alterar senha</span>
-
         <form className={styles.formContainer}>
           {memoizedModal}
 
-          {memoizedCurrentPassword}
+          {memoizedTitle}
           {memoizedNewPassword}
           {memoizedConfirmNewPassword}
 

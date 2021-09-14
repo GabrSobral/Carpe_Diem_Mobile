@@ -41,8 +41,8 @@
 
         img{
           border-radius: 50%;
-          height: 9rem;
-          width: 9rem;
+          min-height: 9rem;
+          min-width: 9rem;
           margin-right: 1rem;
           box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.275);
         }

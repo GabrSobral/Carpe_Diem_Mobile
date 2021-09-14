@@ -68,6 +68,7 @@ body, input, textarea, button, a{
 
 button{
   transition: 0.2s ease;
+  border: 0;
 
   &:active{
     transform: scale(0.95);

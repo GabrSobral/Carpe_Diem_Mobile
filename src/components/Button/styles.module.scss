@@ -1,0 +1,29 @@
+.container{
+  position: relative;
+  padding: 1.25rem;
+  border: 0;
+  border-radius: 7px;
+  height: 4.5rem;
+
+  background: linear-gradient(to right, var(--blue-300) 0%, var(--blue-600) 100%);
+
+  font-size: 1.25rem;
+  color: var(--white);
+  margin-top: 1rem;
+  text-rendering: optimizeSpeed;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:disabled{
+    opacity: 0.5;
+  }
+
+  .icon{
+    position: absolute;
+    transform: translateY(-50%);
+    top: 50%;
+    right: 1.25rem;
+  }
+}

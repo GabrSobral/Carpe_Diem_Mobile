@@ -1,39 +1,37 @@
 import { FormEvent, useState } from 'react';
-import { FaEnvelope, FaLock, FaSignInAlt } from 'react-icons/fa'
+import { FaEnvelope, FaLock } from 'react-icons/fa'
 import { Link, useHistory } from 'react-router-dom';
 import { motion } from 'framer-motion'
 
 import { SignPageHeader } from '../../components/SignPageHeader'
-import { useLoading } from '../../contexts/LoadingContext';
 
 import styles from './styles.module.scss'
 import { useUsers } from '../../contexts/UserContext';
+import { Button } from '../../components/Button';
 
 export const SignIn: React.FC = () => {
   const history = useHistory()
   const { Sign } = useUsers()
   const [ email, setEmail ] = useState<string>('')
   const [ password, setPassword ] = useState<string>('')
-  const { setLoadingTrue, isLoading, closeLoading } = useLoading()
+  const [ isLoading, setIsLoading ] = useState(false)
   const [ message, setMessage ] = useState<string>('')
 
   async function signIn(event : FormEvent){
     event.preventDefault()
-    setLoadingTrue()
-    
+    setIsLoading(true)
+
     const result = await Sign({email, password, query: "/login"})
     if(result.message === "ok") {
       console.log(result.data.user.hasAnswered)
       if(result.data.user.hasAnswered === true) {
-        closeLoading()
         return history.push('/Home')
       } else{
-        closeLoading()
         return history.push('/Questionnaire')  
       }
     } else {
       setMessage(result.message)
-      closeLoading()
+      setIsLoading(false)
     }
   }
 
@@ -68,10 +66,13 @@ export const SignIn: React.FC = () => {
           
           <span className={styles.warningText}>{message}</span>
           
-          <button type='submit' disabled={email && password && !isLoading ? false : true} onClick={signIn}>
-            Entrar
-            <FaSignInAlt size={24} />
-          </button>
+          <Button 
+            title="Entrar"
+            isLoading={isLoading}
+            icon="SignIn"
+            disabled={email && password && !isLoading ? false : true} 
+            onClick={signIn}
+          />
         </form>
       </motion.section>
     </div>

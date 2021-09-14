@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useHistory } from 'react-router-dom'
-import { FaLock, FaUnlock, FaSave, FaKey } from 'react-icons/fa'
+import { FaLock, FaUnlock, FaKey } from 'react-icons/fa'
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { Modal } from '../../components/Modal'
@@ -9,10 +9,12 @@ import { api } from '../../services/api'
 import styles from './styles.module.scss'
 import { Header } from "../../components/header";
 import { useCallback } from "react";
+import { Button } from "../../components/Button";
 
 export function ChangePassword() {
   const [ currentPassword, setCurrentPassword ] = useState<string>('')
   const [ newPassword, setNewPassword ] = useState<string>('')
+  const [ isLoading, setIsLoading ] = useState(false)
   const [ confirmNewPassword, setConfirmNewPassword ] = useState<string>('')
 
   const [ message, setMessage ] = useState<string>('')
@@ -20,19 +22,22 @@ export function ChangePassword() {
 
   const history = useHistory()
 
-  const changePassword = useCallback(async () => {
+  const changePassword = useCallback(async (event) => {
+    event.preventDefault()
     if(newPassword !== confirmNewPassword){
       setMessage("Senhas não estão iguais!")
       return
     }
+    setIsLoading(true)
     try{
       await api.post('/users/change-password', { 
         oldPassword: currentPassword,
         newPassword
       })
-      history.push('/Profile')
+      history.goBack()
     } catch(error: any){
       setMessage(error.response.data.error)
+      setIsLoading(false)
     }
   },[newPassword, confirmNewPassword, currentPassword, history])
 
@@ -45,7 +50,7 @@ export function ChangePassword() {
           keyModal="ResetPassword"
           setIsVisible={setIsModalVisible}
           yesAndNoButtons={false}
-          destinyPage="Me/Me"
+          destinyPage="Profile"
         />
       )}
     </AnimatePresence>
@@ -79,21 +84,6 @@ export function ChangePassword() {
     </div>
   ),[confirmNewPassword])
 
-  const memoizedMessage = useMemo(()=> (
-    <span className={styles.warningText}>{message}</span>
-  ),[message])
-  
-  const memoizedButton = useMemo(()=> (
-    <button 
-      type='button' 
-      onClick={changePassword} 
-      disabled={newPassword && confirmNewPassword ? false : true}
-    >
-      Confirmar
-      <FaSave size={24}/>
-    </button>
-  ),[ newPassword, confirmNewPassword, changePassword ])
-
   return (
     <div className={styles.wrapper}>
       {memoizedHeader}
@@ -103,15 +93,21 @@ export function ChangePassword() {
       >
         <span className={styles.changePasswordTitle}>Alterar senha</span>
 
-        <form className={styles.formContainer}>
+        <form className={styles.formContainer} onSubmit={changePassword}>
           {memoizedModal}
 
           {memoizedCurrentPassword}
           {memoizedNewPassword}
           {memoizedConfirmNewPassword}
 
-          {memoizedMessage}
-          {memoizedButton}
+          <span className={styles.warningText}>{message}</span>
+
+          <Button
+            isLoading={isLoading}
+            icon="Save"
+            title="Confirmar"
+            disabled={newPassword && confirmNewPassword ? false : true}
+          />
         </form>
       </motion.section>
     </div>

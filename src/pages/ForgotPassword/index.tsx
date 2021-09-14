@@ -43,10 +43,6 @@ export function ForgotPassword() {
     <SignPageHeader title='Senha' button='Entrar'/>
   ),[])
 
-  const memoizedTitle = useMemo(()=> (
-    <span className={styles.title}>Insira seu email para <br/> sabermos quem é você.</span>
-  ),[])
-
   const memoizedEmail = useMemo(()=> (
     <div className={!email ? styles.inputContainer : styles.inputContainerActive}>
       <span>Email</span>
@@ -54,10 +50,6 @@ export function ForgotPassword() {
       <FaEnvelope size={20} className={styles.icon}/>
     </div>
   ),[ email ]) 
-
-  const memoizedMessage = useMemo(()=> (
-    <span className={styles.warningText}>{message}</span>
-  ),[message])
   
   const memoizedButton = useMemo(()=> (
     <button 
@@ -80,10 +72,10 @@ export function ForgotPassword() {
         <form className={styles.formContainer}>
           {memoizedModal}
 
-          {memoizedTitle}
+          <span className={styles.title}>Insira seu email para <br/> sabermos quem é você.</span>
           {memoizedEmail}
 
-          {memoizedMessage}
+          <span className={styles.warningText}>{message}</span>
           {memoizedButton}
         </form>
       </motion.section>

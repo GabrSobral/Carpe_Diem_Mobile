@@ -1,16 +1,17 @@
 import { motion } from "framer-motion"
 import { FormEvent, useState } from "react"
-import { FaUser, FaEnvelope, FaSignInAlt, FaLock, FaUnlock } from "react-icons/fa"
+import { FaUser, FaEnvelope, FaLock, FaUnlock } from "react-icons/fa"
 import { useHistory } from "react-router"
 
 import { SignPageHeader } from '../../components/SignPageHeader'
-import { useLoading } from "../../contexts/LoadingContext"
 
 import styles from '../SignIn/styles.module.scss'
 import { useUsers } from "../../contexts/UserContext"
+import { Button } from "../../components/Button"
 
 export const SignUp: React.FC = () => {
   const history = useHistory()
+  const [ isLoading, setIsLoading ] = useState(false)
   const [ name, setName ] = useState<string>('')
   const [ email, setEmail ] = useState<string>('')
   const [ password, setPassword ] = useState<string>('')
@@ -18,7 +19,6 @@ export const SignUp: React.FC = () => {
   const [ confirmPassword, setConfirmPassword ] = useState<string>('')
 
   const { Sign } = useUsers()
-  const { setLoadingTrue, closeLoading, isLoading } = useLoading()
 
   async function SignUp(event: FormEvent){
     event.preventDefault()
@@ -29,15 +29,15 @@ export const SignUp: React.FC = () => {
     if(password !== confirmPassword){
       return setMessage("Sua confirmação de senha está inválida!")
     }
-    setLoadingTrue()
+    setIsLoading(true)
     
     const result = await Sign({name, email, password, query: "/users"})
     if(result.message === "ok") {
       history.push('/Questionnaire')
     } else {
       setMessage(result.message)
+      setIsLoading(false)
     }
-    closeLoading()
   }
 
   return (
@@ -75,14 +75,13 @@ export const SignUp: React.FC = () => {
 
           <span className={styles.warningText}>{message}</span>
 
-          <button 
-            type='button' 
+          <Button
+            title="Cadastrar"
+            icon="SignIn"
+            isLoading={isLoading}
             onClick={SignUp} 
             disabled={name && email && password && confirmPassword && !isLoading ? false : true}
-          >
-            Cadastrar
-            <FaSignInAlt size={24}/>
-          </button>
+          />
         </form>
       </motion.section>
     </div>

@@ -1,9 +1,9 @@
 import { AnimatePresence, motion } from "framer-motion"
 import { useEffect, useState, FormEvent } from "react"
 import { useHistory } from "react-router"
+import { Button } from "../../components/Button"
 
 import { Header } from "../../components/header"
-import { useLoading } from "../../contexts/LoadingContext"
 import { useUsers } from "../../contexts/UserContext"
 import { api } from "../../services/api"
 
@@ -21,7 +21,7 @@ interface QuestionProps {
 export const Questionnaire: React.FC = () => {
   const history = useHistory()
   const [ isVisible, setIsVisible ] = useState(false)
-  const { setLoadingTrue, closeLoading } = useLoading()
+  const [ isLoading, setIsLoading ]= useState(false)
   const [ questions, setQuestions ] = useState<QuestionProps[]>([])
   const [ message, setMessage ] = useState('')
   const [ isFilled, setIsFilled ] = useState(false)
@@ -63,16 +63,15 @@ export const Questionnaire: React.FC = () => {
   },[count, allAnswers]) 
 
   async function handleConfirm(){
-    setLoadingTrue()
+    setIsLoading(true)
 
     await api.post('/answer/new', { answer : allAnswers }).then(()=> {
       setHasAnswered()
-      closeLoading()
       history.push("/Home")
       return 
     }).catch((err)=>{
       setMessage(`Algo deu errado: ${err.response.data.message}`)
-      closeLoading()
+      setIsLoading(false)
       return 
     })
   }
@@ -138,13 +137,13 @@ export const Questionnaire: React.FC = () => {
 
             <span className={styles.warningText}>{message}</span>
 
-              <button 
-                type="button" 
-                onClick={handleConfirm}
-                disabled={!isFilled}
-              >
-                Continuar
-              </button>
+            <Button
+              icon="none"
+              isLoading={isLoading}
+              onClick={handleConfirm}
+              disabled={!isFilled}
+              title="Continuar"
+            />
           </motion.main>
         )}
       </AnimatePresence>

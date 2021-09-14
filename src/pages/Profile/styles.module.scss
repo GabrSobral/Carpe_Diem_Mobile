@@ -37,7 +37,6 @@
         width: 100%;
         display: flex;
         align-items: center;
-        // justify-content: space-between;
 
         img{
           border-radius: 50%;
@@ -59,11 +58,12 @@
       position: relative;
       width: 100%;
       border-radius: 17px 17px 0px 0px;
-      height: calc(89vh - 15rem);
+      height: fit-content;
       background-color: var(--white);
-      box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.207);
+      box-shadow: 1px -8px 10px rgba(0, 0, 0, 0.207);
       transform: translateY(-5%);
       padding: 1rem;
+      padding-bottom: 6rem;
 
       .allActivitiesComplete{
         width: 100%;

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useHistory, Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion'
-import { FiBook, FiLock, FiLogOut, FiSettings } from 'react-icons/fi';
+import { FiBook, FiLock, FiLogOut, FiSettings, FiBookOpen } from 'react-icons/fi';
 // import { format } from 'date-fns'
 
 import { BottomMenu } from '../../components/BottomMenu'
@@ -10,12 +10,15 @@ import { Modal } from '../../components/Modal'
 
 import styles from './styles.module.scss'
 import { useUsers } from '../../contexts/UserContext';
+import { ChangeQuantityModal } from '../../components/QuantityActivitiesModal';
 
 export const Profile: React.FC = () => {
   const history = useHistory()
   const [ isVisible, setIsVisible ] = useState(false)
   const [ settingsIsVisible, setSettingsIsVisible ] = useState(false)
   const [ isLogoutModalVisible, setIsLogoutModalVisible ] = useState(false)
+  const [ isQuantityModalVisible, setIsQuantityModalVisible ] = useState(false)
+
   const { Logout, user } = useUsers()
 
   const logout = useCallback(() => {
@@ -38,6 +41,17 @@ export const Profile: React.FC = () => {
       ) }
     </AnimatePresence>
   ),[isLogoutModalVisible, logout])
+
+  const memoizedModalChangeQuantity = useMemo(()=>(
+    <AnimatePresence exitBeforeEnter>
+      { isQuantityModalVisible && (
+        <ChangeQuantityModal 
+          setIsVisible={setIsQuantityModalVisible}
+          initialValue={Number(user?.quantity_of_activities)}
+        />
+      ) }
+    </AnimatePresence>
+  ),[isQuantityModalVisible, user?.quantity_of_activities])
 
   const memoizedHeader = useMemo(()=>(
     <Header GoBackIsActive/>
@@ -95,6 +109,11 @@ export const Profile: React.FC = () => {
             </button>
           </Link>
 
+          <button type="button" onClick={() => setIsQuantityModalVisible(true)}>
+            Quantidade de atividades diárias
+            <FiBookOpen size={20} color="#6f6b6b"/>
+          </button>
+
         </motion.div>
       )}
       </AnimatePresence>
@@ -115,6 +134,7 @@ export const Profile: React.FC = () => {
   return(
     <div className={styles.container}>
       { memoizedModalLogout }
+      { memoizedModalChangeQuantity }
 
       {memoizedHeader}
       <AnimatePresence exitBeforeEnter>

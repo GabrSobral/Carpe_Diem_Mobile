@@ -55,51 +55,52 @@ export function Respiration(){
   },[respirationSize, isClockStarted])
 
   return(
-        <motion.main
-          key="RespirationMainKey"
-          initial={{ opacity: 0, height: 0, y: 50 }}
-          animate={{ opacity: 1, height: "fit-content", y: 0}}
+    <motion.main
+      key="RespirationMainKey"
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0}}
+      exit={{ opacity: 0, y: 30 }}
+      transition={{ duration: 0.3, bounce: 0 }}
+      className={styles.MainContainer}
+    >
+      <div className={styles.respirationContainer}>
+        <motion.h2 
+          key="RespirationMainTitle"
+          className={styles.instruction}
+          initial={{ opacity: 0}}
+          animate={{ opacity: 1}}
           exit={{ opacity: 0}}
-          className={styles.MainContainer}
         >
-          <div className={styles.respirationContainer}>
-            <motion.h2 
-              key="RespirationMainTitle"
-              className={styles.instruction}
-              initial={{ opacity: 0}}
-              animate={{ opacity: 1}}
-              exit={{ opacity: 0}}
-            >
-              {message}
-            </motion.h2>
+          {message}
+        </motion.h2>
 
-            <div className={styles.RespirationAndTimerContainer}>
-              <div className={styles.circleRespirationContainer}>
-                <div 
-                style={{ 
-                  width: `${respirationSize}%`, 
-                  height: `${respirationSize}%`,
-                  transition: isClockStarted ? "7s" : '0.3s'
-                 }}/>
-              </div>
-              
-              <Timer isClockActive={isClockStarted}/>
-            </div>
-
-            <button 
-              type="button" 
-              onClick={handleStartClock} 
-              className={!isClockStarted ? styles.ButtonActive : ""}
-            >
-              {
-                isClockStarted ? (
-                  <FiX size={42} color="#fff"/>
-                ) : (
-                  <FiPlay size={42} color="#fff"/>
-                )
-              }
-            </button>
+        <div className={styles.RespirationAndTimerContainer}>
+          <div className={styles.circleRespirationContainer}>
+            <div 
+            style={{ 
+              width: `${respirationSize}%`, 
+              height: `${respirationSize}%`,
+              transition: isClockStarted ? "7s" : '0.3s'
+              }}/>
           </div>
-        </motion.main>
+          
+          <Timer isClockActive={isClockStarted}/>
+        </div>
+
+        <button 
+          type="button" 
+          onClick={handleStartClock} 
+          className={!isClockStarted ? styles.ButtonActive : ""}
+        >
+          {
+            isClockStarted ? (
+              <FiX size={42} color="#fff"/>
+            ) : (
+              <FiPlay size={42} color="#fff"/>
+            )
+          }
+        </button>
+      </div>
+    </motion.main>
   )
 }

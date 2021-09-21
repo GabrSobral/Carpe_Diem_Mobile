@@ -36,6 +36,7 @@ export const Activities: React.FC = () => {
           <ActivityItem 
             key={activity.id}
             activity={activity}
+            setIsVisibleToFalse={() => setIsVisible(false)}
           />
         ))
         )

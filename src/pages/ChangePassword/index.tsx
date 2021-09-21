@@ -64,7 +64,7 @@ export function ChangePassword() {
   ),[])
 
   const memoizedCurrentPassword = useMemo(()=> (
-    <div className={!currentPassword ? styles.inputContainer : styles.inputContainerActive}>
+    <div className={`${styles.inputContainer} ${currentPassword && styles.inputContainerActive}`}>
       <span>Senha atual</span>
       <input type='password' onChange={(event)=> setCurrentPassword(event.target.value)}/>
       <FaKey size={20} className={styles.icon}/>
@@ -72,7 +72,7 @@ export function ChangePassword() {
   ),[currentPassword])
 
   const memoizedNewPassword = useMemo(()=> (
-    <div className={!newPassword ? styles.inputContainer : styles.inputContainerActive}>
+    <div className={`${styles.inputContainer} ${newPassword && styles.inputContainerActive}`}>
       <span>Nova senha</span>
       <input type='password' onChange={(event)=> setNewPassword(event.target.value)}/>
       <FaLock size={20} className={styles.icon}/>
@@ -80,7 +80,7 @@ export function ChangePassword() {
   ),[newPassword])
 
   const memoizedConfirmNewPassword = useMemo(()=> (
-    <div className={!confirmNewPassword ? styles.inputContainer : styles.inputContainerActive}>
+    <div className={`${styles.inputContainer} ${confirmNewPassword && styles.inputContainerActive}`}>
       <span>Confirme nova senha</span>
       <input type='password' onChange={(event)=> setConfirmNewPassword(event.target.value)}/>
       <FaUnlock size={20} className={styles.icon}/>

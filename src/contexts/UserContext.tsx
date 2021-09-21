@@ -84,6 +84,7 @@ export function UserProvider({ children }: UserProviderProps){
 
     try {
       const { data } = await api.post(query, { name, email, password })
+      setUser(data.user)
 
       // api.interceptors.request.use((config) => {
       //   config.headers.authorization = `Bearer ${data.token}`
@@ -92,7 +93,6 @@ export function UserProvider({ children }: UserProviderProps){
       
       setToken(data.token)
       await storage.set('user', data.user)
-      setUser(data.user)
       const firstName = data.user.name.split(' ')[0]
       setUsername(firstName)
       setIsAuthenticated(true)

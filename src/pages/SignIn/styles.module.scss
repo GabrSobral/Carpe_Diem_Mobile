@@ -80,7 +80,7 @@
       border: 0;
       border-bottom: 1px solid var(--gray-200);
       outline: 0;
-      background: var(--white);
+      background-color: var(--white);
       transition: border 0.2s ease;
       padding-left: 0.5rem;
     }
@@ -97,11 +97,6 @@
   .inputContainerActive{
     position: relative;
     width: 100%;
-
-    
-    &:not(:last-child){
-      margin-bottom: 1rem;
-    }
 
     &:focus-within{
       input{
@@ -120,32 +115,13 @@
     span{
       position: absolute;
       top: 0;
-      font-size: 0.80rem;
       color: var(--blue-600);
       left: 0.5rem;
-      transform: translateY(-50%);
-      background: var(--gray-50);
-      pointer-events: none;
-      transition: top 0.2s ease;
     }
     input{
-      height: 3.5rem;
-      width: 100%;
-
-      border: 0;
       border-bottom: 1px solid var(--blue-300);
-      outline: 0;
-      transition: border 0.2s ease;
-      padding-left: 0.5rem;
-
-      padding-right: 2.25rem;
     }
     .icon{
-      position: absolute;
-      transform: translateY(-50%);
-      top: 50%;
-      right: 0.5rem;
-
       fill: var(--blue-300);
     }
   }

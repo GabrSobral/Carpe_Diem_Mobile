@@ -1,6 +1,6 @@
 import { FormEvent, useState } from 'react';
 import { FaEnvelope, FaLock } from 'react-icons/fa'
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion'
 
 import { SignPageHeader } from '../../components/SignPageHeader'
@@ -58,26 +58,28 @@ export const SignIn: React.FC = () => {
             transition={{ duration: 0.3, bounce: 0 }}
           >
             <form className={styles.formContainer}>
-              <div className={!email ? styles.inputContainer : styles.inputContainerActive}>
+              <div className={`${styles.inputContainer} ${email && styles.inputContainerActive}`}>
                 <span>Email</span>
                 <input type='email' onChange={(event)=> setEmail(event.target.value)}/>
                 <FaEnvelope size={20} className={styles.icon}/>
               </div>
     
-              <div className={!password ? styles.inputContainer : styles.inputContainerActive}>
+              <div className={`${styles.inputContainer} ${password && styles.inputContainerActive}`}>
                 <span>Senha</span>
                 <input type='password' onChange={(event)=> setPassword(event.target.value)}/>
                 <FaLock size={20} className={styles.icon}/>
               </div>
               
-              <Link to="/ForgotPassword">
-                <button 
-                  type="button" 
-                  className={styles.forgotPassword}
-                >
-                    Esqueci minha senha
-                </button>
-              </Link>
+              <button 
+                type="button" 
+                className={styles.forgotPassword}
+                onClick={() => {
+                  setIsVisible(false)
+                  setTimeout(() => history.push('/ForgotPassword'))
+                }}
+              >
+                  Esqueci minha senha
+              </button>
               
               <span className={styles.warningText}>{message}</span>
               

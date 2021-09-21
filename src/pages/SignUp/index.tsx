@@ -62,25 +62,25 @@ export const SignUp: React.FC = () => {
           >
             <form className={styles.formContainer}>
               
-              <div className={!name ? styles.inputContainer : styles.inputContainerActive}>
+              <div className={`${styles.inputContainer} ${name && styles.inputContainerActive}`}>
                 <span>Nome</span>
                 <input type='text' onChange={(event)=> setName(event.target.value)}/>
                 <FaUser size={20} className={styles.icon}/>
               </div>
             
-              <div className={!email ? styles.inputContainer : styles.inputContainerActive}>
+              <div className={`${styles.inputContainer} ${email && styles.inputContainerActive}`}>
                 <span>Email</span>
                 <input type='email' onChange={(event)=> setEmail(event.target.value)}/>
                 <FaEnvelope size={20} className={styles.icon}/>
               </div>
 
-              <div className={!password ? styles.inputContainer : styles.inputContainerActive}>
+              <div className={`${styles.inputContainer} ${password && styles.inputContainerActive}`}>
                 <span>Senha</span>
                 <input type='password' onChange={(event)=> setPassword(event.target.value)}/>
                 <FaLock size={20} className={styles.icon}/>
               </div>
 
-              <div className={!confirmPassword ? styles.inputContainer : styles.inputContainerActive}>
+              <div className={`${styles.inputContainer} ${confirmPassword && styles.inputContainerActive}`}>
                 <span>Confirmar senha</span>
                 <input type='password' onChange={(event)=> setConfirmPassword(event.target.value)}/>
                 <FaUnlock size={20} className={styles.icon}/>

@@ -78,6 +78,7 @@
       outline: 0;
       transition: border 0.2s ease;
       padding-left: 0.5rem;
+      background-color: var(--white);
 
       transition: 0.3s;
     }
@@ -94,11 +95,6 @@
   .inputContainerActive{
     position: relative;
     width: 100%;
-
-    
-    &:not(:last-child){
-      margin-bottom: 1rem;
-    }
 
     &:focus-within{
       input{
@@ -117,62 +113,14 @@
     span{
       position: absolute;
       top: 0;
-      font-size: 0.80rem;
       color: var(--blue-600);
       left: 0.5rem;
-      transform: translateY(-50%);
-      background: var(--gray-50);
-      pointer-events: none;
-      transition: top 0.2s ease;
     }
     input{
-      height: 3.5rem;
-      width: 100%;
-
-      border: 0;
       border-bottom: 1px solid var(--blue-300);
-      outline: 0;
-      transition: border 0.2s ease;
-      padding-left: 0.5rem;
-
-      padding-right: 2.25rem;
     }
     .icon{
-      position: absolute;
-      transform: translateY(-50%);
-      top: 50%;
-      right: 0.5rem;
-
       fill: var(--blue-300);
-    }
-  }
-
-  button{
-    position: relative;
-    padding: 1.25rem;
-    border: 0;
-    border-radius: 7px;
-
-    background: linear-gradient(to right, var(--blue-300) 0%, var(--blue-600) 100%);
-
-    font-size: 1.25rem;
-    color: var(--white);
-    margin-top: 1rem;
-    text-rendering: optimizeSpeed;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    &:disabled{
-      opacity: 0.5;
-    }
-
-    svg{
-      position: absolute;
-      transform: translateY(-50%);
-      top: 50%;
-      right: 1.25rem;
     }
   }
 

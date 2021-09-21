@@ -51,7 +51,7 @@ export function ForgotPassword() {
   ),[])
 
   const memoizedEmail = useMemo(()=> (
-    <div className={!email ? styles.inputContainer : styles.inputContainerActive}>
+    <div className={`${styles.inputContainer} ${email && styles.inputContainerActive}`}>
       <span>Email</span>
       <input type='email' onChange={(event)=> setEmail(event.target.value)}/>
       <FaEnvelope size={20} className={styles.icon}/>

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useHistory } from 'react-router-dom'
 import { FaLock, FaUnlock, FaKey } from 'react-icons/fa'
 import { motion, AnimatePresence } from 'framer-motion';
@@ -17,10 +17,13 @@ export function ChangePassword() {
   const [ isLoading, setIsLoading ] = useState(false)
   const [ confirmNewPassword, setConfirmNewPassword ] = useState<string>('')
 
+  const [ isVisible, setIsVisible ] = useState(false)
   const [ message, setMessage ] = useState<string>('')
   const [ isModalVisible, setIsModalVisible ] = useState<boolean>(false)
 
   const history = useHistory()
+
+  useEffect(() => { setIsVisible(true) },[])
 
   const changePassword = useCallback(async (event) => {
     event.preventDefault()
@@ -57,7 +60,7 @@ export function ChangePassword() {
   ),[isModalVisible])
 
   const memoizedHeader = useMemo(()=> (
-    <Header GoBackIsActive={true}/>
+    <Header GoBackIsActive={true} setIsVisibleToFalse={() => setIsVisible(false)}/>
   ),[])
 
   const memoizedCurrentPassword = useMemo(()=> (
@@ -87,29 +90,36 @@ export function ChangePassword() {
   return (
     <div className={styles.wrapper}>
       {memoizedHeader}
-      <motion.section
-        initial={{opacity : 0, y : 50}}
-        animate={{opacity : 1, y : 0}}
-      >
-        <span className={styles.changePasswordTitle}>Alterar senha</span>
+      <AnimatePresence>
+        { isVisible && (
+          <motion.section
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0}}
+            exit={{ opacity: 0, y: 30 }}
+            transition={{ duration: 0.3, bounce: 0 }}
+          >
+            <span className={styles.changePasswordTitle}>Alterar senha</span>
 
-        <form className={styles.formContainer} onSubmit={changePassword}>
-          {memoizedModal}
+            <form className={styles.formContainer} onSubmit={changePassword}>
+              {memoizedModal}
 
-          {memoizedCurrentPassword}
-          {memoizedNewPassword}
-          {memoizedConfirmNewPassword}
+              {memoizedCurrentPassword}
+              {memoizedNewPassword}
+              {memoizedConfirmNewPassword}
 
-          <span className={styles.warningText}>{message}</span>
+              <span className={styles.warningText}>{message}</span>
 
-          <Button
-            isLoading={isLoading}
-            icon="Save"
-            title="Confirmar"
-            disabled={newPassword && confirmNewPassword ? false : true}
-          />
-        </form>
-      </motion.section>
+              <Button
+                isLoading={isLoading}
+                icon="Save"
+                title="Confirmar"
+                disabled={newPassword && confirmNewPassword ? false : true}
+              />
+            </form>
+          </motion.section>
+        ) }
+      </AnimatePresence>
+      
     </div>
   )
 }

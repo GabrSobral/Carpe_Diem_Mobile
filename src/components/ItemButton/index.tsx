@@ -1,5 +1,5 @@
 import styles from './style.module.scss'
-import { Link } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { FiHeadphones } from 'react-icons/fi'
 
 import Medic from '../../images/medic.svg'
@@ -11,7 +11,8 @@ interface ActivityItemProps extends ButtonHTMLAttributes<HTMLButtonElement>{
   title : string,
   description : string,
   icons : "music" | "gym" | "medic" | "clock",
-  page : string
+  page : string;
+  setIsVisibleToFalse: () => void;
 }
 const icon = {
   music: <FiHeadphones size={30} color="#fff"/>,
@@ -20,9 +21,22 @@ const icon = {
   clock : <img src={Clock} alt="" style={{ width: 40, height: 40 }}/>
 }
 
-export function Item({ title, description, icons, page }: ActivityItemProps){
+export function Item({ 
+  title, 
+  description, 
+  icons, 
+  page,
+  setIsVisibleToFalse }: ActivityItemProps){
+    const history = useHistory()
   return(
-    <Link to={`/${page}`}>
+    <button 
+      className={styles.itemButtom}
+      type="button"
+      onClick={() => {
+        setIsVisibleToFalse()
+        setTimeout(() => history.push(`/${page}`),300) 
+      }}
+    >
       <div className={styles.container}>
         <div className={styles.icon}>
           {icon[icons]}
@@ -35,6 +49,6 @@ export function Item({ title, description, icons, page }: ActivityItemProps){
 
         <div/>
       </div>
-    </Link>
+    </button>
   )
 }

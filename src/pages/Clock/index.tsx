@@ -13,7 +13,7 @@ export const Clock: React.FC = () => {
 
   return(
     <div className={styles.container}>
-      <Header GoBackIsActive={true}/>
+      <Header GoBackIsActive={true} setIsVisibleToFalse={() => setIsVisible(false)}/>
       <AnimatePresence exitBeforeEnter>
         {isVisible && <Respiration key="RespirationKey"/> }
       </AnimatePresence>

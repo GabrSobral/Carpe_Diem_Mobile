@@ -17,7 +17,9 @@ export const Activities: React.FC = () => {
   useEffect(()=> { setIsVisible(true) },[])
 
   const memoizedHeader = useMemo(()=>(
-    <Header GoBackIsActive={true}/>
+    <Header 
+      GoBackIsActive={false} 
+      setIsVisibleToFalse={() => setIsVisible(false)}/>
   ),[])
   const memoizedMainTitle = useMemo(()=> (
     <div className={styles.activityTitle}>
@@ -55,10 +57,11 @@ export const Activities: React.FC = () => {
       <AnimatePresence exitBeforeEnter>
         {isVisible && (
           <motion.main
-          key="Activities"
-          initial={{ opacity: 0, height: 0, y: 50 }}
-          animate={{ opacity: 1, height: "fit-content", y: 0}}
-          exit={{ opacity: 0}}
+            key="Activities"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0}}
+            exit={{ opacity: 0, y: 30 }}
+            transition={{ duration: 0.3, bounce: 0 }}
           >
             {memoizedMainTitle}
             

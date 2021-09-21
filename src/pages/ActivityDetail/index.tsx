@@ -61,7 +61,7 @@ export const ActivityDetails: React.FC = () => {
   },[setIsModalRemoveVisible, history, selectedActivity?.id, handleUpdateActivitiesState])
   
   const MemoizedModalExclude = useMemo(()=>(
-    <AnimatePresence exitBeforeEnter>
+    <AnimatePresence>
       { isModalRemoveVisible && (
         <Modal
           title="Oh não..."
@@ -117,7 +117,9 @@ export const ActivityDetails: React.FC = () => {
   ),[selectedActivity])
 
   const memoizedHeader = useMemo(()=>(
-    <Header GoBackIsActive={true}/>
+    <Header 
+      GoBackIsActive={true} 
+      setIsVisibleToFalse={() => setIsVisible(false)}/>
   ),[])
 
   const memoizedBottomMenu = useMemo(()=>(
@@ -148,13 +150,12 @@ export const ActivityDetails: React.FC = () => {
         
         <AnimatePresence exitBeforeEnter>
           {isVisible && (
-            
             <motion.main
-            layout
-            key="ActivityDetails"
-            initial={{ opacity: 0, height: 0, y: 50 }}
-            animate={{ opacity: 1, height: "fit-content", y: 0}}
-            exit={{ opacity: 0, height: 0}}
+              key="ActivityDetails"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0}}
+              exit={{ opacity: 0, y: 30 }}
+              transition={{ duration: 0.3, bounce: 0 }}
             >    
               {memoizedDetails}
 

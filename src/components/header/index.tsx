@@ -4,41 +4,42 @@ import { useHistory } from 'react-router-dom'
 
 import styles from './style.module.scss'
 import { useUsers } from '../../contexts/UserContext'
+import { useState } from 'react'
 
 interface HeaderProps{
-  GoBackIsActive : boolean
+  GoBackIsActive : boolean;
+  setIsVisibleToFalse: () => void;
+  homeButtonVisible?: boolean;
 }
 
-export function Header({ GoBackIsActive} : HeaderProps){
+export function Header({ 
+  GoBackIsActive, 
+  setIsVisibleToFalse, 
+  homeButtonVisible = true } : HeaderProps){
   const history = useHistory()
+  const [ IsGobackActive, setIsGoBackActive ] = useState(GoBackIsActive)
   const { username } = useUsers()
-  const variants = {
-    active: {
-      x : [0, 50]
-    },
-    disable :{
-      x: 0
-    }
-  }
 
   return(
     <header className={styles.container}>
       <div className={styles.name}>
 
         <AnimatePresence>
-          {GoBackIsActive && (
+          {IsGobackActive && (
             <motion.button 
-              onClick={() => history.goBack()}
+              onClick={() => {
+                setIsVisibleToFalse()
+                setIsGoBackActive(false)
+                setTimeout(() => history.goBack(), 300)
+              }}
               key="GoBackKey"
               type='button'
-              animate={{ 
-                display: "block",
-                opacity: [0, 1]
-              }}
+              initial={{ display: "none", opacity: 0 }}
+              animate={{ display: "block", opacity: 1 }}
               transition={{ 
-                delay: 0.5,
-                duration: 0.5, 
-                type: 'spring' 
+                delay: 0.2,
+                duration: 0.2, 
+                bounce: 0
               }}
             >
             <FiArrowLeft size={30} color="#434343"/>
@@ -46,20 +47,28 @@ export function Header({ GoBackIsActive} : HeaderProps){
           )}    
         
           <motion.h2
-            animate={GoBackIsActive ? "active" : "disable"}
+            initial={{ x: 0 }}
+            animate={IsGobackActive ? { x: 50 } : { x: 0 }}
             key="GoBackWord"
             transition={{ 
-              bounce: 0.5, 
-              duration: 0.5, 
-              type: 'spring' 
+              bounce: 0, 
+              duration: 0.3, 
             }}
-            variants={variants}
           >
             Olá, 
             <span>{username}</span>
           </motion.h2>
         </AnimatePresence>
       </div>
+    
+      { homeButtonVisible && (
+        <span onClick={() => {
+          setIsVisibleToFalse()
+          setIsGoBackActive(false)
+          setTimeout(() => history.replace('/Home'), 300)
+        }}>Home</span>
+      ) }
+
     </header>
   )
 }

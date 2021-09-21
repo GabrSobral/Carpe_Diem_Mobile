@@ -84,14 +84,15 @@ export const Questionnaire: React.FC = () => {
 
   return(
     <div className={styles.container}>
-      <Header GoBackIsActive={!!user?.hasAnswered}/>
+      <Header GoBackIsActive={!!user?.hasAnswered} setIsVisibleToFalse={() => setIsVisible(false)}/>
       <AnimatePresence exitBeforeEnter>
         {isVisible && (
           <motion.main
             key="Activities"
-            initial={{ opacity: 0, height: 0, y: 50 }}
-            animate={{ opacity: 1, height: "fit-content", y: 0}}
-            exit={{ opacity: 0}}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0}}
+            exit={{ opacity: 0, y: 30 }}
+            transition={{ duration: 0.3, bounce: 0 }}
           >
             {user?.hasAnswered ?
               <h2>Revise e selecione suas <br/> respostas novamente</h2> : 

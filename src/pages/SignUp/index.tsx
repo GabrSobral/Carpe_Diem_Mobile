@@ -1,4 +1,4 @@
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { FormEvent, useState } from "react"
 import { FaUser, FaEnvelope, FaLock, FaUnlock } from "react-icons/fa"
 import { useHistory } from "react-router"
@@ -8,6 +8,7 @@ import { SignPageHeader } from '../../components/SignPageHeader'
 import styles from '../SignIn/styles.module.scss'
 import { useUsers } from "../../contexts/UserContext"
 import { Button } from "../../components/Button"
+import { useEffect } from "react"
 
 export const SignUp: React.FC = () => {
   const history = useHistory()
@@ -17,6 +18,9 @@ export const SignUp: React.FC = () => {
   const [ password, setPassword ] = useState<string>('')
   const [ message, setMessage ] = useState<string>('')
   const [ confirmPassword, setConfirmPassword ] = useState<string>('')
+  const [ isVisible, setIsVisible ] = useState(false)
+
+  useEffect(() => { setIsVisible(true) },[])
 
   const { Sign } = useUsers()
 
@@ -42,48 +46,59 @@ export const SignUp: React.FC = () => {
 
   return (
     <div className={styles.wrapper}>
-      <SignPageHeader title='Cadastrar' button='Entrar'/>
-      <motion.section
-        initial={{opacity : 0, y : 50}}
-        animate={{opacity : 1, y : 0}}
-      >
-        <form className={styles.formContainer}>
-          
-          <div className={!name ? styles.inputContainer : styles.inputContainerActive}>
-            <span>Nome</span>
-            <input type='text' onChange={(event)=> setName(event.target.value)}/>
-            <FaUser size={20} className={styles.icon}/>
-          </div>
-         
-          <div className={!email ? styles.inputContainer : styles.inputContainerActive}>
-            <span>Email</span>
-            <input type='email' onChange={(event)=> setEmail(event.target.value)}/>
-            <FaEnvelope size={20} className={styles.icon}/>
-          </div>
+      <SignPageHeader 
+        title='Cadastrar' 
+        button='Entrar'
+        setIsVisibleToFalse={() => setIsVisible(false)}
+      />
 
-          <div className={!password ? styles.inputContainer : styles.inputContainerActive}>
-            <span>Senha</span>
-            <input type='password' onChange={(event)=> setPassword(event.target.value)}/>
-            <FaLock size={20} className={styles.icon}/>
-          </div>
+      <AnimatePresence>
+        { isVisible && (
+          <motion.section
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0}}
+            exit={{ opacity: 0, y: 30 }}
+            transition={{ duration: 0.3, bounce: 0 }}
+          >
+            <form className={styles.formContainer}>
+              
+              <div className={!name ? styles.inputContainer : styles.inputContainerActive}>
+                <span>Nome</span>
+                <input type='text' onChange={(event)=> setName(event.target.value)}/>
+                <FaUser size={20} className={styles.icon}/>
+              </div>
+            
+              <div className={!email ? styles.inputContainer : styles.inputContainerActive}>
+                <span>Email</span>
+                <input type='email' onChange={(event)=> setEmail(event.target.value)}/>
+                <FaEnvelope size={20} className={styles.icon}/>
+              </div>
 
-          <div className={!confirmPassword ? styles.inputContainer : styles.inputContainerActive}>
-            <span>Confirmar senha</span>
-            <input type='password' onChange={(event)=> setConfirmPassword(event.target.value)}/>
-            <FaUnlock size={20} className={styles.icon}/>
-          </div>
+              <div className={!password ? styles.inputContainer : styles.inputContainerActive}>
+                <span>Senha</span>
+                <input type='password' onChange={(event)=> setPassword(event.target.value)}/>
+                <FaLock size={20} className={styles.icon}/>
+              </div>
 
-          <span className={styles.warningText}>{message}</span>
+              <div className={!confirmPassword ? styles.inputContainer : styles.inputContainerActive}>
+                <span>Confirmar senha</span>
+                <input type='password' onChange={(event)=> setConfirmPassword(event.target.value)}/>
+                <FaUnlock size={20} className={styles.icon}/>
+              </div>
 
-          <Button
-            title="Cadastrar"
-            icon="SignIn"
-            isLoading={isLoading}
-            onClick={SignUp} 
-            disabled={name && email && password && confirmPassword && !isLoading ? false : true}
-          />
-        </form>
-      </motion.section>
+              <span className={styles.warningText}>{message}</span>
+
+              <Button
+                title="Cadastrar"
+                icon="SignIn"
+                isLoading={isLoading}
+                onClick={SignUp} 
+                disabled={name && email && password && confirmPassword && !isLoading ? false : true}
+              />
+            </form>
+          </motion.section>
+        ) }
+      </AnimatePresence>
     </div>
   )
 }

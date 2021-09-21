@@ -8,6 +8,7 @@ import { Modal } from '../../components/Modal'
 import { api } from '../../services/api'
 
 import styles from '../ChangePassword/styles.module.scss'
+import { useEffect } from "react";
 
 export function ResetPassword() {
   const history = useHistory()
@@ -17,7 +18,9 @@ export function ResetPassword() {
 
   const [ message, setMessage ] = useState<string>('')
   const [ isModalVisible, setIsModalVisible ] = useState<boolean>(false)
+  const [ isVisible, setIsVisible ] = useState(false)
 
+  useEffect(() => { setIsVisible(true) },[])
 
   const reset = useCallback(async () => {
     const query = new URLSearchParams(location.search)
@@ -56,7 +59,10 @@ export function ResetPassword() {
   ),[isModalVisible])
 
   const memoizedHeader = useMemo(()=> (
-    <SignPageHeader title='Troca de senha'/>
+    <SignPageHeader 
+      title='Troca de senha' 
+      setIsVisibleToFalse={() => setIsVisible(false)}
+    />
   ),[])
 
   const memoizedTitle = useMemo(()=> (
@@ -93,21 +99,27 @@ export function ResetPassword() {
   return (
     <div className={styles.wrapper}>
       {memoizedHeader}
-      <motion.section
-        initial={{opacity : 0, y : 50}}
-        animate={{opacity : 1, y : 0}}
-      >
-        <form className={styles.formContainer}>
-          {memoizedModal}
+      <AnimatePresence>
+      { isVisible && (
+        <motion.section
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0}}
+          exit={{ opacity: 0, y: 30 }}
+          transition={{ duration: 0.3, bounce: 0 }}
+        >
+          <form className={styles.formContainer}>
+            {memoizedModal}
 
-          {memoizedTitle}
-          {memoizedNewPassword}
-          {memoizedConfirmNewPassword}
+            {memoizedTitle}
+            {memoizedNewPassword}
+            {memoizedConfirmNewPassword}
 
-          {memoizedMessage}
-          {memoizedButton}
-        </form>
-      </motion.section>
+            {memoizedMessage}
+            {memoizedButton}
+          </form>
+        </motion.section>
+      )}
+      </AnimatePresence>
     </div>
   )
 }

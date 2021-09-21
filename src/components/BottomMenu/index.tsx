@@ -53,7 +53,7 @@ export function BottomMenu({ pageActive }: TabsProps){
         className={pageActive === "activities" ? styles.active : ''} 
         onClick={()=> navigate("activities")}
       >
-        <FiList size={34} color={'#fff'}/>
+        <FiList className={styles.iconButton}/>
       </button>
 
       <button  
@@ -69,7 +69,7 @@ export function BottomMenu({ pageActive }: TabsProps){
         className={pageActive === "me" ? styles.active : ''} 
         onClick={()=> navigate("me")}
       >
-        <FiUser size={34} color={'#fff'}/>
+        <FiUser className={styles.iconButton}/>
       </button>
     </footer>
   )

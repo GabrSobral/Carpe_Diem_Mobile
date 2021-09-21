@@ -24,7 +24,11 @@ export const Home: React.FC = () => {
   },[user?.activities_finished_today, user?.quantity_of_activities])
 
   const memoizedHeader = useMemo(()=>(
-    <Header GoBackIsActive={false}/>
+    <Header 
+      GoBackIsActive={false} 
+      setIsVisibleToFalse={() => setIsVisible(false)}
+      homeButtonVisible={false}
+    />
   ),[])
 
   const memoizedProgressBar = useMemo(()=>(
@@ -55,6 +59,7 @@ export const Home: React.FC = () => {
         description="Faça exercícios de respiração para se acalmar."
         icons="clock"
         page="Clock"
+        setIsVisibleToFalse={() => setIsVisible(false)}
       />
     </section>
   ),[])
@@ -70,9 +75,10 @@ export const Home: React.FC = () => {
         {isVisible && (
           <motion.main
             key="Activities"
-            initial={{ opacity: 0, height: 0, y: 50 }}
-            animate={{ opacity: 1, height: "fit-content", y: 0}}
-            exit={{ opacity: 0}}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0}}
+            exit={{ opacity: 0, y: 30 }}
+            transition={{ duration: 0.3, bounce: 0 }}
           >
             {memoizedProgressBar}
 

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FaEnvelope, FaCheck } from 'react-icons/fa'
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -13,6 +13,9 @@ export function ForgotPassword() {
   const [ email, setEmail ] = useState<string>('')
   const [ message, setMessage ] = useState<string>('')
   const [ isModalVisible, setIsModalVisible ] = useState<boolean>(false)
+  const [ isVisible, setIsVisible ] = useState(false)
+
+  useEffect(() => { setIsVisible(true) },[])
 
   const sendEmail = useCallback(async () => {
     try{
@@ -40,7 +43,11 @@ export function ForgotPassword() {
   ),[isModalVisible])
 
   const memoizedHeader = useMemo(()=> (
-    <SignPageHeader title='Senha' button='Entrar'/>
+    <SignPageHeader 
+      title='Senha' 
+      button='Entrar'
+      setIsVisibleToFalse={() => setIsVisible(false)}
+    />
   ),[])
 
   const memoizedEmail = useMemo(()=> (
@@ -65,20 +72,27 @@ export function ForgotPassword() {
   return (
     <div className={styles.wrapper}>
       {memoizedHeader}
-      <motion.section
-        initial={{opacity : 0, y : 50}}
-        animate={{opacity : 1, y : 0}}
-      >
-        <form className={styles.formContainer}>
-          {memoizedModal}
+      <AnimatePresence>
+        { isVisible && (
+          <motion.section
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0}}
+            exit={{ opacity: 0, y: 30 }}
+            transition={{ duration: 0.3, bounce: 0 }}
+          >
+            <form className={styles.formContainer}>
+              {memoizedModal}
 
-          <span className={styles.title}>Insira seu email para <br/> sabermos quem é você.</span>
-          {memoizedEmail}
+              <span className={styles.title}>Insira seu email para <br/> sabermos quem é você.</span>
+              {memoizedEmail}
 
-          <span className={styles.warningText}>{message}</span>
-          {memoizedButton}
-        </form>
-      </motion.section>
+              <span className={styles.warningText}>{message}</span>
+              {memoizedButton}
+            </form>
+          </motion.section>
+        ) }
+      </AnimatePresence>
+
     </div>
   )
 }

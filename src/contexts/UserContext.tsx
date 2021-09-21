@@ -35,6 +35,7 @@ interface UserContextProps {
   handleFinishActivityInUser: () => void;
   setHasAnswered: () => void;
   updateUserState: () => void;
+  handleUpdateQuantityOfActivities: (quantity: number) => void;
 }
 interface UserProps {
   id: string;
@@ -147,6 +148,13 @@ export function UserProvider({ children }: UserProviderProps){
     })
   }
 
+  function handleUpdateQuantityOfActivities(quantity: number){
+    setUser(prev => {
+      prev && (prev.quantity_of_activities = quantity)
+      return prev
+    })
+  }
+
   return(
     <UserContext.Provider 
       value={{
@@ -157,7 +165,8 @@ export function UserProvider({ children }: UserProviderProps){
         user,
         handleFinishActivityInUser,
         setHasAnswered,
-        updateUserState
+        updateUserState,
+        handleUpdateQuantityOfActivities
       }}>
       {children}
     </UserContext.Provider>

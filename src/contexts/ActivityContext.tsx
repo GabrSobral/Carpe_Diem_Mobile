@@ -56,6 +56,7 @@ export function ActivityProvider({children} : ActivityProviderProps){
         if( error.response.data.error === 
             "You already request the activities, try again tomorrow") {
               const { data } = await api.get('/activity/my-list')
+              await storage.set('activities', data)
               setActivities(data)
               return
         }

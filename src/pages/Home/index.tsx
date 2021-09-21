@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { FiCheck } from 'react-icons/fi'
 import { buildStyles, CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
@@ -38,8 +39,6 @@ export const Home: React.FC = () => {
       <div className={styles.progressBarContainer}>
         <CircularProgressbar 
           value={percentage} 
-          text={(user?.activities_finished_today || 0) >= 0 ? 
-              `${user?.activities_finished_today}/${(user?.quantity_of_activities || 0)}` : "..."}
           className={styles.circularProgressBar}
           strokeWidth={3}
           styles={buildStyles({
@@ -47,6 +46,12 @@ export const Home: React.FC = () => {
             textColor: "#434343"
           })}
         />
+        { (user?.activities_finished_today || 0) < (user?.quantity_of_activities || 0)  ? (
+          <span className={styles.progressBarText}>
+            {`${user?.activities_finished_today}/${user?.quantity_of_activities || 0}`}
+          </span>) : (
+            <FiCheck className={styles.progressCheckIcon}/>
+          )}
       </div>
     </section>
   ),[percentage, user?.activities_finished_today, user?.quantity_of_activities])

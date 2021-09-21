@@ -25,6 +25,7 @@
   }
 
   .progressBarContainer{
+    position: relative;
     width: 100%;
     height: 15rem;
     display: flex;
@@ -35,6 +36,19 @@
     .circularProgressBar{
       width: 80%;
       height: 80%;
+    }
+    .progressBarText{
+      position: absolute;
+      font-size: 2.5rem;
+      color: var(--text);
+    }
+
+    .progressCheckIcon{
+      position: absolute;
+      width: 6rem;
+      height: 6rem;
+      stroke-width: 1.5px;
+      color: var(--green-300);
     }
   }
 }

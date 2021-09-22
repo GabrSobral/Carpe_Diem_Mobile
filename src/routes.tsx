@@ -17,11 +17,11 @@ import { ForgotPassword } from './pages/ForgotPassword';
 import { ResetPassword } from './pages/ResetPassword';
 
 export const Routes: React.FC = () => {
-  const { isAuthenticated, user } = useUsers()
+  const { user } = useUsers()
 
   const PrivateRoute = ({component, ...rest}: any) => {
     const routeComponent = (props: any) => (
-     (isAuthenticated && user)
+     ( user )
         ? (user.hasAnswered ? 
           createElement(component, props) : 
           <Redirect to={{ pathname: "/Questionnaire", state: { from: props.location } }}/>)
@@ -40,13 +40,13 @@ export const Routes: React.FC = () => {
 
         <Route 
           exact path="/SignIn" 
-          render={() => (isAuthenticated && user) ? 
+          render={() => (user) ? 
             <Redirect to={'/Home'}/> : 
             <SignIn/>}
         />
         <Route 
           exact path="/SignUp" 
-          render={() => (isAuthenticated && user) ? 
+          render={() => (user) ? 
             <Redirect to={'/Home'}/> : 
             <SignUp/>}
         />

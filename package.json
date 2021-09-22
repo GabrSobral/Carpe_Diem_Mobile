@@ -17,6 +17,7 @@
     "@ionic/react-router": "^5.5.0",
     "@ionic/storage": "^3.0.6",
     "axios": "^0.21.1",
+    "date-fns": "^2.24.0",
     "framer-motion": "^4.1.17",
     "ionicons": "^5.4.0",
     "rc-slider": "^9.7.2",

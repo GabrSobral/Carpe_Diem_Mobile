@@ -33,6 +33,7 @@ export function ConfigContainer({
           initial={{ height: 0 }}
           animate={{ height: "fit-content"}}
           exit={{ height: 0 }}
+          transition={{ duration: 0.3, bounce: 0 }}
         >
           <button 
             type="button"

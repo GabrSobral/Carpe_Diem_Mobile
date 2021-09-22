@@ -1,0 +1,82 @@
+.inputContainer{
+  position: relative;
+  width: 100%;
+  
+  &:not(:last-child){
+    margin-bottom: 1rem;
+  }
+
+  &:focus-within{
+    input{
+      border-bottom: 2px solid var(--blue-300);
+    }
+    span{
+      top: 0;
+      color: var(--blue-300);
+      background-color: var(--white);
+    }
+    .icon{
+      fill: var(--blue-300);
+    }
+  }
+
+  span{
+    position: absolute;
+    top: 50%;
+    left: 0.5rem;
+    transform: translateY(-50%);
+    background: var(--white);
+    pointer-events: none;
+    transition: 0.2s ease;
+  }
+  input{
+    height: 3.5rem;
+    width: 100%;
+
+    border: 0;
+    border-bottom: 1px solid var(--gray-200);
+    outline: 0;
+    background-color: var(--white);
+    transition: border 0.2s ease;
+    padding-left: 0.5rem;
+  }
+  .icon{
+    position: absolute;
+    transform: translateY(-50%);
+    top: 50%;
+    right: 0.5rem;
+
+    fill: var(--gray-200);
+  }
+}
+
+.inputContainerActive{
+  position: relative;
+  width: 100%;
+
+  &:focus-within{
+    input{
+      border-bottom: 2px solid var(--blue-600);
+    }
+    span{
+      top: 0;
+      color: var(--blue-600);
+    }
+    .icon{
+      fill: var(--blue-600);
+    }
+  }
+
+  span{
+    position: absolute;
+    top: 0;
+    color: var(--blue-600);
+    left: 0.5rem;
+  }
+  input{
+    border-bottom: 1px solid var(--blue-300);
+  }
+  .icon{
+    fill: var(--blue-300);
+  }
+}

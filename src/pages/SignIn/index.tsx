@@ -12,33 +12,36 @@ import { useEffect } from 'react';
 
 export const SignIn: React.FC = () => {
   const history = useHistory()
-  const { Sign } = useUsers()
   const [ email, setEmail ] = useState<string>('')
   const [ password, setPassword ] = useState<string>('')
   const [ isLoading, setIsLoading ] = useState(false)
   const [ message, setMessage ] = useState<string>('')
   const [ isVisible, setIsVisible ] = useState(false)
-
+  const { Sign } = useUsers()
+  
   useEffect(() => { setIsVisible(true) },[])
 
   async function signIn(event : FormEvent){
     event.preventDefault()
     setIsLoading(true)
 
-    const result = await Sign({email, password, query: "/login"});
-    if(result.message === "ok") {
-      setIsVisible(false);
-      if(result.data.user.hasAnswered === true) {
-        setTimeout(() => history.replace('/Home'), 300);
-        return;
-      } else{
-        setTimeout(() => history.replace('/Questionnaire'), 300);
-        return;
+    Sign({email, password, query: "/login"})
+    .then((result: any) => {
+      if(result.message === "ok") {
+        setIsVisible(false);
+        if(result.data.user.hasAnswered === true) {
+          setTimeout(() => history.replace('/Home'), 300);
+          return;
+        } else{
+          setTimeout(() => history.replace('/Questionnaire'), 300);
+          return;
+        }
+      } else {
+        setMessage(result.message)
+        setIsLoading(false)
       }
-    } else {
-      setMessage(result.message)
-      setIsLoading(false)
-    }
+    })
+    
   }
 
   return(

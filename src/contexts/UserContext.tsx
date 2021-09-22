@@ -15,21 +15,14 @@ interface SignProps {
 }
 interface SignResult {
   data: {
-    user: {
-      id: String;
-      name: String;
-      email: String;
-      created_at: Date;
-      updated_at: Date;
-    };
-    token: String;
+    user: UserProps;
+    token: string;
   };
-  message?: String;
+  message?: string;
 }
 interface UserContextProps {
   Sign: ({name, password, email, query}: SignProps) => any;
   username: String;
-  isAuthenticated: Boolean;
   Logout: () => Promise<unknown>;
   user?: UserProps;
   handleFinishActivityInUser: () => void;
@@ -52,7 +45,6 @@ interface UserProps {
 const UserContext = createContext({} as UserContextProps)
 
 export function UserProvider({ children }: UserProviderProps){
-  const [ isAuthenticated, setIsAuthenticated ] = useState(false)
   const [ username, setUsername ] = useState('')
   const [ user, setUser ] = useState<UserProps>()
 
@@ -60,10 +52,9 @@ export function UserProvider({ children }: UserProviderProps){
     const userStore = await storage.get('user')
     if(userStore){
       setUser(userStore)
+
       if(userStore){
         const firstName = userStore.name.split(' ')[0]
-
-        console.log(firstName)
         setUsername(firstName)
       }
     }
@@ -72,46 +63,42 @@ export function UserProvider({ children }: UserProviderProps){
   useEffect(() => {
     (async () => {
       if(getToken()) {
-        setIsAuthenticated(true) 
         updateUserState()
       }
     })()
   },[ updateUserState ])
 
 
-  async function Sign({name, email, password, query = '/login'}: SignProps) {
-    const result = {} as SignResult
+  const Sign = useCallback((
+    {name, email, password, query = '/login'}: SignProps) => {
+    return new Promise((resolve, reject) => {
+      const result = {} as SignResult
 
-    try {
-      const { data } = await api.post(query, { name, email, password })
-      setUser(data.user)
+      api.post(query, { name, email, password })
+      .then(({ data }: SignResult) => {
+        const firstName = data.user.name.split(' ')[0]
+        storage.set('user', data.user)
+        
+        result.data = data
+        result.message = "ok"
 
-      // api.interceptors.request.use((config) => {
-      //   config.headers.authorization = `Bearer ${data.token}`
-      //   return config
-      // })
+        setToken(data.token)
+        setUser(data.user)
+        setUsername(firstName)
+      })
+      .catch((error) => {
+        result.message = error.response.data.error
+      })
       
-      setToken(data.token)
-      await storage.set('user', data.user)
-      const firstName = data.user.name.split(' ')[0]
-      setUsername(firstName)
-      setIsAuthenticated(true)
-
-      result.data = data
-      result.message = "ok"
-    } catch(error: any) {
-      result.message = error.response.data.error
-    } finally {
-      return result
-    }
-  }
+      return resolve(result)
+    })
+  },[])
 
   function Logout(){
     return new Promise((resolve, reject) => {
       storage.remove('user')
       storage.remove('activities')
       removeToken()
-      setIsAuthenticated(false)
       setUsername('')
       setUser(undefined)
 
@@ -159,7 +146,6 @@ export function UserProvider({ children }: UserProviderProps){
     <UserContext.Provider 
       value={{
         Sign,
-        isAuthenticated,
         username,
         Logout,
         user,

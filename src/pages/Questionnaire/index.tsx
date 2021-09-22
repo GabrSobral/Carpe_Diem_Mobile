@@ -66,13 +66,16 @@ export const Questionnaire: React.FC = () => {
     setIsLoading(true)
 
     await api.post('/answer/new', { answer : allAnswers }).then(()=> {
+      if(user?.hasAnswered) {
+        setIsVisible(false)
+        setTimeout(() => { history.goBack(); },300) 
+        return;
+      }
       setHasAnswered()
       history.push("/Home")
-      return 
     }).catch((err)=>{
       setMessage(`Algo deu errado: ${err.response.data.message}`)
       setIsLoading(false)
-      return 
     })
   }
 

@@ -35,7 +35,8 @@ export function ChangePassword() {
         oldPassword: currentPassword,
         newPassword
       })
-      history.goBack()
+      setIsVisible(false)
+      setTimeout(() => { history.goBack(); },300) 
     } catch(error: any){
       setMessage(error.response.data.error)
       setIsLoading(false)

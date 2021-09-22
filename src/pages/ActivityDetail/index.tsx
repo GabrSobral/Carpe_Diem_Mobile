@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState, useCallback } from 'react'
-import { AnimatePresence, AnimateSharedLayout, motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { useHistory } from 'react-router-dom'
 // import { FiHeadphones, FiTrash, FiCheck, FiBook } from 'react-icons/fi'
 
 import { BottomMenu } from '../../components/BottomMenu'
 import { Header } from '../../components/header'
 import { Player } from '../../components/Player'
+import { FeedbackModal } from '../../components/FeedbackModal'
 
 // import Medic from '../../images/medic.svg'
 // import Clock from '../../images/clock.svg'
@@ -37,6 +38,7 @@ export const ActivityDetails: React.FC = () => {
   const [ isVisible, setIsVisible ] = useState(false)
   const [ isModalSuccessVisible, setIsModalSuccessVisible ] = useState(false)
   const [ isModalRemoveVisible, setIsModalRemoveVisible ] = useState(false)
+  const [ isModalFeedbackVisible, setIsModalFeedbackVisible ] = useState(true)
   const { selectedActivity, handleUpdateActivitiesState, handleFinishActivity } = useActivity()
   
   const history = useHistory()
@@ -93,124 +95,113 @@ export const ActivityDetails: React.FC = () => {
     </AnimatePresence>
   ),[isModalSuccessVisible])
 
-  const memoizedDetails = useMemo(()=>(
-    <>
-      <div className={styles.activityItem}>
-        <div className={styles.icon}>
-          {/* {icon[String(selectedActivity?.category.name)]} */}
-        </div>
-
-        <div className={styles.content}>
-          <h2>{selectedActivity?.title}</h2>
-          <p>{selectedActivity?.description}</p>
-        </div>
-      </div>
-
-      <div 
-        className={styles.ActivityDescription} 
-        dangerouslySetInnerHTML={{
-          __html: selectedActivity?.description as string
-        }}
-      >
-      </div>
-    </>
-  ),[selectedActivity])
-
-  const memoizedHeader = useMemo(()=>(
-    <Header 
-      GoBackIsActive={true} 
-      setIsVisibleToFalse={() => setIsVisible(false)}/>
-  ),[])
-
-  const memoizedBottomMenu = useMemo(()=>(
-    <BottomMenu pageActive='activities'/>
-  ),[])
-
-  const memoizedButtonsControl = useMemo(()=>(
-    <div className={styles.buttons}>
-      <button type="button" onClick={() => setIsModalRemoveVisible(true)}>
-        Descartar
-      </button>
-
-      <button type="button" onClick={Finish}>
-        Concluir
-      </button>
-    </div>
-  ),[Finish, setIsModalRemoveVisible])
+  const MemoizedModalFeedback = useMemo(()=>(
+    <AnimatePresence exitBeforeEnter>
+      { isModalFeedbackVisible && (
+        <FeedbackModal setIsVisible={setIsModalFeedbackVisible}/>
+      ) }
+    </AnimatePresence>
+  ),[isModalFeedbackVisible])
 
   return(
     <div className={styles.container}>
-      {memoizedHeader}
+      <Header 
+        GoBackIsActive={true} 
+        setIsVisibleToFalse={() => setIsVisible(false)}
+      />
 
       {MemoizedModalSuccess}
-
       {MemoizedModalExclude}
-
-      <AnimateSharedLayout type="crossfade">
+      {MemoizedModalFeedback}
         
-        <AnimatePresence exitBeforeEnter>
-          {isVisible && (
-            <motion.main
-              key="ActivityDetails"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0}}
-              exit={{ opacity: 0, y: 30 }}
-              transition={{ duration: 0.3, bounce: 0 }}
-            >    
-              {memoizedDetails}
+      <AnimatePresence exitBeforeEnter>
+        {isVisible && (
+          <motion.main
+            key="ActivityDetails"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0}}
+            exit={{ opacity: 0, y: 30 }}
+            transition={{ duration: 0.3, bounce: 0 }}
+          >    
+            <div className={styles.activityItem}>
+              <div className={styles.icon}>
+                {/* {icon[String(selectedActivity?.category.name)]} */}
+              </div>
 
-              {selectedActivity?.files.map(item => {
-              
-                if(item.format === "mp4"){
-                  return(
-                    <motion.video 
-                      controls 
-                      className={styles.video} 
-                      key={item.id}
-                      initial={{ opacity: 0}}
-                      animate={{ opacity: 1}}
-                    >
-                      <source src={item.url} type="video/mp4"/>
-                      Your browser does not support the video tag.
-                    </motion.video>
-                  )
-                }
-      
-                if(item.format === "mp3"){
-                  return(
-                    <div key={item.id}>
-                      <strong>Nós recomendamos essa música</strong>
-                      <Player 
-                        name={item.name || ''}
-                        url={item.url || ''}
-                        duration={item.duration || 0}
-                      />
-                    </div>
-                  )
-                }
-      
-                if(item.format === "png"){
-                  return(
-                    <div className={styles.image} key={item.id}>
-                      <img 
-                        key={item.id}
-                        src={item.url} 
-                        alt="Imagem do arquivo" 
-                        width={"100%"}
-                        height={"fit-content"}
+              <div className={styles.content}>
+                <h2>{selectedActivity?.title}</h2>
+                <p>{selectedActivity?.description}</p>
+              </div>
+            </div>
+
+            <div 
+              className={styles.ActivityDescription} 
+              dangerouslySetInnerHTML={{
+                __html: selectedActivity?.description as string
+              }}
+            >
+            </div>
+
+            {selectedActivity?.files.map(item => {
+            
+              if(item.format === "mp4"){
+                return(
+                  <motion.video 
+                    controls 
+                    className={styles.video} 
+                    key={item.id}
+                    initial={{ opacity: 0}}
+                    animate={{ opacity: 1}}
+                  >
+                    <source src={item.url} type="video/mp4"/>
+                    Your browser does not support the video tag.
+                  </motion.video>
+                )
+              }
+    
+              if(item.format === "mp3"){
+                return(
+                  <div key={item.id}>
+                    <strong>Nós recomendamos essa música</strong>
+                    <Player 
+                      name={item.name || ''}
+                      url={item.url || ''}
+                      duration={item.duration || 0}
                     />
-                    </div>
-                    
-                  )
-                }
-                return <p key={item.id}/>
-              })}
-              {memoizedButtonsControl}
-            </motion.main>
-          )}
-        </AnimatePresence>
-        {memoizedBottomMenu}
-      </AnimateSharedLayout>
+                  </div>
+                )
+              }
+    
+              if(item.format === "png"){
+                return(
+                  <div className={styles.image} key={item.id}>
+                    <img 
+                      key={item.id}
+                      src={item.url} 
+                      alt="Imagem do arquivo" 
+                      width={"100%"}
+                      height={"fit-content"}
+                  />
+                  </div>
+                  
+                )
+              }
+              return <p key={item.id}/>
+            })}
+            
+            <div className={styles.buttons}>
+              <button type="button" onClick={() => setIsModalRemoveVisible(true)}>
+                Descartar
+              </button>
+
+              <button type="button" onClick={Finish}>
+                Concluir
+              </button>
+            </div>
+          </motion.main>
+        )}
+      </AnimatePresence>
+      <BottomMenu pageActive='activities'/>
     </div>
   )
 }

@@ -1,77 +1,45 @@
-import { useEffect, useMemo, useState } from "react";
-import { FaEnvelope, FaCheck } from 'react-icons/fa'
+import { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { SignPageHeader } from "../../components/SignPageHeader";
 import { Modal } from '../../components/Modal'
-import { api } from '../../services/api'
+import { Button } from "../../components/Button";
+import { Input } from "../../components/Input";
 
+import { api } from '../../services/api'
 import styles from '../ChangePassword/styles.module.scss'
-import { useCallback } from "react";
 
 export function ForgotPassword() {
   const [ email, setEmail ] = useState<string>('')
+  const [ isLoading, setIsLoading ] = useState(false)
   const [ message, setMessage ] = useState<string>('')
   const [ isModalVisible, setIsModalVisible ] = useState<boolean>(false)
   const [ isVisible, setIsVisible ] = useState(false)
 
   useEffect(() => { setIsVisible(true) },[])
 
-  const sendEmail = useCallback(async () => {
+  const sendEmail = useCallback(async (event: any) => {
+    event.preventDefault()
     try{
+      setIsLoading(true)
       await api.post('/users/forgot-password', { email }).then(()=> {
         setIsModalVisible(true)
+        setIsLoading(false)
       })
     } catch(error: any) {
+      setIsLoading(false)
       setMessage(error.response.data.error)
     }
   },[email])
 
-  const memoizedModal = useMemo(()=>(
-    <AnimatePresence exitBeforeEnter>
-      {isModalVisible && (
-        <Modal
-          title="Enviado..."
-          description="Verifique a sua caixa de email principal ou spam."
-          keyModal="EmailSend"
-          setIsVisible={setIsModalVisible}
-          yesAndNoButtons={false}
-          destinyPage="SignIn"
-        />
-      )}
-    </AnimatePresence>
-  ),[isModalVisible])
-
-  const memoizedHeader = useMemo(()=> (
-    <SignPageHeader 
-      title='Senha' 
-      button='Entrar'
-      setIsVisibleToFalse={() => setIsVisible(false)}
-    />
-  ),[])
-
-  const memoizedEmail = useMemo(()=> (
-    <div className={`${styles.inputContainer} ${email && styles.inputContainerActive}`}>
-      <span>Email</span>
-      <input type='email' onChange={(event)=> setEmail(event.target.value)}/>
-      <FaEnvelope size={20} className={styles.icon}/>
-    </div>
-  ),[ email ]) 
-  
-  const memoizedButton = useMemo(()=> (
-    <button 
-      type='button' 
-      onClick={sendEmail} 
-      disabled={email ? false : true}
-    >
-      Confirmar
-      <FaCheck size={24}/>
-    </button>
-  ),[ email, sendEmail ])
-
   return (
     <div className={styles.wrapper}>
-      {memoizedHeader}
+      <SignPageHeader 
+        title='Senha' 
+        button='Entrar'
+        setIsVisibleToFalse={() => setIsVisible(false)}
+      />
+
       <AnimatePresence>
         { isVisible && (
           <motion.section
@@ -81,13 +49,37 @@ export function ForgotPassword() {
             transition={{ duration: 0.3, bounce: 0 }}
           >
             <form className={styles.formContainer}>
-              {memoizedModal}
+              <AnimatePresence exitBeforeEnter>
+                {isModalVisible && (
+                  <Modal
+                    title="Enviado..."
+                    description="Verifique a sua caixa de email principal ou spam."
+                    keyModal="EmailSend"
+                    setIsVisible={setIsModalVisible}
+                    yesAndNoButtons={false}
+                    destinyPage="SignIn"
+                  />
+                )}
+              </AnimatePresence>
 
               <span className={styles.title}>Insira seu email para <br/> sabermos quem é você.</span>
-              {memoizedEmail}
+              
+              <Input
+                type="emil"
+                icon="envelope"
+                setValue={(value: string) => setEmail(value)}
+                value={email}
+                title="Email"
+              />
 
               <span className={styles.warningText}>{message}</span>
-              {memoizedButton}
+              <Button 
+                title="Confirmar"
+                isLoading={isLoading}
+                icon="Check"
+                disabled={email ? false : true} 
+                onClick={sendEmail}
+              />
             </form>
           </motion.section>
         ) }

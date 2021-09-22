@@ -1,14 +1,14 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState, useEffect } from "react";
 import { useLocation, useHistory } from 'react-router-dom'
-import { FaLock, FaUnlock, FaSave } from 'react-icons/fa'
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { SignPageHeader } from "../../components/SignPageHeader";
 import { Modal } from '../../components/Modal'
-import { api } from '../../services/api'
+import { Input } from "../../components/Input";
+import { Button } from "../../components/Button";
 
+import { api } from '../../services/api'
 import styles from '../ChangePassword/styles.module.scss'
-import { useEffect } from "react";
 
 export function ResetPassword() {
   const history = useHistory()
@@ -19,10 +19,12 @@ export function ResetPassword() {
   const [ message, setMessage ] = useState<string>('')
   const [ isModalVisible, setIsModalVisible ] = useState<boolean>(false)
   const [ isVisible, setIsVisible ] = useState(false)
+  const [ isLoading, setIsLoading ] = useState(false)
 
   useEffect(() => { setIsVisible(true) },[])
 
   const reset = useCallback(async () => {
+    setIsLoading(true)
     const query = new URLSearchParams(location.search)
 
     if(newPassword !== confirmNewPassword) {
@@ -37,6 +39,7 @@ export function ResetPassword() {
       })
       history.push('/SignIn')
     } catch(error: any) {
+      setIsLoading(false)
       setMessage(error.response.data.error)
     }
 
@@ -46,59 +49,23 @@ export function ResetPassword() {
     <AnimatePresence exitBeforeEnter>
       {isModalVisible && ( 
         <Modal
-        title="Tudo resolvido..."
-        description="Sua senha foi alterada com sucesso, faça login para entrar"
-        keyModal="ResetPassword"
-        setIsVisible={setIsModalVisible}
-        yesAndNoButtons={false}
-        destinyPage="Login/SignIn"
+          title="Tudo resolvido..."
+          description="Sua senha foi alterada com sucesso, faça login para entrar"
+          keyModal="ResetPassword"
+          setIsVisible={setIsModalVisible}
+          yesAndNoButtons={false}
+          destinyPage="Login/SignIn"
         />)
       }
     </AnimatePresence>
-   
   ),[isModalVisible])
-
-  const memoizedHeader = useMemo(()=> (
-    <SignPageHeader 
-      title='Troca de senha' 
-      setIsVisibleToFalse={() => setIsVisible(false)}
-    />
-  ),[])
-
-  const memoizedTitle = useMemo(()=> (
-    <span className={styles.title}>Insira sua nova senha</span>
-  ),[])
-
-  const memoizedNewPassword = useMemo(()=> (
-    <div className={`${styles.inputContainer} ${newPassword && styles.inputContainerActive}`}>
-      <span>Nova senha</span>
-      <input type='password' onChange={(event)=> setNewPassword(event.target.value)}/>
-      <FaLock size={20} className={styles.icon}/>
-    </div>
-  ),[newPassword])
-
-  const memoizedConfirmNewPassword = useMemo(()=> (
-    <div className={`${styles.inputContainer} ${confirmNewPassword && styles.inputContainerActive}`}>
-      <span>Confirme nova senha</span>
-      <input type='password' onChange={(event)=> setConfirmNewPassword(event.target.value)}/>
-      <FaUnlock size={20} className={styles.icon}/>
-    </div>
-  ),[confirmNewPassword])
-
-  const memoizedMessage = useMemo(()=> (
-    <span className={styles.warningText}>{message}</span>
-  ),[message])
-  
-  const memoizedButton = useMemo(()=> (
-    <button type='button' onClick={reset} disabled={newPassword && confirmNewPassword ? false : true}>
-      Confirmar
-      <FaSave size={24}/>
-    </button>
-  ),[ newPassword, confirmNewPassword, reset ])
 
   return (
     <div className={styles.wrapper}>
-      {memoizedHeader}
+      <SignPageHeader 
+        title='Troca de senha' 
+        setIsVisibleToFalse={() => setIsVisible(false)}
+      />
       <AnimatePresence>
       { isVisible && (
         <motion.section
@@ -110,12 +77,35 @@ export function ResetPassword() {
           <form className={styles.formContainer}>
             {memoizedModal}
 
-            {memoizedTitle}
-            {memoizedNewPassword}
-            {memoizedConfirmNewPassword}
+            <span className={styles.title}>Insira sua nova senha</span>
 
-            {memoizedMessage}
-            {memoizedButton}
+            <Input
+              type="password"
+              icon="lock"
+              autoComplete="none"
+              setValue={(value: string) => setNewPassword(value)}
+              value={newPassword}
+              title="Nova senha"
+            />
+
+            <Input
+              type="password"
+              icon="unlock"
+              autoComplete="none"
+              setValue={(value: string) => setConfirmNewPassword(value)}
+              value={confirmNewPassword}
+              title="Confirme nova senha"
+            />
+
+            <span className={styles.warningText}>{message}</span>
+
+            <Button
+              disabled={newPassword && confirmNewPassword ? false : true}
+              onClick={reset}
+              title="Confirmar"
+              isLoading={isLoading}
+              icon="Save"
+            />
           </form>
         </motion.section>
       )}

@@ -1,15 +1,14 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useHistory } from 'react-router-dom'
-import { FaLock, FaUnlock, FaKey } from 'react-icons/fa'
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { Modal } from '../../components/Modal'
-import { api } from '../../services/api'
-
-import styles from './styles.module.scss'
 import { Header } from "../../components/header";
-import { useCallback } from "react";
 import { Button } from "../../components/Button";
+import { Input } from "../../components/Input";
+
+import { api } from '../../services/api'
+import styles from './styles.module.scss'
 
 export function ChangePassword() {
   const [ currentPassword, setCurrentPassword ] = useState<string>('')
@@ -25,8 +24,7 @@ export function ChangePassword() {
 
   useEffect(() => { setIsVisible(true) },[])
 
-  const changePassword = useCallback(async (event) => {
-    event.preventDefault()
+  async function changePassword(){
     if(newPassword !== confirmNewPassword){
       setMessage("Senhas não estão iguais!")
       return
@@ -42,54 +40,15 @@ export function ChangePassword() {
       setMessage(error.response.data.error)
       setIsLoading(false)
     }
-  },[newPassword, confirmNewPassword, currentPassword, history])
-
-  const memoizedModal = useMemo(()=>(
-    <AnimatePresence exitBeforeEnter>
-      {isModalVisible && (
-        <Modal
-          title="Tudo resolvido..."
-          description="Sua senha foi alterada com sucesso, faça login para entrar"
-          keyModal="ResetPassword"
-          setIsVisible={setIsModalVisible}
-          yesAndNoButtons={false}
-          destinyPage="Profile"
-        />
-      )}
-    </AnimatePresence>
-  ),[isModalVisible])
-
-  const memoizedHeader = useMemo(()=> (
-    <Header GoBackIsActive={true} setIsVisibleToFalse={() => setIsVisible(false)}/>
-  ),[])
-
-  const memoizedCurrentPassword = useMemo(()=> (
-    <div className={`${styles.inputContainer} ${currentPassword && styles.inputContainerActive}`}>
-      <span>Senha atual</span>
-      <input type='password' onChange={(event)=> setCurrentPassword(event.target.value)}/>
-      <FaKey size={20} className={styles.icon}/>
-    </div>
-  ),[currentPassword])
-
-  const memoizedNewPassword = useMemo(()=> (
-    <div className={`${styles.inputContainer} ${newPassword && styles.inputContainerActive}`}>
-      <span>Nova senha</span>
-      <input type='password' onChange={(event)=> setNewPassword(event.target.value)}/>
-      <FaLock size={20} className={styles.icon}/>
-    </div>
-  ),[newPassword])
-
-  const memoizedConfirmNewPassword = useMemo(()=> (
-    <div className={`${styles.inputContainer} ${confirmNewPassword && styles.inputContainerActive}`}>
-      <span>Confirme nova senha</span>
-      <input type='password' onChange={(event)=> setConfirmNewPassword(event.target.value)}/>
-      <FaUnlock size={20} className={styles.icon}/>
-    </div>
-  ),[confirmNewPassword])
+  }
 
   return (
     <div className={styles.wrapper}>
-      {memoizedHeader}
+      <Header 
+        GoBackIsActive={true} 
+        setIsVisibleToFalse={() => setIsVisible(false)}
+      />
+
       <AnimatePresence>
         { isVisible && (
           <motion.section
@@ -101,11 +60,44 @@ export function ChangePassword() {
             <span className={styles.changePasswordTitle}>Alterar senha</span>
 
             <form className={styles.formContainer} onSubmit={changePassword}>
-              {memoizedModal}
+              <AnimatePresence exitBeforeEnter>
+                {isModalVisible && (
+                  <Modal
+                    title="Tudo resolvido..."
+                    description="Sua senha foi alterada com sucesso, faça login para entrar"
+                    keyModal="ResetPassword"
+                    setIsVisible={setIsModalVisible}
+                    yesAndNoButtons={false}
+                    destinyPage="Profile"
+                  />
+                )}
+              </AnimatePresence>
 
-              {memoizedCurrentPassword}
-              {memoizedNewPassword}
-              {memoizedConfirmNewPassword}
+              <Input
+                icon="key"
+                type="password"
+                autoComplete="none"
+                title="Senha atual"
+                setValue={(value: string) => setCurrentPassword(value)}
+                value={currentPassword}
+              />
+
+              <Input
+                icon="lock"
+                type="password"
+                autoComplete="none"
+                title="Nova senha"
+                setValue={(value: string) => setNewPassword(value)}
+                value={newPassword}
+              />
+
+              <Input
+                icon="lock"
+                type="password"
+                title="Confirme nova senha"
+                setValue={(value: string) => setConfirmNewPassword(value)}
+                value={confirmNewPassword}
+              />
 
               <span className={styles.warningText}>{message}</span>
 

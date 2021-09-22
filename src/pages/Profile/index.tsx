@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion'
-import { FiBook, FiLock, FiLogOut, FiSettings, FiBookOpen } from 'react-icons/fi';
+import { FiLogOut} from 'react-icons/fi';
 // import { format } from 'date-fns'
 
 import { BottomMenu } from '../../components/BottomMenu'
@@ -11,11 +11,11 @@ import { Modal } from '../../components/Modal'
 import styles from './styles.module.scss'
 import { useUsers } from '../../contexts/UserContext';
 import { ChangeQuantityModal } from '../../components/QuantityActivitiesModal';
+import { ConfigContainer } from '../../components/ConfigContainer';
 
 export const Profile: React.FC = () => {
   const history = useHistory()
   const [ isVisible, setIsVisible ] = useState(false)
-  const [ settingsIsVisible, setSettingsIsVisible ] = useState(false)
   const [ isLogoutModalVisible, setIsLogoutModalVisible ] = useState(false)
   const [ isQuantityModalVisible, setIsQuantityModalVisible ] = useState(false)
 
@@ -27,124 +27,35 @@ export const Profile: React.FC = () => {
  
   useEffect(()=>{ setIsVisible(true) },[])
 
-  const memoizedModalLogout = useMemo(()=>(
-    <AnimatePresence exitBeforeEnter>
-      { isLogoutModalVisible && (
-        <Modal
-          title={`Volte sempre ${': )'}`}
-          description="Você tem certeza de que deseja sair do nosso app?"
-          keyModal="Logout"
-          setIsVisible={setIsLogoutModalVisible}
-          yesAndNoButtons={true}
-          confirmFunction={logout}
-        />
-      ) }
-    </AnimatePresence>
-  ),[isLogoutModalVisible, logout])
-
-  const memoizedModalChangeQuantity = useMemo(()=>(
-    <AnimatePresence exitBeforeEnter>
-      { isQuantityModalVisible && (
-        <ChangeQuantityModal 
-          setIsVisible={setIsQuantityModalVisible}
-          initialValue={Number(user?.quantity_of_activities)}
-        />
-      ) }
-    </AnimatePresence>
-  ),[isQuantityModalVisible, user?.quantity_of_activities])
-
-  const memoizedHeader = useMemo(()=>(
-    <Header GoBackIsActive={false} setIsVisibleToFalse={() => setIsVisible(false)}/>
-  ),[])
-
-  const memoizedHeaderUser = useMemo(()=>(
-    <section className={styles.headerUserContainer}>
-      <div className={styles.ImageAndNameContainer}>
-        <img src="https://github.com/c-santana4.png" alt="Minha foto de perfil" />
-        <span>{user?.name}</span>
-      </div>
-
-      <span className={styles.registeredAt}>Registrado em: {user?.created_at}</span>
-    </section>
-  ),[user?.name, user?.created_at])
-
-  const memoizedAllActivities = useMemo(()=>(
-    <div className={styles.allActivitiesComplete}>
-      <span>Atividades completas:</span>
-      <span>{user?.all_activities_finished}</span>
-    </div>
-  ),[user?.all_activities_finished])
-
-  const memoizedSettingsButton = useMemo(()=>(
-    <div className={styles.configurationsContainer}>
-      <button 
-        type="button" 
-        className={styles.configurationButton} 
-        onClick={()=> setSettingsIsVisible(!settingsIsVisible)}
-      >
-        Configurações
-        <FiSettings size={27} color="#534A4A"/>
-      </button>
-
-      <AnimatePresence>
-      {settingsIsVisible && (
-        <motion.div 
-          key="SettingsButton"
-          className={styles.hiddenButtons}
-          initial={{ height: 0 }}
-          animate={{ height: "fit-content"}}
-          exit={{ height: 0 }}
-        >
-          <button 
-            type="button"
-            onClick={() => {
-              setIsVisible(false)
-              setTimeout(() => history.push('/Questionnaire'),300)
-            }}
-          >
-            Alterar questionário
-            <FiBook size={20} color="#6f6b6b"/>
-          </button>
-          
-          <button
-            type="button"
-            onClick={() => {
-              setIsVisible(false)
-              setTimeout(() => history.push('/ChangePassword'),300)
-            }}
-          >
-            Alterar senha
-            <FiLock size={20} color="#6f6b6b"/>
-          </button>
-
-          <button type="button" onClick={() => setIsQuantityModalVisible(true)}>
-            Quantidade de atividades diárias
-            <FiBookOpen size={20} color="#6f6b6b"/>
-          </button>
-
-        </motion.div>
-      )}
-      </AnimatePresence>
-    </div>
-  ),[settingsIsVisible, history])
-
-  const memoizedLogoutButton = useMemo(()=>(
-    <button type='button' className={styles.logoutButton} onClick={()=> setIsLogoutModalVisible(true)}>
-      Sair
-      <FiLogOut size={35} color="#EF4040"/>
-    </button>
-  ),[])
-
-  const memoizedBottomMenu = useMemo(()=>(
-    <BottomMenu pageActive='me'/>
-  ),[])
-
   return(
     <div className={styles.container}>
-      { memoizedModalLogout }
-      { memoizedModalChangeQuantity }
+      <AnimatePresence exitBeforeEnter>
+        { isLogoutModalVisible && (
+          <Modal
+            title={`Volte sempre ${': )'}`}
+            description="Você tem certeza de que deseja sair do nosso app?"
+            keyModal="Logout"
+            setIsVisible={setIsLogoutModalVisible}
+            yesAndNoButtons={true}
+            confirmFunction={logout}
+          />
+        ) }
+      </AnimatePresence>
 
-      {memoizedHeader}
+       <AnimatePresence exitBeforeEnter>
+        { isQuantityModalVisible && (
+          <ChangeQuantityModal 
+            setIsVisible={setIsQuantityModalVisible}
+            initialValue={Number(user?.quantity_of_activities)}
+          />
+        ) }
+      </AnimatePresence>
+
+      <Header 
+        GoBackIsActive={false} 
+        setIsVisibleToFalse={() => setIsVisible(false)}
+      />
+
       <AnimatePresence exitBeforeEnter>
         {isVisible && (
           <motion.main
@@ -154,17 +65,34 @@ export const Profile: React.FC = () => {
             exit={{ opacity: 0, y: 30 }}
             transition={{ duration: 0.3, bounce: 0 }}
           >
-            {memoizedHeaderUser}
+            <section className={styles.headerUserContainer}>
+              <div className={styles.ImageAndNameContainer}>
+                <img src="https://github.com/c-santana4.png" alt="Minha foto de perfil" />
+                <span>{user?.name}</span>
+              </div>
+
+              <span className={styles.registeredAt}>Registrado em: {user?.created_at}</span>
+            </section>
 
             <section className={styles.BottomInfoContainer}>
-              {memoizedAllActivities}
-              {memoizedSettingsButton}
-              {memoizedLogoutButton}
+              <div className={styles.allActivitiesComplete}>
+                <span>Atividades completas:</span>
+                <span>{user?.all_activities_finished}</span>
+              </div>
+
+              <ConfigContainer
+                setIsVisibleToFalse={() => setIsVisible(false)}
+                setQuantityModalToVisible={() => setIsQuantityModalVisible(true)}
+              />
+              <button type='button' className={styles.logoutButton} onClick={()=> setIsLogoutModalVisible(true)}>
+                Sair
+                <FiLogOut size={35} color="#EF4040"/>
+              </button>
             </section>
           </motion.main>
         )}
       </AnimatePresence>
-      {memoizedBottomMenu}
+      <BottomMenu pageActive='me'/>
     </div>
   )
 }

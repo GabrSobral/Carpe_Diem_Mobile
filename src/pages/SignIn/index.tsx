@@ -1,9 +1,9 @@
 import { FormEvent, useState } from 'react';
-import { FaEnvelope, FaLock } from 'react-icons/fa'
 import { useHistory } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion'
 
 import { SignPageHeader } from '../../components/SignPageHeader'
+import { Input } from '../../components/Input'
 
 import styles from './styles.module.scss'
 import { useUsers } from '../../contexts/UserContext';
@@ -27,12 +27,11 @@ export const SignIn: React.FC = () => {
 
     const result = await Sign({email, password, query: "/login"});
     if(result.message === "ok") {
+      setIsVisible(false);
       if(result.data.user.hasAnswered === true) {
-        setIsVisible(false);
         setTimeout(() => history.replace('/Home'), 300);
         return;
       } else{
-        setIsVisible(false);
         setTimeout(() => history.replace('/Questionnaire'), 300);
         return;
       }
@@ -58,18 +57,23 @@ export const SignIn: React.FC = () => {
             transition={{ duration: 0.3, bounce: 0 }}
           >
             <form className={styles.formContainer}>
-              <div className={`${styles.inputContainer} ${email && styles.inputContainerActive}`}>
-                <span>Email</span>
-                <input type='email' onChange={(event)=> setEmail(event.target.value)}/>
-                <FaEnvelope size={20} className={styles.icon}/>
-              </div>
-    
-              <div className={`${styles.inputContainer} ${password && styles.inputContainerActive}`}>
-                <span>Senha</span>
-                <input type='password' onChange={(event)=> setPassword(event.target.value)}/>
-                <FaLock size={20} className={styles.icon}/>
-              </div>
-              
+              <Input
+                type="email"
+                autoComplete="username"
+                icon="envelope"
+                value={email}
+                setValue={(value: string) => setEmail(value)}
+                title="Email"
+              />
+              <Input
+                type="password"
+                icon="lock"
+                autoComplete="current-password"
+                value={password}
+                setValue={(value: string) => setPassword(value)}
+                title="Senha"
+              /> 
+
               <button 
                 type="button" 
                 className={styles.forgotPassword}
@@ -78,7 +82,7 @@ export const SignIn: React.FC = () => {
                   setTimeout(() => history.push('/ForgotPassword'))
                 }}
               >
-                  Esqueci minha senha
+                Esqueci minha senha
               </button>
               
               <span className={styles.warningText}>{message}</span>

@@ -1,6 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion"
 import { FormEvent, useState } from "react"
-import { FaUser, FaEnvelope, FaLock, FaUnlock } from "react-icons/fa"
 import { useHistory } from "react-router"
 
 import { SignPageHeader } from '../../components/SignPageHeader'
@@ -9,6 +8,7 @@ import styles from '../SignIn/styles.module.scss'
 import { useUsers } from "../../contexts/UserContext"
 import { Button } from "../../components/Button"
 import { useEffect } from "react"
+import { Input } from "../../components/Input"
 
 export const SignUp: React.FC = () => {
   const history = useHistory()
@@ -62,29 +62,41 @@ export const SignUp: React.FC = () => {
           >
             <form className={styles.formContainer}>
               
-              <div className={`${styles.inputContainer} ${name && styles.inputContainerActive}`}>
-                <span>Nome</span>
-                <input type='text' onChange={(event)=> setName(event.target.value)}/>
-                <FaUser size={20} className={styles.icon}/>
-              </div>
+              <Input
+                type="text"
+                icon="user"
+                autoComplete="usename"
+                value={name}
+                setValue={(value: string) => setName(value)}
+                title="Nome"
+              />
             
-              <div className={`${styles.inputContainer} ${email && styles.inputContainerActive}`}>
-                <span>Email</span>
-                <input type='email' onChange={(event)=> setEmail(event.target.value)}/>
-                <FaEnvelope size={20} className={styles.icon}/>
-              </div>
+              <Input
+                type="email"
+                autoComplete="email"
+                icon="envelope"
+                value={email}
+                setValue={(value: string) => setEmail(value)}
+                title="Email"
+              />
 
-              <div className={`${styles.inputContainer} ${password && styles.inputContainerActive}`}>
-                <span>Senha</span>
-                <input type='password' onChange={(event)=> setPassword(event.target.value)}/>
-                <FaLock size={20} className={styles.icon}/>
-              </div>
+              <Input
+                type="password"
+                icon="lock"
+                autoComplete="current-password"
+                value={password}
+                setValue={(value: string) => setPassword(value)}
+                title="Senha"
+              />
 
-              <div className={`${styles.inputContainer} ${confirmPassword && styles.inputContainerActive}`}>
-                <span>Confirmar senha</span>
-                <input type='password' onChange={(event)=> setConfirmPassword(event.target.value)}/>
-                <FaUnlock size={20} className={styles.icon}/>
-              </div>
+              <Input
+                type="password"
+                icon="unlock"
+                autoComplete="current-password"
+                value={confirmPassword}
+                setValue={(value: string) => setConfirmPassword(value)}
+                title="Confirmar senha"
+              />
 
               <span className={styles.warningText}>{message}</span>
 

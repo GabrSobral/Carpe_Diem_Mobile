@@ -1,11 +1,11 @@
 import { ButtonHTMLAttributes } from "react";
-import { FaSignInAlt, FaSave } from 'react-icons/fa'
+import { FaSignInAlt, FaSave, FaCheck } from 'react-icons/fa'
 import Loading from 'react-loading'
 
 import styles from './styles.module.scss'
 
 interface ButtonProps extends  ButtonHTMLAttributes<HTMLButtonElement>{
-  icon: "SignIn" | 'none' | "Save";
+  icon: "SignIn" | 'none' | "Save" | "Check";
   isLoading: boolean;
   title: string
 }
@@ -13,7 +13,8 @@ interface ButtonProps extends  ButtonHTMLAttributes<HTMLButtonElement>{
 const icons = {
   SignIn: <FaSignInAlt size={24} className={styles.icon}/>,
   Save: <FaSave size={24} className={styles.icon}/>,
-  none: null
+  none: null,
+  Check: <FaCheck size={24} className={styles.icon}/>
 }
 
 export function Button({ icon, isLoading, title, ...rest }: ButtonProps){

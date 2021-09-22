@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FiFrown } from 'react-icons/fi'
 import { AnimatePresence, motion } from 'framer-motion'
 
@@ -16,45 +16,12 @@ export const Activities: React.FC = () => {
 
   useEffect(()=> { setIsVisible(true) },[])
 
-  const memoizedHeader = useMemo(()=>(
-    <Header 
-      GoBackIsActive={false} 
-      setIsVisibleToFalse={() => setIsVisible(false)}/>
-  ),[])
-  const memoizedMainTitle = useMemo(()=> (
-    <div className={styles.activityTitle}>
-      <div className={styles.content}>
-        <h2>Atividades</h2>
-        <p>Aqui você pode encontrar atividades <br/>que serão geradas diariamente</p>
-      </div>
-    </div>
-  ),[])
-  const memoizedAllActivities = useMemo(()=>(
-    <section className={styles.allActivities}>
-      {activities?.length !== 0 ? (
-        activities.map(activity => (
-          <ActivityItem 
-            key={activity.id}
-            activity={activity}
-            setIsVisibleToFalse={() => setIsVisible(false)}
-          />
-        ))
-        )
-        : (
-        <div className={styles.dontHaveActivitiesContainer}>
-          <FiFrown color="#bbb" size={86}/>
-          <span>Não há atividades para realizar.</span>
-        </div>
-      )}
-    </section>
-  ),[activities])
-  const memoizedBottomMenu = useMemo(()=>(
-    <BottomMenu pageActive='activities'/>
-  ),[])
-
   return(
     <div className={styles.container}>
-      {memoizedHeader}
+       <Header 
+        GoBackIsActive={false} 
+        setIsVisibleToFalse={() => setIsVisible(false)}
+      />
       <AnimatePresence exitBeforeEnter>
         {isVisible && (
           <motion.main
@@ -64,13 +31,34 @@ export const Activities: React.FC = () => {
             exit={{ opacity: 0, y: 30 }}
             transition={{ duration: 0.3, bounce: 0 }}
           >
-            {memoizedMainTitle}
+            <div className={styles.activityTitle}>
+              <div className={styles.content}>
+                <h2>Atividades</h2>
+                <p>Aqui você pode encontrar atividades <br/>que serão geradas diariamente</p>
+              </div>
+            </div>
             
-            {memoizedAllActivities}
+            <section className={styles.allActivities}>
+              {activities?.length !== 0 ? (
+                activities.map(activity => (
+                  <ActivityItem 
+                    key={activity.id}
+                    activity={activity}
+                    setIsVisibleToFalse={() => setIsVisible(false)}
+                  />
+                ))
+                )
+                : (
+                <div className={styles.dontHaveActivitiesContainer}>
+                  <FiFrown color="#bbb" size={86}/>
+                  <span>Não há atividades para realizar.</span>
+                </div>
+              )}
+            </section>
           </motion.main>
         )}
       </AnimatePresence>
-      {memoizedBottomMenu}
+      <BottomMenu pageActive='activities'/>
     </div>
   )
 }

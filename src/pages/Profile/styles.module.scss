@@ -86,41 +86,6 @@
         }
       }
 
-      .configurationsContainer{
-        width: 100%;
-        background-color: var(--gray-100);
-        margin: 1rem 0;
-        border-radius: 7px;
-        overflow: hidden;
-
-        .configurationButton{
-          width: 100%;
-          display: flex;
-          padding: 1.25rem 1rem;
-          align-items: center;
-          border-radius: 7px;
-          box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.234);
-          background-color: var(--gray-50);
-          justify-content: space-between;
-          border: 0;
-          font-size: 1.25rem;
-          font-weight: 500;
-        }
-
-        .hiddenButtons{
-          box-shadow: 1px 1px 10px inset rgba(0, 0, 0, 0.234);
-
-          button{
-            width: 100%;
-            border: 0;
-            background: transparent;
-            padding: 1.25rem 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-          }
-        }
-      }
 
       .logoutButton{
         position: relative;

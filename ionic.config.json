@@ -1,5 +1,7 @@
 {
   "name": "Carpe Diem",
-  "integrations": {},
+  "integrations": {
+    "capacitor": {}
+  },
   "type": "react"
 }

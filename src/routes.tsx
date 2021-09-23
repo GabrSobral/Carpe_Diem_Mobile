@@ -28,7 +28,7 @@ export const Routes: React.FC = () => {
         ? (user.hasAnswered ? 
           createElement(component, props) : 
           <Redirect to={{ pathname: "/Questionnaire", state: { from: props.location } }}/>)
-        : <Redirect to={{ pathname: "/SignIn", state: { from: props.location } }} />
+        : <Redirect to={{ pathname: "/SignIn" }} />
     )
     return <Route {...rest} render={routeComponent}/>;
   }
@@ -53,9 +53,9 @@ export const Routes: React.FC = () => {
             <Redirect to={'/tabs/Home'}/> : 
             <SignUp/>}
         />
-        <Route exact path="/Questionnaire" component={Questionnaire} />
         <Route exact path="/ForgotPassword" component={ForgotPassword} />
         <Route exact path="/ResetPassword" component={ResetPassword} />
+        <PrivateRoute exact path="/Questionnaire" component={Questionnaire} />
         <PrivateRoute exact path="/Clock" component={Clock} />
         <PrivateRoute exact path="/ChangePassword" component={ChangePassword} />
 
@@ -64,10 +64,10 @@ export const Routes: React.FC = () => {
           render={() => (
             <IonTabs>
               <IonRouterOutlet>
-                <Route exact path="/tabs/Home" component={Home} />
-                <Route exact path="/tabs/Profile" component={Profile} />
-                <Route exact path="/tabs/Activities" component={Activities} />
-                <Route exact path="/tabs/ActivityDetails" component={ActivityDetails} />
+                <PrivateRoute exact path="/tabs/Home" component={Home} />
+                <PrivateRoute exact path="/tabs/Profile" component={Profile} />
+                <PrivateRoute exact path="/tabs/Activities" component={Activities} />
+                <PrivateRoute exact path="/tabs/ActivityDetails" component={ActivityDetails} />
               </IonRouterOutlet>
 
               <IonTabBar slot="bottom" className={styles.container}>

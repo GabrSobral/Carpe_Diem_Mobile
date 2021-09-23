@@ -21,7 +21,9 @@ export const Profile: React.FC = () => {
   const { Logout, user } = useUsers()
 
   const logout = useCallback(() => {
-    Logout().then(() => { history.push('/') })
+    Logout().then(() => { 
+      history.replace('/SignIn') 
+    })
   },[history, Logout])
 
   return(

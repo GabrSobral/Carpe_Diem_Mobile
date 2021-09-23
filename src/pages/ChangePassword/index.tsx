@@ -22,7 +22,9 @@ export function ChangePassword() {
 
   const history = useHistory()
 
-  async function changePassword(){
+  async function changePassword(event:any){
+    event.preventDefault()
+    
     if(newPassword !== confirmNewPassword){
       setMessage("Senhas não estão iguais!")
       return

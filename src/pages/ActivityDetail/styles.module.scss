@@ -92,6 +92,20 @@
       }
     }
 
+    .feedbackStatementButton{
+      margin-top: 1rem;
+      text-align: center;
+      font-size: 1rem;
+
+      button{
+        font-size: 1rem;
+        background-color: transparent;
+        margin-left: 0.3rem;
+        color: var(--blue-400);
+        font-weight: 600;
+      }
+    }
+
     .buttons{
       width: 90%;
       margin: auto;

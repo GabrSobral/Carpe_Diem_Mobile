@@ -43,18 +43,23 @@
     }
   }
 
-  .userImage{
-    button{
-      width: 4rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height:4rem;
-      border: 0;
-      border-radius: 50%;
-      background-color: var(--red-900);
-      box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.234);
+  .urgentButton{
+    min-width: 4rem;
+    min-height: 4rem;
+    max-width: 4rem;
+    max-height: 4rem;
+    border-radius: 2rem;
+    background-color: var(--red-300);
+    box-shadow: 1px 5px 5px rgba(0, 0, 0, 0.26);
+
+    &:active {
+      transform: scale(0.9);
     }
-    
+
+    img{
+      height: 3rem;
+      width: 3rem;
+    }
   }
+
 }

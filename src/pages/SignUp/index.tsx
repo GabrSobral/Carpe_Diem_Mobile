@@ -30,16 +30,15 @@ export const SignUp: React.FC = () => {
       return setMessage("Sua confirmação de senha está inválida!")
     }
     setIsLoading(true)
-    
+
     Sign({name, email, password, query: "/users"})
-      .then((result: any) => {
-        if(result.message === "ok") {
-          history.replace('/Questionnaire')
-        } else {
-          setMessage(result.message)
-          setIsLoading(false)
-        }
-      })
+    .then((result: any) => {
+      result && history.replace('/Questionnaire');
+    })
+    .catch((result: any) => {
+      setMessage(result.message)
+      setIsLoading(false)
+    })
   }
 
   return (
@@ -56,7 +55,7 @@ export const SignUp: React.FC = () => {
             <Input
               type="text"
               icon="user"
-              autoComplete="usename"
+              autoComplete="username"
               value={name}
               setValue={(value: string) => setName(value)}
               title="Nome"
@@ -64,7 +63,6 @@ export const SignUp: React.FC = () => {
           
             <Input
               type="email"
-              autoComplete="email"
               icon="envelope"
               value={email}
               setValue={(value: string) => setEmail(value)}

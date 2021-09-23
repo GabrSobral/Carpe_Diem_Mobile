@@ -1,11 +1,15 @@
+import { useState } from 'react'
+import ReactDOM from 'react-dom'
 import { FiArrowLeft } from 'react-icons/fi'
 import { IonHeader } from '@ionic/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useHistory } from 'react-router-dom'
 
-import styles from './style.module.scss'
+import { UrgentModal } from '../UrgentModal'
 import { useUsers } from '../../contexts/UserContext'
-import { useState } from 'react'
+
+import UrgentSVG from '../../images/urgent.svg'
+import styles from './style.module.scss'
 
 interface HeaderProps{
   GoBackIsActive : boolean;
@@ -16,11 +20,19 @@ export function Header({
   GoBackIsActive, 
   homeButtonVisible = true } : HeaderProps){
   const history = useHistory()
+  const [ isUrgentModalVisible, setIsUrgentModalVisible ] = useState(false)
   const [ IsGobackActive, setIsGoBackActive ] = useState(GoBackIsActive)
   const { username } = useUsers()
 
   return(
     <IonHeader className={styles.container}>
+      {ReactDOM.createPortal(
+        <AnimatePresence exitBeforeEnter>
+          {isUrgentModalVisible && 
+          <UrgentModal setIsVisible={setIsUrgentModalVisible}/>}
+        </AnimatePresence>,
+        document.body
+      ) }
       <div className={styles.name}>
         <AnimatePresence>
           {IsGobackActive && (
@@ -58,13 +70,13 @@ export function Header({
         </AnimatePresence>
       </div>
     
-      { homeButtonVisible && (
-        <span onClick={() => {
-          setIsGoBackActive(false)
-          history.replace('/tabs/Home')
-        }}>Home</span>
-      ) }
-
+      <button  
+        type='button' 
+        className={styles.urgentButton} 
+        onClick={()=> setIsUrgentModalVisible(!isUrgentModalVisible)}
+      >
+        <img src={UrgentSVG} alt="Clique em caso de crise" />
+      </button>
     </IonHeader>
   )
 }

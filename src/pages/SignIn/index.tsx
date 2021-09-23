@@ -17,22 +17,21 @@ export const SignIn: React.FC = () => {
   const [ message, setMessage ] = useState<string>('')
   const { Sign } = useUsers()
 
-  function signIn(event : FormEvent){
+  async function signIn(event : FormEvent){
     event.preventDefault()
     setIsLoading(true)
 
     Sign({email, password, query: "/login"})
     .then((result: any) => {
-      if(result.message === "ok") {
-        if(result.data.user.hasAnswered === true) {
-          history.replace('/tabs/Home');
-        } else{
-          history.replace('/Questionnaire');
-        }
-      } else {
-        setMessage(result.message)
-        setIsLoading(false)
+      if(result.data.user.hasAnswered === true) {
+        history.replace('/tabs/Home');
+      } else{
+        history.replace('/Questionnaire');
       }
+    })
+    .catch((result: any) => {
+      setMessage(result.message)
+      setIsLoading(false)
     })
   }
 
@@ -44,10 +43,9 @@ export const SignIn: React.FC = () => {
           button='Cadastrar'
         />
         <section>
-          <form className={styles.formContainer}>
+          <form className={styles.formContainer} onSubmit={signIn}>
             <Input
               type="email"
-              autoComplete="username"
               icon="envelope"
               value={email}
               setValue={(value: string) => setEmail(value)}

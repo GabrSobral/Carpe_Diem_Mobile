@@ -11,7 +11,7 @@ import { ActivityProvider } from './contexts/ActivityContext';
 const App: React.FC = () => {
   if(isPlatform('mobile')){
     (async () => {
-      StatusBar.setOverlaysWebView({ overlay: true });
+      StatusBar.setOverlaysWebView({ overlay: false });
       await StatusBar.setStyle({ style: Style.Light })
     })()
   }

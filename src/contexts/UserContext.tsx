@@ -25,10 +25,8 @@ interface UserContextProps {
   username: String;
   Logout: () => Promise<unknown>;
   user?: UserProps;
-  handleFinishActivityInUser: () => void;
-  setHasAnswered: () => void;
   updateUserState: () => void;
-  handleUpdateQuantityOfActivities: (quantity: number) => void;
+  handleUpdate: (...args: any) => Promise<UserProps>;
 }
 interface UserProps {
   id: string;
@@ -60,6 +58,20 @@ export function UserProvider({ children }: UserProviderProps){
     }
   },[])
 
+  const handleUpdate = useCallback(async({...args}): Promise<UserProps> => {
+    let newUser: UserProps;
+
+    return new Promise(resolve => {
+      setUser(prevUser => {
+        prevUser = { ...prevUser, ...args } as UserProps;
+        newUser = prevUser;
+        (async () => await storage.set('user', prevUser))();
+        return prevUser;
+      })
+      return resolve(newUser)
+    })
+  },[])
+
   useEffect(() => {
     (async () => {
       if(getToken()) {
@@ -85,12 +97,12 @@ export function UserProvider({ children }: UserProviderProps){
         setToken(data.token)
         setUser(data.user)
         setUsername(firstName)
+        return resolve(result)
       })
       .catch((error) => {
         result.message = error.response.data.error
+        return reject(result)
       })
-      
-      return resolve(result)
     })
   },[])
 
@@ -106,42 +118,6 @@ export function UserProvider({ children }: UserProviderProps){
     })
   }
 
-  async function handleFinishActivityInUser(){
-    setUser(prev => {
-      if(prev){
-        prev.all_activities_finished++
-        prev.activities_finished_today++
-
-        (async () => {
-          await storage.set('user', prev)
-        })()
-
-        return prev
-      }
-      return undefined
-    })
-  }
-
-  function setHasAnswered(){
-    setUser(prev => {
-      if(prev) {
-        (async () => {
-          prev.hasAnswered = true
-          await storage.set('user', prev)
-        })()
-        return prev
-      }
-      return undefined
-    })
-  }
-
-  function handleUpdateQuantityOfActivities(quantity: number){
-    setUser(prev => {
-      prev && (prev.quantity_of_activities = quantity)
-      return prev
-    })
-  }
-
   return(
     <UserContext.Provider 
       value={{
@@ -149,10 +125,8 @@ export function UserProvider({ children }: UserProviderProps){
         username,
         Logout,
         user,
-        handleFinishActivityInUser,
-        setHasAnswered,
         updateUserState,
-        handleUpdateQuantityOfActivities
+        handleUpdate
       }}>
       {children}
     </UserContext.Provider>

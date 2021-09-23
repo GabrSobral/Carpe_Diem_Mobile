@@ -1,4 +1,5 @@
 import { useEffect, useState, FormEvent } from "react"
+import Loading from 'react-loading'
 import { IonPage } from '@ionic/react'
 import { useHistory } from "react-router"
 import { Button } from "../../components/Button"
@@ -19,15 +20,15 @@ interface QuestionProps {
 }
 
 export const Questionnaire: React.FC = () => {
-  const history = useHistory()
   const [ isLoading, setIsLoading ]= useState(false)
   const [ questions, setQuestions ] = useState<QuestionProps[]>([])
   const [ message, setMessage ] = useState('')
   const [ isFilled, setIsFilled ] = useState(false)
   const [ allAnswers, setAllAnswers ] = useState<any[]>([])
   const [ count, setCount ] = useState(0)
-  const { setHasAnswered, user } = useUsers()
-
+  const { handleUpdate, user } = useUsers()
+  const history = useHistory()
+  
   useEffect(() => {
     (async () => {
       const questionsData = await api.get('/question/list')
@@ -47,7 +48,8 @@ export const Questionnaire: React.FC = () => {
           setAllAnswers(nullArray)
         }
     })()
-  }, [user?.hasAnswered])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     if(allAnswers.indexOf(null) === -1 && allAnswers.length !== 0) {
@@ -58,13 +60,12 @@ export const Questionnaire: React.FC = () => {
   async function handleConfirm(){
     setIsLoading(true)
 
-    await api.post('/answer/new', { answer : allAnswers }).then(()=> {
+    api.post('/answer/new', { answer : allAnswers }).then(()=> {
       if(user?.hasAnswered) {
-        setTimeout(() => { history.goBack(); },300) 
+        history.goBack();
         return;
       }
-      setHasAnswered()
-      history.push("/Home")
+      handleUpdate({ hasAnswered: true }).then(() => history.replace("/tabs/Home"))
     }).catch((err)=>{
       setMessage(`Algo deu errado: ${err.response.data.message}`)
       setIsLoading(false)
@@ -87,7 +88,7 @@ export const Questionnaire: React.FC = () => {
             <h2>Permita-nos conhecê-lo(a) <br/> melhor</h2> 
           }
 
-          {questions.map((question, index) => (
+          {questions ? (questions.map((question, index) => (
             <div className={styles.questionItem} key={question.id}>
               <span>{question.body}</span>
 
@@ -122,7 +123,15 @@ export const Questionnaire: React.FC = () => {
                 </div>
               </div>
             </div>
-          ))}
+          ))) : (
+            <Loading 
+              type="spin" 
+              className={styles.loadingIcon} 
+              width="3rem"
+              height="3rem"
+              color="#1A73E9"
+            />
+          )}
 
           <span className={styles.warningText}>{message}</span>
 

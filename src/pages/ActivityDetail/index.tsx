@@ -37,7 +37,7 @@ import { api } from '../../services/api'
 export const ActivityDetails: React.FC = () => {
   const [ isModalSuccessVisible, setIsModalSuccessVisible ] = useState(false)
   const [ isModalRemoveVisible, setIsModalRemoveVisible ] = useState(false)
-  const [ isModalFeedbackVisible, setIsModalFeedbackVisible ] = useState(true)
+  const [ isModalFeedbackVisible, setIsModalFeedbackVisible ] = useState(false)
   const { selectedActivity, handleUpdateActivitiesState, handleFinishActivity } = useActivity()
   
   const history = useHistory()
@@ -174,6 +174,15 @@ export const ActivityDetails: React.FC = () => {
             }
             return <p key={item.id}/>
           })}
+
+          <div className={styles.feedbackStatementButton}>
+            <span >
+              O que achou da atividade? 
+              <button type="button" onClick={() => setIsModalFeedbackVisible(true)}>
+                Nos dê um feedback!
+              </button>
+            </span>
+          </div>
           
           <div className={styles.buttons}>
             <button type="button" onClick={() => setIsModalRemoveVisible(true)}>

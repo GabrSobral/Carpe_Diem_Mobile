@@ -12,6 +12,7 @@
 /build
 
 .env
+android
 # misc
 .DS_Store
 .env.local

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import ReactDOM from 'react-dom'
 import { FiThumbsUp, FiThumbsDown } from 'react-icons/fi'
 
@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { storage } from "../../utils/ionicStorage"
 
 import styles from '../Modal/style.module.scss'
+import { useActivity } from "../../contexts/ActivityContext"
 
 interface FeedbackModalProps {
   initialValue?: boolean;
@@ -17,11 +18,27 @@ interface FeedbackModalProps {
 
 export function FeedbackModal({ initialValue, setIsVisible }: FeedbackModalProps){
   const [ feedback, setFeedback ] = useState(initialValue)
-  const {  } = useUsers() 
+  // const { selectedActivity } = useActivity()
+  const FeedbackRef: any = useRef(null)
 
-  function confirmFunction(){
+  async function confirmFunction(){
+    // await api.post('/feedback/new', 
+    // { activity: selectedActivity?.id, feedback: true })
+    
     setIsVisible(false)
   }
+  useEffect(() => {
+    function handleClickOutside(event: any){
+      if(FeedbackRef.current && 
+        !FeedbackRef.current.contains(event.target)) {
+        setIsVisible(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [FeedbackRef, setIsVisible])
 
   return(
     <>
@@ -35,6 +52,7 @@ export function FeedbackModal({ initialValue, setIsVisible }: FeedbackModalProps
         <AnimatePresence key={`APFeedback`}>
           <motion.div className={styles.modalContainer}
             key={`modalFeedback`}
+            ref={FeedbackRef}
             animate={{
               scale : [0, 1],
               opacity:[0, 1]}}

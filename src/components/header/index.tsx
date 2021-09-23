@@ -1,4 +1,5 @@
 import { FiArrowLeft } from 'react-icons/fi'
+import { IonHeader } from '@ionic/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useHistory } from 'react-router-dom'
 
@@ -21,16 +22,15 @@ export function Header({
   const { username } = useUsers()
 
   return(
-    <header className={styles.container}>
+    <IonHeader className={styles.container}>
       <div className={styles.name}>
-
         <AnimatePresence>
           {IsGobackActive && (
             <motion.button 
               onClick={() => {
                 setIsVisibleToFalse()
                 setIsGoBackActive(false)
-                setTimeout(() => history.goBack(), 300)
+                history.goBack()
               }}
               key="GoBackKey"
               type='button'
@@ -65,10 +65,10 @@ export function Header({
         <span onClick={() => {
           setIsVisibleToFalse()
           setIsGoBackActive(false)
-          setTimeout(() => history.replace('/Home'), 300)
+          history.replace('/Home')
         }}>Home</span>
       ) }
 
-    </header>
+    </IonHeader>
   )
 }

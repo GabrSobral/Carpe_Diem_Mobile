@@ -39,7 +39,7 @@ export function ConfigContainer({
             type="button"
             onClick={() => {
               setIsVisibleToFalse()
-              setTimeout(() => history.push('/Questionnaire'),300)
+              history.push('/Questionnaire')
             }}
           >
             Alterar questionário
@@ -50,7 +50,7 @@ export function ConfigContainer({
             type="button"
             onClick={() => {
               setIsVisibleToFalse()
-              setTimeout(() => history.push('/ChangePassword'),300)
+              history.push('/ChangePassword')
             }}
           >
             Alterar senha

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, useCallback } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { IonPage } from '@ionic/react'
 import { useHistory } from 'react-router-dom'
 // import { FiHeadphones, FiTrash, FiCheck, FiBook } from 'react-icons/fi'
 
@@ -35,7 +36,6 @@ import { api } from '../../services/api'
 // }
 
 export const ActivityDetails: React.FC = () => {
-  const [ isVisible, setIsVisible ] = useState(false)
   const [ isModalSuccessVisible, setIsModalSuccessVisible ] = useState(false)
   const [ isModalRemoveVisible, setIsModalRemoveVisible ] = useState(false)
   const [ isModalFeedbackVisible, setIsModalFeedbackVisible ] = useState(true)
@@ -43,7 +43,6 @@ export const ActivityDetails: React.FC = () => {
   
   const history = useHistory()
 
-  useEffect(()=> { setIsVisible(true) },[])
   useEffect(() => {
     if(!selectedActivity) {
       history.push('/Activities')
@@ -104,104 +103,96 @@ export const ActivityDetails: React.FC = () => {
   ),[isModalFeedbackVisible])
 
   return(
-    <div className={styles.container}>
-      <Header 
-        GoBackIsActive={true} 
-        setIsVisibleToFalse={() => setIsVisible(false)}
-      />
+    <IonPage>
+      <div className={styles.container}>
+        <Header 
+          GoBackIsActive={true} 
+          setIsVisibleToFalse={() => {}}
+        />
 
-      {MemoizedModalSuccess}
-      {MemoizedModalExclude}
-      {MemoizedModalFeedback}
-        
-      <AnimatePresence exitBeforeEnter>
-        {isVisible && (
-          <motion.main
-            key="ActivityDetails"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0}}
-            exit={{ opacity: 0, y: 30 }}
-            transition={{ duration: 0.3, bounce: 0 }}
-          >    
-            <div className={styles.activityItem}>
-              <div className={styles.icon}>
-                {/* {icon[String(selectedActivity?.category.name)]} */}
-              </div>
-
-              <div className={styles.content}>
-                <h2>{selectedActivity?.title}</h2>
-                <p>{selectedActivity?.description}</p>
-              </div>
+        {MemoizedModalSuccess}
+        {MemoizedModalExclude}
+        {MemoizedModalFeedback}
+          
+        <main>    
+          <div className={styles.activityItem}>
+            <div className={styles.icon}>
+              {/* {icon[String(selectedActivity?.category.name)]} */}
             </div>
 
-            <div 
-              className={styles.ActivityDescription} 
-              dangerouslySetInnerHTML={{
-                __html: selectedActivity?.description as string
-              }}
-            >
+            <div className={styles.content}>
+              <h2>{selectedActivity?.title}</h2>
+              <p>{selectedActivity?.description}</p>
             </div>
+          </div>
 
-            {selectedActivity?.files.map(item => {
-            
-              if(item.format === "mp4"){
-                return(
-                  <motion.video 
-                    controls 
-                    className={styles.video} 
-                    key={item.id}
-                    initial={{ opacity: 0}}
-                    animate={{ opacity: 1}}
-                  >
-                    <source src={item.url} type="video/mp4"/>
-                    Your browser does not support the video tag.
-                  </motion.video>
-                )
-              }
-    
-              if(item.format === "mp3"){
-                return(
-                  <div key={item.id}>
-                    <strong>Nós recomendamos essa música</strong>
-                    <Player 
-                      name={item.name || ''}
-                      url={item.url || ''}
-                      duration={item.duration || 0}
-                    />
-                  </div>
-                )
-              }
-    
-              if(item.format === "png"){
-                return(
-                  <div className={styles.image} key={item.id}>
-                    <img 
-                      key={item.id}
-                      src={item.url} 
-                      alt="Imagem do arquivo" 
-                      width={"100%"}
-                      height={"fit-content"}
+          <div 
+            className={styles.ActivityDescription} 
+            dangerouslySetInnerHTML={{
+              __html: selectedActivity?.description as string
+            }}
+          >
+          </div>
+
+          {selectedActivity?.files.map(item => {
+          
+            if(item.format === "mp4"){
+              return(
+                <motion.video 
+                  controls 
+                  className={styles.video} 
+                  key={item.id}
+                  initial={{ opacity: 0}}
+                  animate={{ opacity: 1}}
+                >
+                  <source src={item.url} type="video/mp4"/>
+                  Your browser does not support the video tag.
+                </motion.video>
+              )
+            }
+
+            if(item.format === "mp3"){
+              return(
+                <div key={item.id}>
+                  <strong>Nós recomendamos essa música</strong>
+                  <Player 
+                    name={item.name || ''}
+                    url={item.url || ''}
+                    duration={item.duration || 0}
                   />
-                  </div>
-                  
-                )
-              }
-              return <p key={item.id}/>
-            })}
-            
-            <div className={styles.buttons}>
-              <button type="button" onClick={() => setIsModalRemoveVisible(true)}>
-                Descartar
-              </button>
+                </div>
+              )
+            }
 
-              <button type="button" onClick={Finish}>
-                Concluir
-              </button>
-            </div>
-          </motion.main>
-        )}
-      </AnimatePresence>
-      <BottomMenu pageActive='activities'/>
-    </div>
+            if(item.format === "png"){
+              return(
+                <div className={styles.image} key={item.id}>
+                  <img 
+                    key={item.id}
+                    src={item.url} 
+                    alt="Imagem do arquivo" 
+                    width={"100%"}
+                    height={"fit-content"}
+                />
+                </div>
+                
+              )
+            }
+            return <p key={item.id}/>
+          })}
+          
+          <div className={styles.buttons}>
+            <button type="button" onClick={() => setIsModalRemoveVisible(true)}>
+              Descartar
+            </button>
+
+            <button type="button" onClick={Finish}>
+              Concluir
+            </button>
+          </div>
+        </main>
+        <BottomMenu pageActive='activities'/>
+      </div>
+    </IonPage>
   )
 }

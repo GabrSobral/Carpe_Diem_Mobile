@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { FiPlay, FiX } from "react-icons/fi";
 import { Timer } from "../Timer";
@@ -55,24 +54,11 @@ export function Respiration(){
   },[respirationSize, isClockStarted])
 
   return(
-    <motion.main
-      key="RespirationMainKey"
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0}}
-      exit={{ opacity: 0, y: 30 }}
-      transition={{ duration: 0.3, bounce: 0 }}
-      className={styles.MainContainer}
-    >
+    <main className={styles.MainContainer}>
       <div className={styles.respirationContainer}>
-        <motion.h2 
-          key="RespirationMainTitle"
-          className={styles.instruction}
-          initial={{ opacity: 0}}
-          animate={{ opacity: 1}}
-          exit={{ opacity: 0}}
-        >
+        <h2 className={styles.instruction}>
           {message}
-        </motion.h2>
+        </h2>
 
         <div className={styles.RespirationAndTimerContainer}>
           <div className={styles.circleRespirationContainer}>
@@ -101,6 +87,6 @@ export function Respiration(){
           }
         </button>
       </div>
-    </motion.main>
+    </main>
   )
 }

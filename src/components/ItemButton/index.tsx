@@ -34,7 +34,7 @@ export function Item({
       type="button"
       onClick={() => {
         setIsVisibleToFalse()
-        setTimeout(() => history.push(`/${page}`),300) 
+        history.push(`/${page}`)
       }}
     >
       <div className={styles.container}>

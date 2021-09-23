@@ -6,6 +6,7 @@
   align-items: center;
   padding: 1rem 1.25rem;
   padding-bottom: 0;
+  background-color: var(--white);
 
   section{
     display: flex;
@@ -26,7 +27,6 @@
 
 .formContainer{
   background-color: var(--white);
-  z-index: 9999;
   display: flex;
   flex: 1;
   flex-direction: column;

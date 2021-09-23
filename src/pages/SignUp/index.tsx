@@ -1,5 +1,5 @@
-import { motion, AnimatePresence } from "framer-motion"
 import { FormEvent, useState } from "react"
+import { IonPage } from '@ionic/react'
 import { useHistory } from "react-router"
 
 import { SignPageHeader } from '../../components/SignPageHeader'
@@ -7,7 +7,6 @@ import { SignPageHeader } from '../../components/SignPageHeader'
 import styles from '../SignIn/styles.module.scss'
 import { useUsers } from "../../contexts/UserContext"
 import { Button } from "../../components/Button"
-import { useEffect } from "react"
 import { Input } from "../../components/Input"
 
 export const SignUp: React.FC = () => {
@@ -18,9 +17,6 @@ export const SignUp: React.FC = () => {
   const [ password, setPassword ] = useState<string>('')
   const [ message, setMessage ] = useState<string>('')
   const [ confirmPassword, setConfirmPassword ] = useState<string>('')
-  const [ isVisible, setIsVisible ] = useState(false)
-
-  useEffect(() => { setIsVisible(true) },[])
 
   const { Sign } = useUsers()
 
@@ -35,82 +31,77 @@ export const SignUp: React.FC = () => {
     }
     setIsLoading(true)
     
-    const result = await Sign({name, email, password, query: "/users"})
-    if(result.message === "ok") {
-      history.push('/Questionnaire')
-    } else {
-      setMessage(result.message)
-      setIsLoading(false)
-    }
+    Sign({name, email, password, query: "/users"})
+      .then((result: any) => {
+        if(result.message === "ok") {
+          history.replace('/Questionnaire')
+        } else {
+          setMessage(result.message)
+          setIsLoading(false)
+        }
+      })
   }
 
   return (
-    <div className={styles.wrapper}>
-      <SignPageHeader 
-        title='Cadastrar' 
-        button='Entrar'
-        setIsVisibleToFalse={() => setIsVisible(false)}
-      />
+    <IonPage>
+      <div className={styles.wrapper}>
+        <SignPageHeader 
+          title='Cadastrar' 
+          button='Entrar'
+          setIsVisibleToFalse={() => {}}
+        />
 
-      <AnimatePresence>
-        { isVisible && (
-          <motion.section
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0}}
-            exit={{ opacity: 0, y: 30 }}
-            transition={{ duration: 0.3, bounce: 0 }}
-          >
-            <form className={styles.formContainer}>
-              
-              <Input
-                type="text"
-                icon="user"
-                autoComplete="usename"
-                value={name}
-                setValue={(value: string) => setName(value)}
-                title="Nome"
-              />
+        <section>
+          <form className={styles.formContainer}>
             
-              <Input
-                type="email"
-                autoComplete="email"
-                icon="envelope"
-                value={email}
-                setValue={(value: string) => setEmail(value)}
-                title="Email"
-              />
+            <Input
+              type="text"
+              icon="user"
+              autoComplete="usename"
+              value={name}
+              setValue={(value: string) => setName(value)}
+              title="Nome"
+            />
+          
+            <Input
+              type="email"
+              autoComplete="email"
+              icon="envelope"
+              value={email}
+              setValue={(value: string) => setEmail(value)}
+              title="Email"
+            />
 
-              <Input
-                type="password"
-                icon="lock"
-                autoComplete="current-password"
-                value={password}
-                setValue={(value: string) => setPassword(value)}
-                title="Senha"
-              />
+            <Input
+              type="password"
+              icon="lock"
+              autoComplete="current-password"
+              value={password}
+              setValue={(value: string) => setPassword(value)}
+              title="Senha"
+            />
 
-              <Input
-                type="password"
-                icon="unlock"
-                autoComplete="current-password"
-                value={confirmPassword}
-                setValue={(value: string) => setConfirmPassword(value)}
-                title="Confirmar senha"
-              />
+            <Input
+              type="password"
+              icon="unlock"
+              autoComplete="current-password"
+              value={confirmPassword}
+              setValue={(value: string) => setConfirmPassword(value)}
+              title="Confirmar senha"
+            />
 
-              <span className={styles.warningText}>{message}</span>
+            <span className={styles.warningText}>{message}</span>
 
-              <Button
-                title="Cadastrar"
-                icon="SignIn"
-                isLoading={isLoading}
-                onClick={SignUp} 
-                disabled={name && email && password && confirmPassword && !isLoading ? false : true}
-              />
-            </form>
-          </motion.section>
-        ) }
-      </AnimatePresence>
-    </div>
+            <Button
+              title="Cadastrar"
+              icon="SignIn"
+              isLoading={isLoading}
+              onClick={SignUp} 
+              disabled={name && email && password && confirmPassword && !isLoading ? false : true}
+            />
+          </form>
+        </section>
+      </div>
+    </IonPage>
   )
 }

@@ -20,8 +20,8 @@ export function SignPageHeader({ title, button, setIsVisibleToFalse } : headerPr
           type="button"
           onClick={() => {
             setIsVisibleToFalse()
-            setTimeout(() => history.replace(
-              button === 'Entrar' ? '/SignIn' : '/SignUp'), 300)
+            history.replace(
+              button === 'Entrar' ? '/SignIn' : '/SignUp')
           }}  
         >
           {button}

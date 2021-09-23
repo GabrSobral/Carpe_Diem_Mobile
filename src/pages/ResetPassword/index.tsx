@@ -1,6 +1,7 @@
-import { useCallback, useMemo, useState, useEffect } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useLocation, useHistory } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion';
+import { IonPage } from '@ionic/react'
+import { AnimatePresence } from 'framer-motion';
 
 import { SignPageHeader } from "../../components/SignPageHeader";
 import { Modal } from '../../components/Modal'
@@ -18,10 +19,7 @@ export function ResetPassword() {
 
   const [ message, setMessage ] = useState<string>('')
   const [ isModalVisible, setIsModalVisible ] = useState<boolean>(false)
-  const [ isVisible, setIsVisible ] = useState(false)
   const [ isLoading, setIsLoading ] = useState(false)
-
-  useEffect(() => { setIsVisible(true) },[])
 
   const reset = useCallback(async () => {
     setIsLoading(true)
@@ -61,19 +59,13 @@ export function ResetPassword() {
   ),[isModalVisible])
 
   return (
-    <div className={styles.wrapper}>
-      <SignPageHeader 
-        title='Troca de senha' 
-        setIsVisibleToFalse={() => setIsVisible(false)}
-      />
-      <AnimatePresence>
-      { isVisible && (
-        <motion.section
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0}}
-          exit={{ opacity: 0, y: 30 }}
-          transition={{ duration: 0.3, bounce: 0 }}
-        >
+    <IonPage>
+      <div className={styles.wrapper}>
+        <SignPageHeader 
+          title='Troca de senha' 
+          setIsVisibleToFalse={() => {}}
+        />
+        <section>
           <form className={styles.formContainer}>
             {memoizedModal}
 
@@ -107,9 +99,8 @@ export function ResetPassword() {
               icon="Save"
             />
           </form>
-        </motion.section>
-      )}
-      </AnimatePresence>
-    </div>
+        </section>
+      </div>
+    </IonPage>
   )
 }

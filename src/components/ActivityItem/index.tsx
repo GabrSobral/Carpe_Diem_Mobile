@@ -41,7 +41,7 @@ export function ActivityItem({ activity, setIsVisibleToFalse }: ActivityItemProp
     onClick={() => {
       setSelectedActivityState(activity)
       setIsVisibleToFalse()
-      setTimeout(() => { history.push('/ActivityDetails') },300)
+      history.push('/ActivityDetails')
     }}>
       <div className={styles.icon}>
         {/* {icon[icons]} */}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { IonPage } from '@ionic/react'
 import { FiCheck } from 'react-icons/fi'
 import { buildStyles, CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
@@ -13,10 +13,7 @@ import { useUsers } from '../../contexts/UserContext';
 
 export const Home: React.FC = () => {
   const { user } = useUsers()
-  const [ isVisible, setIsVisible ] = useState(false)
   const [ percentage , setPercentage ] = useState(0)
-
-  useEffect(() => { setIsVisible(true) },[])
 
   useEffect(() => {
     const percentegeCalculated = Math.round(
@@ -25,21 +22,14 @@ export const Home: React.FC = () => {
   },[user?.activities_finished_today, user?.quantity_of_activities])
 
   return(
-    <div className={styles.container}>
-      <Header 
-        GoBackIsActive={false} 
-        setIsVisibleToFalse={() => setIsVisible(false)}
-        homeButtonVisible={false}
-      />
-      <AnimatePresence exitBeforeEnter>
-        {isVisible && (
-          <motion.main
-            key="Activities"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0}}
-            exit={{ opacity: 0, y: 30 }}
-            transition={{ duration: 0.3, bounce: 0 }}
-          >
+    <IonPage>
+      <div className={styles.container}>
+        <Header 
+          GoBackIsActive={false} 
+          setIsVisibleToFalse={() => {}}
+          homeButtonVisible={false}
+        />
+          <main>
             <section>
               <h2 className={styles.sectionTitle}>Tarefas concluídas hoje</h2>
               <div className={styles.progressBarContainer}>
@@ -68,13 +58,12 @@ export const Home: React.FC = () => {
                 description="Faça exercícios de respiração para se acalmar."
                 icons="clock"
                 page="Clock"
-                setIsVisibleToFalse={() => setIsVisible(false)}
+                setIsVisibleToFalse={() => {}}
               />
             </section>
-          </motion.main>
-        )}
-      </AnimatePresence>
-      <BottomMenu pageActive='home'/>
-    </div>
+          </main>
+        <BottomMenu pageActive='home'/>
+      </div>
+    </IonPage>
   )
 }

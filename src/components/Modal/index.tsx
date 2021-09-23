@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion'
+import ReactDOM from 'react-dom'
 import { useHistory } from 'react-router-dom'
 
 import Success from '../../images/trophy.svg'
@@ -12,7 +13,6 @@ interface ModalProps{
   description: string;
   yesAndNoButtons: boolean;
   setIsVisible: any;
-  destinyPage?: string;
   confirmFunction?: () => any;
   image?: 'Success' | "Exclude"
 }
@@ -29,12 +29,13 @@ export function Modal({
   image,
   setIsVisible,
   yesAndNoButtons,
-  destinyPage,
   confirmFunction
  }: ModalProps) {
   const history = useHistory()
 
   return(
+    <>
+    {ReactDOM.createPortal(
     <motion.div className={styles.modalBackground}
       layout
       key={`modal${keyModal}Background`}
@@ -86,7 +87,7 @@ export function Modal({
               className={styles.finishButton}
               onClick={() => {
                 setIsVisible(false)
-                setTimeout(() => history.push(`/${destinyPage}`), 270)
+                setTimeout(() => history.goBack(), 250)
               }}
               >
               Fechar
@@ -94,6 +95,9 @@ export function Modal({
           ) }
         </motion.div>
       </AnimatePresence>
-    </motion.div>
+    </motion.div>,
+    document.body
+    )}
+    </>
   )
 }

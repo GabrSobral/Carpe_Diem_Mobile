@@ -43,10 +43,7 @@ export function ChangePassword() {
   return (
     <IonPage>
       <div className={styles.wrapper}>
-        <Header 
-          GoBackIsActive={true} 
-          setIsVisibleToFalse={() => {}}
-        />
+        <Header GoBackIsActive={true}/>
 
         <section>
           <span className={styles.changePasswordTitle}>Alterar senha</span>
@@ -60,7 +57,6 @@ export function ChangePassword() {
                   keyModal="ResetPassword"
                   setIsVisible={setIsModalVisible}
                   yesAndNoButtons={false}
-                  destinyPage="Profile"
                 />
               )}
             </AnimatePresence>

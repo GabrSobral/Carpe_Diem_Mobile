@@ -9,7 +9,7 @@ export const Clock: React.FC = () => {
   return(
     <IonPage>
       <div className={styles.container}>
-        <Header GoBackIsActive={true} setIsVisibleToFalse={() => {}}/>
+        <Header GoBackIsActive={true}/>
         <Respiration key="RespirationKey"/>
       </div>
     </IonPage>

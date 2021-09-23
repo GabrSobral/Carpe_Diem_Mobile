@@ -4,7 +4,6 @@ import { FiCheck } from 'react-icons/fi'
 import { buildStyles, CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 
-import { BottomMenu } from '../../components/BottomMenu'
 import { Header } from '../../components/header'
 import { Item } from '../../components/ItemButton';
 
@@ -26,43 +25,41 @@ export const Home: React.FC = () => {
       <div className={styles.container}>
         <Header 
           GoBackIsActive={false} 
-          setIsVisibleToFalse={() => {}}
           homeButtonVisible={false}
         />
-          <main>
-            <section>
-              <h2 className={styles.sectionTitle}>Tarefas concluídas hoje</h2>
-              <div className={styles.progressBarContainer}>
-                <CircularProgressbar 
-                  value={percentage} 
-                  className={styles.circularProgressBar}
-                  strokeWidth={3}
-                  styles={buildStyles({
-                    pathColor: "#54A06A",
-                    textColor: "#434343"
-                  })}
-                />
-                { (user?.activities_finished_today || 0) < (user?.quantity_of_activities || 0)  ? (
-                  <span className={styles.progressBarText}>
-                    {`${user?.activities_finished_today}/${user?.quantity_of_activities || 0}`}
-                  </span>) : (
-                    <FiCheck className={styles.progressCheckIcon}/>
-                  )}
-              </div>
-            </section>
-
-            <section>
-              <h2 className={styles.sectionTitle}>Confira também</h2>
-              <Item
-                title="Respire e se acalme"
-                description="Faça exercícios de respiração para se acalmar."
-                icons="clock"
-                page="Clock"
-                setIsVisibleToFalse={() => {}}
+        <main>
+          <section>
+            <h2 className={styles.sectionTitle}>Tarefas concluídas hoje</h2>
+            <div className={styles.progressBarContainer}>
+              <CircularProgressbar 
+                value={percentage} 
+                className={styles.circularProgressBar}
+                strokeWidth={3}
+                styles={buildStyles({
+                  pathColor: "#54A06A",
+                  textColor: "#434343"
+                })}
               />
-            </section>
-          </main>
-        <BottomMenu pageActive='home'/>
+              { (user?.activities_finished_today || 0) < (user?.quantity_of_activities || 0)  ? (
+                <span className={styles.progressBarText}>
+                  {`${user?.activities_finished_today}/${user?.quantity_of_activities || 0}`}
+                </span>) : (
+                  <FiCheck className={styles.progressCheckIcon}/>
+                )}
+            </div>
+          </section>
+
+          <section>
+            <h2 className={styles.sectionTitle}>Confira também</h2>
+            <Item
+              title="Respire e se acalme"
+              description="Faça exercícios de respiração para se acalmar."
+              icons="clock"
+              page="Clock"
+              setIsVisibleToFalse={() => {}}
+            />
+          </section>
+        </main>
       </div>
     </IonPage>
   )

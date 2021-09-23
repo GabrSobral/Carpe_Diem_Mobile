@@ -33,11 +33,7 @@ export function ForgotPassword() {
   return (
     <IonPage>
       <div className={styles.wrapper}>
-        <SignPageHeader 
-          title='Senha' 
-          button='Entrar'
-          setIsVisibleToFalse={() => {}}
-        />
+        <SignPageHeader title='Senha' button='Entrar'/>
         <section>
           <form className={styles.formContainer}>
             <AnimatePresence exitBeforeEnter>
@@ -48,7 +44,6 @@ export function ForgotPassword() {
                   keyModal="EmailSend"
                   setIsVisible={setIsModalVisible}
                   yesAndNoButtons={false}
-                  destinyPage="SignIn"
                 />
               )}
             </AnimatePresence>

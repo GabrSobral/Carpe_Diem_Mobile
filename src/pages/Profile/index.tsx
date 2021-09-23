@@ -5,7 +5,6 @@ import { AnimatePresence } from 'framer-motion'
 import { FiLogOut} from 'react-icons/fi';
 // import { format } from 'date-fns'
 
-import { BottomMenu } from '../../components/BottomMenu'
 import { Header } from '../../components/header'
 import { Modal } from '../../components/Modal'
 
@@ -22,7 +21,7 @@ export const Profile: React.FC = () => {
   const { Logout, user } = useUsers()
 
   const logout = useCallback(() => {
-    Logout().then(() => { history.push('/SignIn') })
+    Logout().then(() => { history.push('/') })
   },[history, Logout])
 
   return(
@@ -50,10 +49,7 @@ export const Profile: React.FC = () => {
             ) }
           </AnimatePresence>
 
-        <Header 
-          GoBackIsActive={false} 
-          setIsVisibleToFalse={() => {}}
-        />
+        <Header GoBackIsActive={false}/>
 
         <main>
           <section className={styles.headerUserContainer}>
@@ -81,7 +77,6 @@ export const Profile: React.FC = () => {
             </button>
           </section>
         </main>
-        <BottomMenu pageActive='me'/>
       </div>
     </IonPage>
   )

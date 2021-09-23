@@ -48,7 +48,6 @@ export const SignUp: React.FC = () => {
         <SignPageHeader 
           title='Cadastrar' 
           button='Entrar'
-          setIsVisibleToFalse={() => {}}
         />
 
         <section>

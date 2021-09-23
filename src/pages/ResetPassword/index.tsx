@@ -52,7 +52,6 @@ export function ResetPassword() {
           keyModal="ResetPassword"
           setIsVisible={setIsModalVisible}
           yesAndNoButtons={false}
-          destinyPage="Login/SignIn"
         />)
       }
     </AnimatePresence>
@@ -61,10 +60,7 @@ export function ResetPassword() {
   return (
     <IonPage>
       <div className={styles.wrapper}>
-        <SignPageHeader 
-          title='Troca de senha' 
-          setIsVisibleToFalse={() => {}}
-        />
+        <SignPageHeader title='Troca de senha'/>
         <section>
           <form className={styles.formContainer}>
             {memoizedModal}

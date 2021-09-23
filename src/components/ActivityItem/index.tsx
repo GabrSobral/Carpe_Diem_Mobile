@@ -16,7 +16,6 @@ import { useHistory } from 'react-router'
 
 interface ActivityItemProps extends ButtonHTMLAttributes<HTMLButtonElement>{
   activity: ActivitiesProps;
-  setIsVisibleToFalse: () => void;
 }
 
 // const icon = {
@@ -31,7 +30,7 @@ interface ActivityItemProps extends ButtonHTMLAttributes<HTMLButtonElement>{
 //   clock : <img src={Clock} alt="" style={{ width: 30, height: 30 }}/>
 // }
 
-export function ActivityItem({ activity, setIsVisibleToFalse }: ActivityItemProps){
+export function ActivityItem({ activity }: ActivityItemProps){
   const { setSelectedActivityState } = useActivity()
   const history = useHistory()
 
@@ -40,8 +39,7 @@ export function ActivityItem({ activity, setIsVisibleToFalse }: ActivityItemProp
     className={styles.container} 
     onClick={() => {
       setSelectedActivityState(activity)
-      setIsVisibleToFalse()
-      history.push('/ActivityDetails')
+      history.push('/tabs/ActivityDetails')
     }}>
       <div className={styles.icon}>
         {/* {icon[icons]} */}

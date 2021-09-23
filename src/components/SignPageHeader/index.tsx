@@ -5,10 +5,9 @@ import styles from './style.module.scss'
 interface headerProps{
   title : string,
   button?: "Entrar" | "Cadastrar",
-  setIsVisibleToFalse: () => void;
 }
 
-export function SignPageHeader({ title, button, setIsVisibleToFalse } : headerProps){
+export function SignPageHeader({ title, button } : headerProps){
   const history = useHistory()
 
   return(
@@ -19,7 +18,6 @@ export function SignPageHeader({ title, button, setIsVisibleToFalse } : headerPr
         <button 
           type="button"
           onClick={() => {
-            setIsVisibleToFalse()
             history.replace(
               button === 'Entrar' ? '/SignIn' : '/SignUp')
           }}  

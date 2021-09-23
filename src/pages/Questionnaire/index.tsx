@@ -80,7 +80,7 @@ export const Questionnaire: React.FC = () => {
   return(
     <IonPage>
       <div className={styles.container}>
-        <Header GoBackIsActive={!!user?.hasAnswered} setIsVisibleToFalse={() => {}}/>
+        <Header GoBackIsActive={!!user?.hasAnswered}/>
         <main>
           {user?.hasAnswered ?
             <h2>Revise e selecione suas <br/> respostas novamente</h2> : 

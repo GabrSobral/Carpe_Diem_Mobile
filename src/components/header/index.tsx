@@ -9,13 +9,11 @@ import { useState } from 'react'
 
 interface HeaderProps{
   GoBackIsActive : boolean;
-  setIsVisibleToFalse: () => void;
   homeButtonVisible?: boolean;
 }
 
 export function Header({ 
   GoBackIsActive, 
-  setIsVisibleToFalse, 
   homeButtonVisible = true } : HeaderProps){
   const history = useHistory()
   const [ IsGobackActive, setIsGoBackActive ] = useState(GoBackIsActive)
@@ -28,7 +26,6 @@ export function Header({
           {IsGobackActive && (
             <motion.button 
               onClick={() => {
-                setIsVisibleToFalse()
                 setIsGoBackActive(false)
                 history.goBack()
               }}
@@ -63,9 +60,8 @@ export function Header({
     
       { homeButtonVisible && (
         <span onClick={() => {
-          setIsVisibleToFalse()
           setIsGoBackActive(false)
-          history.replace('/Home')
+          history.replace('/tabs/Home')
         }}>Home</span>
       ) }
 

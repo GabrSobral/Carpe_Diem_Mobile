@@ -25,7 +25,7 @@ export const SignIn: React.FC = () => {
     .then((result: any) => {
       if(result.message === "ok") {
         if(result.data.user.hasAnswered === true) {
-          history.replace('/Home');
+          history.replace('/tabs/Home');
         } else{
           history.replace('/Questionnaire');
         }
@@ -42,7 +42,6 @@ export const SignIn: React.FC = () => {
         <SignPageHeader 
           title='Entrar' 
           button='Cadastrar'
-          setIsVisibleToFalse={() => {}}
         />
         <section>
           <form className={styles.formContainer}>

@@ -4,7 +4,6 @@ import { IonPage } from '@ionic/react'
 import { useHistory } from 'react-router-dom'
 // import { FiHeadphones, FiTrash, FiCheck, FiBook } from 'react-icons/fi'
 
-import { BottomMenu } from '../../components/BottomMenu'
 import { Header } from '../../components/header'
 import { Player } from '../../components/Player'
 import { FeedbackModal } from '../../components/FeedbackModal'
@@ -58,7 +57,7 @@ export const ActivityDetails: React.FC = () => {
     await api.delete(`/activity/my-delete/${selectedActivity?.id}`)
     handleUpdateActivitiesState(String(selectedActivity?.id))
     setIsModalRemoveVisible(false)
-    setTimeout(() => history.push('/activities'), 300)
+    setTimeout(() => history.goBack(), 250)
   },[setIsModalRemoveVisible, history, selectedActivity?.id, handleUpdateActivitiesState])
   
   const MemoizedModalExclude = useMemo(()=>(
@@ -72,7 +71,6 @@ export const ActivityDetails: React.FC = () => {
           yesAndNoButtons={true}
           confirmFunction={ExcludeActivity}
           image="Exclude"
-          destinyPage="Activities"
         />
       ) }
     </AnimatePresence>
@@ -88,7 +86,6 @@ export const ActivityDetails: React.FC = () => {
           setIsVisible={setIsModalSuccessVisible}
           yesAndNoButtons={false}
           image="Success"
-          destinyPage="Activities"
         />
       ) }
     </AnimatePresence>
@@ -105,10 +102,7 @@ export const ActivityDetails: React.FC = () => {
   return(
     <IonPage>
       <div className={styles.container}>
-        <Header 
-          GoBackIsActive={true} 
-          setIsVisibleToFalse={() => {}}
-        />
+        <Header GoBackIsActive={true}/>
 
         {MemoizedModalSuccess}
         {MemoizedModalExclude}
@@ -191,7 +185,6 @@ export const ActivityDetails: React.FC = () => {
             </button>
           </div>
         </main>
-        <BottomMenu pageActive='activities'/>
       </div>
     </IonPage>
   )

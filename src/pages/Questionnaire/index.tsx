@@ -26,7 +26,7 @@ export const Questionnaire: React.FC = () => {
   const [ isFilled, setIsFilled ] = useState(false)
   const [ allAnswers, setAllAnswers ] = useState<any[]>([])
   const [ count, setCount ] = useState(0)
-  const { handleUpdate, user } = useUsers()
+  const { user, setHasAnswered } = useUsers()
   const history = useHistory()
   
   useEffect(() => {
@@ -65,7 +65,11 @@ export const Questionnaire: React.FC = () => {
         history.goBack();
         return;
       }
-      handleUpdate({ hasAnswered: true }).then(() => history.replace("/tabs/Home"))
+
+      setHasAnswered()
+      // handleUpdate({ hasAnswered: true })
+      // .then(() => )
+      history.replace("/tabs/Home")
     }).catch((err)=>{
       setMessage(`Algo deu errado: ${err.response.data.message}`)
       setIsLoading(false)

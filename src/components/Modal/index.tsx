@@ -45,7 +45,6 @@ export function Modal({
     >
       <AnimatePresence key={`AP${keyModal}`}>
         <motion.div className={styles.modalContainer}
-          layout
           key={`modal${keyModal}`}
           animate={{
             scale : [0, 1],
@@ -89,7 +88,7 @@ export function Modal({
                 setIsVisible(false)
                 setTimeout(() => history.goBack(), 250)
               }}
-              >
+            >
               Fechar
             </button>
           ) }

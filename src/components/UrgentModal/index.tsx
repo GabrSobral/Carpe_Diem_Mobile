@@ -44,7 +44,6 @@ export function UrgentModal(
       >
         <AnimatePresence key={`AP$UrgentModal`}>
           <motion.div className={styles.modalContainer}
-            layout
             key={`UrgentModal`}
             animate={{
               scale : [0, 1],

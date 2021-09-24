@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { createContext, ReactNode, useContext, useState, useEffect } from "react";
 import { api } from "../services/api";
-import { getToken, removeToken, setToken } from "../utils/handleToken";
+import { getToken, removeToken, setAnswered, setAuth, setToken } from "../utils/handleToken";
 import { storage } from "../utils/ionicStorage";
 
 interface UserProviderProps {
@@ -27,6 +27,9 @@ interface UserContextProps {
   user?: UserProps;
   updateUserState: () => void;
   handleUpdate: (...args: any) => Promise<UserProps>;
+  handleFinishActivityInUser: () => void;
+  setHasAnswered: () => void;
+  handleUpdateQuantityOfActivities: (quantity: number) => void;
 }
 interface UserProps {
   id: string;
@@ -49,12 +52,11 @@ export function UserProvider({ children }: UserProviderProps){
   const updateUserState = useCallback(async () => {
     const userStore = await storage.get('user')
     if(userStore){
+      setAuth()
+      userStore.hasAnswered && setAnswered()
       setUser(userStore)
-
-      if(userStore){
-        const firstName = userStore.name.split(' ')[0]
-        setUsername(firstName)
-      }
+      const firstName = userStore.name.split(' ')[0]
+      setUsername(firstName)
     }
   },[])
 
@@ -65,9 +67,10 @@ export function UserProvider({ children }: UserProviderProps){
       setUser(prevUser => {
         prevUser = { ...prevUser, ...args } as UserProps;
         newUser = prevUser;
-        (async () => await storage.set('user', prevUser))();
-        return prevUser;
-      })
+        return newUser;
+      });
+      
+      (async () => await storage.set('user', newUser))();
       return resolve(newUser)
     })
   },[])
@@ -88,16 +91,18 @@ export function UserProvider({ children }: UserProviderProps){
 
       api.post(query, { name, email, password })
       .then(({ data }: SignResult) => {
-        const firstName = data.user.name.split(' ')[0]
-        storage.set('user', data.user)
+        const firstName = data.user.name.split(' ')[0];
+        storage.set('user', data.user);
         
-        result.data = data
-        result.message = "ok"
+        result.data = data;
+        result.message = "ok";
 
-        setToken(data.token)
-        setUser(data.user)
-        setUsername(firstName)
-        return resolve(result)
+        setToken(data.token);
+        setAuth();
+        data.user.hasAnswered && setAnswered();
+        setUser(data.user);
+        setUsername(firstName);
+        return resolve(result);
       })
       .catch((error) => {
         result.message = error.response.data.error
@@ -118,6 +123,42 @@ export function UserProvider({ children }: UserProviderProps){
     })
   }
 
+  async function handleFinishActivityInUser(){
+    setUser(prev => {
+      if(prev){
+        prev.all_activities_finished++
+        prev.activities_finished_today++
+
+        (async () => {
+          await storage.set('user', prev)
+        })()
+
+        return prev
+      }
+      return undefined
+    })
+  }
+
+  function setHasAnswered(){
+    setUser(prev => {
+      if(prev) {
+        (async () => {
+          prev.hasAnswered = true
+          await storage.set('user', prev)
+        })()
+        return prev
+      }
+      return undefined
+    })
+  }
+
+  function handleUpdateQuantityOfActivities(quantity: number){
+    setUser(prev => {
+      prev && (prev.quantity_of_activities = quantity)
+      return prev
+    })
+  }
+
   return(
     <UserContext.Provider 
       value={{
@@ -126,7 +167,10 @@ export function UserProvider({ children }: UserProviderProps){
         Logout,
         user,
         updateUserState,
-        handleUpdate
+        handleFinishActivityInUser,
+        setHasAnswered,
+        handleUpdate,
+        handleUpdateQuantityOfActivities
       }}>
       {children}
     </UserContext.Provider>

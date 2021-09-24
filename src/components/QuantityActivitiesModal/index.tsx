@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import styles from '../Modal/style.module.scss'
 import { api } from '../../services/api'
 import { useUsers } from '../../contexts/UserContext'
+import { storage } from '../../utils/ionicStorage'
 
 interface ChangeQuantityModalProps {
   setIsVisible: Dispatch<React.SetStateAction<boolean>>;
@@ -13,13 +14,18 @@ interface ChangeQuantityModalProps {
 
 export function ChangeQuantityModal({ setIsVisible, initialValue } : ChangeQuantityModalProps) {
   const [ selectedValue, setSelectedValue ] = useState<number>(initialValue)
-  const { handleUpdate } = useUsers() 
+  const { handleUpdateQuantityOfActivities } = useUsers() 
 
   async function confirmFunction(){
     await api.patch('/users', { quantity_of_activities: selectedValue })
 
-    await handleUpdate({ quantity_of_activities: selectedValue })
+    handleUpdateQuantityOfActivities(selectedValue)
+    const user = await storage.get('user')
+    user.quantity_of_activities = selectedValue
+    storage.set('user', user)
       .then(() => setIsVisible(false))
+    // handleUpdate({ quantity_of_activities: selectedValue })
+    //   .then(() => setIsVisible(false))
   }
 
   return(

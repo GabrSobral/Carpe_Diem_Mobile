@@ -92,6 +92,7 @@ export function FeedbackModal({ initialValue, setIsVisible }: FeedbackModalProps
               type="button" 
               onClick={confirmFunction}
               className={styles.finishButton}
+              disabled={feedback !== undefined ? false : true}
             >   
               Dar feedback
             </button>

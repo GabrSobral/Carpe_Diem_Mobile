@@ -38,7 +38,7 @@ export function ActivityProvider({children} : ActivityProviderProps){
   const [ activities, setActivities ] = useState<ActivitiesProps[]>([])
   const [ activitiesToday, setActivitiesToday ] = useState(0)
   const [ selectedActivity, setSelectedActivity ] = useState<ActivitiesProps>()
-  const { handleUpdate, user, updateUserState } = useUsers()
+  const { user, updateUserState, handleFinishActivityInUser } = useUsers()
 
   useEffect(() => {
     if(!user?.hasAnswered){ return }
@@ -78,15 +78,12 @@ export function ActivityProvider({children} : ActivityProviderProps){
 
   async function handleFinishActivity(activity_id: string){
     await api.delete(`/activity/finish/${activity_id}`)
-    handleUpdateActivitiesState(activity_id)
-
-    const allActivitiesFinished = (user ? (user.all_activities_finished) : 0)
-    const ActivitiesFinishedToday = (user ? (user.activities_finished_today) : 0)
-
-    await handleUpdate({
-      all_activities_finished: (allActivitiesFinished + 1),
-      activities_finished_today: (ActivitiesFinishedToday + 1),
-    })
+    await handleUpdateActivitiesState(activity_id)
+    handleFinishActivityInUser()
+    // await handleUpdate({
+    //   all_activities_finished: ((user?.all_activities_finished || 0) + 1),
+    //   activities_finished_today: ((user?.activities_finished_today ||  0) + 1),
+    // })
   }
 
   return (
